@@ -9,9 +9,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   // Load env
   await dotenv.load(fileName: EnvAppSetting.production);
-  // Add Flavor
-  FlavorConfiguration.addFlavorConfig(
-      EnvBaseAppSettingValue.flavor, Colors.green);
   configureDependencies();
   final firebase = getIt.get<FirebaseNotification>();
   await firebase.initialize();

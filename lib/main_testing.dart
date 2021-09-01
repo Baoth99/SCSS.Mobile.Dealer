@@ -10,7 +10,7 @@ void main() async {
   // Load env
   await dotenv.load(fileName: EnvAppSetting.testing);
   FlavorConfiguration.addFlavorConfig(
-      EnvBaseAppSettingValue.flavor, Colors.green);
+      EnvBaseAppSettingValue.flavor, Colors.purple);
   configureDependencies();
   final firebase = getIt.get<FirebaseNotification>();
   await firebase.initialize();
