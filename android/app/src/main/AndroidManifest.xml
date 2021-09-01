@@ -5,7 +5,7 @@
       <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:name=".Application"
-        android:label="VeChaiXanh Vựa"
+        android:label="VeChaiXANH Vựa"
         android:icon="@mipmap/vechaixanh_ic_launcher">
         <activity
             android:name=".MainActivity"
