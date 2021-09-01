@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.dealer_app">
+      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
-        android:label="dealer_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="VeChaiXanh Vựa"
+        android:icon="@mipmap/vechaixanh_ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
