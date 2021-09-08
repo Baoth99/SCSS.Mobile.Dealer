@@ -35,3 +35,14 @@ class EnvMapSettingValue {
   static String apiKey = dotenv.env['GOONG_MAP_API_KEY'].toString();
   static String mapStype = dotenv.env['GOONG_MAP_STYLE'].toString();
 }
+
+class BotNavUtils {
+  static const String stateHomeTitle = "Trang chủ";
+  static const int stateHomeIndex = 0;
+  static const String stateNotificationTitle = "Thông báo";
+  static const int stateNotificationIndex = 1;
+  static const String stateCategoryTitle = "Danh mục";
+  static const int stateCategoryIndex = 3;
+  static const String stateHistoryTitle = "Lịch sử";
+  static const int stateHistoryIndex = 4;
+}
