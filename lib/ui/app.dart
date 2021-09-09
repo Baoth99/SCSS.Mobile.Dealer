@@ -1,30 +1,50 @@
-import 'package:dealer_app/bottom_nav/view/bot_nav_page.dart';
+import 'package:dealer_app/blocs/bot_nav_bloc.dart';
+import 'package:dealer_app/repositories/states/bot_nav_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'layouts/bot_nav_view.dart';
 
 class DealerApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FlavorBanner(
-      color: FlavorConfig.instance.color,
-      location: BannerLocation.topStart,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.green,
+    return BlocProvider(
+      create: (context) => BotNavBloc(StateHome()),
+      child: FlavorBanner(
+        color: FlavorConfig.instance.color,
+        location: BannerLocation.topStart,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+          ),
+          routes: {
+            '/pageA': (_) => PageA(),
+          },
+          home: BlocBuilder<BotNavBloc, BotNavState>(
+            builder: (_, state) {
+              return Scaffold(
+                body: state is StateHome
+                    ? PageA()
+                    : state is StateNotification
+                        ? PageB()
+                        : state is StateCategory
+                            ? PageC()
+                            : PageD(),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.add),
+                ),
+                bottomNavigationBar: BotNavView(),
+              );
+            },
+          ),
         ),
-        home: BotNavPage(),
       ),
     );
   }

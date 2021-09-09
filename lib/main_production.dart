@@ -1,4 +1,3 @@
-import 'package:dealer_app/providers/configs/flavor_config.dart';
 import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/providers/services/firebase_service.dart';
 import 'package:dealer_app/ui/app.dart';

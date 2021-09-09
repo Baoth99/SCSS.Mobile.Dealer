@@ -37,12 +37,13 @@ class EnvMapSettingValue {
 }
 
 class BotNavUtils {
-  static const String stateHomeTitle = "Trang chủ";
   static const int stateHomeIndex = 0;
-  static const String stateNotificationTitle = "Thông báo";
   static const int stateNotificationIndex = 1;
-  static const String stateCategoryTitle = "Danh mục";
   static const int stateCategoryIndex = 3;
-  static const String stateHistoryTitle = "Lịch sử";
   static const int stateHistoryIndex = 4;
+}
+
+class ScreenTitles {
+  static const String categoryScreenTitle = "Danh mục";
+  static const String addCategoryScreenTitle = "Thêm danh mục";
 }
