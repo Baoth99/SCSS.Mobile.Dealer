@@ -1,10 +1,10 @@
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
+import 'package:dealer_app/ui/layouts/category_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'layouts/bot_nav_view.dart';
 
 class DealerApp extends StatelessWidget {
@@ -18,22 +18,24 @@ class DealerApp extends StatelessWidget {
         location: BannerLocation.topStart,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.green,
-          ),
+          theme: _themeData(),
           routes: {
-            '/pageA': (_) => PageA(),
+            //TODO: add category
+            '/addCategory': (_) => Container(),
           },
           home: BlocBuilder<BotNavBloc, BotNavState>(
             builder: (_, state) {
               return Scaffold(
                 body: state is StateHome
-                    ? PageA()
+                    //todo: homepage
+                    ? Container()
                     : state is StateNotification
-                        ? PageB()
+                        //todo: noti
+                        ? Container()
                         : state is StateCategory
-                            ? PageC()
-                            : PageD(),
+                            ? CategoryView()
+                            //todo history
+                            : Container(),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
                 floatingActionButton: FloatingActionButton(
@@ -46,6 +48,31 @@ class DealerApp extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  _themeData() {
+    return ThemeData(
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 1,
+        iconTheme: IconThemeData(size: 25),
+        actionsIconTheme: IconThemeData(size: 25),
+      ),
+      textTheme: TextTheme(
+        headline1: TextStyle(
+          fontSize: 25,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+        headline2: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      primarySwatch: Colors.green,
     );
   }
 }
