@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-enum rowFlexibleType { smallToBig, BigToSmall }
+enum rowFlexibleType { smallToBig, bigToSmall }
 
 Row rowFlexibleBuilder(smallwidget, largeWidget, rowFlexibleType type) {
   return type == rowFlexibleType.smallToBig
@@ -23,6 +23,7 @@ Row rowFlexibleBuilder(smallwidget, largeWidget, rowFlexibleType type) {
 Flexible flexibleSmallBuilder(widget) {
   return Flexible(
     flex: 28,
+    fit: FlexFit.tight,
     child: widget,
   );
 }
@@ -37,6 +38,7 @@ Flexible flexibleSpaceBuilder() {
 Flexible flexibleLargeBuilder(widget) {
   return Flexible(
     flex: 70,
+    fit: FlexFit.tight,
     child: widget,
   );
 }

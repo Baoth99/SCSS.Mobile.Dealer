@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'layouts/add_category_view.dart';
+
 import 'layouts/bot_nav_view.dart';
 
 class DealerApp extends StatelessWidget {
@@ -20,32 +22,9 @@ class DealerApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: _themeData(),
           routes: {
-            //TODO: add category
-            '/addCategory': (_) => Container(),
+            '/addCategory': (_) => AddCategoryView(),
           },
-          home: BlocBuilder<BotNavBloc, BotNavState>(
-            builder: (_, state) {
-              return Scaffold(
-                body: state is StateHome
-                    //todo: homepage
-                    ? Container()
-                    : state is StateNotification
-                        //todo: noti
-                        ? Container()
-                        : state is StateCategory
-                            ? CategoryView()
-                            //todo history
-                            : Container(),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                ),
-                bottomNavigationBar: BotNavView(),
-              );
-            },
-          ),
+          home: _homeWidget(),
         ),
       ),
     );
@@ -73,6 +52,32 @@ class DealerApp extends StatelessWidget {
         ),
       ),
       primarySwatch: Colors.green,
+    );
+  }
+
+  _homeWidget() {
+    return BlocBuilder<BotNavBloc, BotNavState>(
+      builder: (_, state) {
+        return Scaffold(
+          body: state is StateHome
+              //todo: homepage
+              ? Container()
+              : state is StateNotification
+                  //todo: noti
+                  ? Container()
+                  : state is StateCategory
+                      ? CategoryView()
+                      //todo history
+                      : Container(),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: Icon(Icons.add),
+          ),
+          bottomNavigationBar: BotNavView(),
+        );
+      },
     );
   }
 }

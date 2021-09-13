@@ -1,9 +1,17 @@
+import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
+
 class ScrapCategoryModel extends Comparable<ScrapCategoryModel> {
   int id;
   String name;
   String imageUrl;
+  List<ScrapCategoryDetailModel> unitList;
 
-  ScrapCategoryModel(this.id, this.name, this.imageUrl);
+  List<ScrapCategoryDetailModel> get getUnitList => this.unitList;
+
+  set setUnitList(List<ScrapCategoryDetailModel> unitList) =>
+      this.unitList = unitList;
+
+  ScrapCategoryModel(this.id, this.name, this.imageUrl, this.unitList);
 
   get getId => this.id;
 
