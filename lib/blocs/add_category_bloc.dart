@@ -21,5 +21,8 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
       } else
         return;
     }
+    if (event is EventAddScrapCategoryUnit) {
+      yield state.copyWith(controllers: event.controllers);
+    }
   }
 }

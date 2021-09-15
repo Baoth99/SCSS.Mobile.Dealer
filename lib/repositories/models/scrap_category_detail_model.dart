@@ -8,15 +8,15 @@ class ScrapCategoryDetailModel {
 
   set setId(int id) => this.id = id;
 
-  get getUnit => this.unit;
+  String get getUnit => this.unit;
 
   set setUnit(unit) => this.unit = unit;
 
-  get getPrice => this.price;
+  int? get getPrice => this.price;
 
   set setPrice(price) => this.price = price;
 
-  get getStatus => this.status;
+  int? get getStatus => this.status;
 
   set setStatus(status) => this.status = status;
 
