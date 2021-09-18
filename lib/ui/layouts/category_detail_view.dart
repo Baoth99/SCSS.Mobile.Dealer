@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:dealer_app/blocs/add_category_bloc.dart';
-import 'package:dealer_app/repositories/events/add_category_event.dart';
-import 'package:dealer_app/repositories/states/add_category_state.dart';
+import 'package:dealer_app/blocs/category_detail_bloc.dart';
+import 'package:dealer_app/repositories/events/category_detail_event.dart';
+import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:dealer_app/repositories/states/category_detail_state.dart';
 import 'package:dealer_app/ui/widgets/cancel_button.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
@@ -13,8 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CategoryDetailView extends StatelessWidget {
-  final String _pickedImageUrl = '';
-  final String _scrapName = '';
+  //form key
   final _formKey = GlobalKey<FormState>();
 
   //controllers
@@ -23,13 +23,24 @@ class CategoryDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // initialize controllers from arguments
+    final model =
+        ModalRoute.of(context)!.settings.arguments as ScrapCategoryModel;
+    _scrapNameController.text = model.getName;
+    model.getUnitList?.forEach((element) {
+      _unitControllers.putIfAbsent(
+        new TextEditingController(text: element.getUnit),
+        () => new TextEditingController(text: element.getPrice.toString()),
+      );
+    });
+
     return BlocProvider(
-      create: (context) => AddCategoryBloc(AddCategoryState(
-        scrapName: _scrapName,
-        pickedImageUrl: _pickedImageUrl,
+      create: (context) => CategoryDetailBloc(CategoryDetailState(
+        scrapName: model.getName,
+        imageUrl: model.getImageUrl,
         controllers: _unitControllers,
       )),
-      child: BlocListener<AddCategoryBloc, AddCategoryState>(
+      child: BlocListener<CategoryDetailBloc, CategoryDetailState>(
         listener: (context, state) {
           if (state.isImageSourceActionSheetVisible) {
             _showImageSourceActionSheet(context);
@@ -39,18 +50,18 @@ class CategoryDetailView extends StatelessWidget {
           appBar: AppBar(
             elevation: 1,
             title: Text(
-              ScreenTitles.addCategoryScreenTitle,
+              ScreenTitles.categoryDetailScreenTitle,
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
-          body: _addCategoryBody(),
+          body: _categoryDetailBody(),
         ),
       ),
     );
   }
 
-  _addCategoryBody() {
-    return BlocBuilder<AddCategoryBloc, AddCategoryState>(
+  _categoryDetailBody() {
+    return BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
       builder: (context, state) {
         return Container(
           color: Colors.white,
@@ -84,6 +95,9 @@ class CategoryDetailView extends StatelessWidget {
                           if (value == null || value.isEmpty)
                             return "Nhập tên loại phế liệu";
                         },
+                        onFieldSubmitted: (value) => context
+                            .read<CategoryDetailBloc>()
+                            .add(EventChangeEditStatus(isEdited: true)),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,7 +109,7 @@ class CategoryDetailView extends StatelessWidget {
                               var newPriceController = TextEditingController();
                               _unitControllers.putIfAbsent(
                                   newUnitController, () => newPriceController);
-                              context.read<AddCategoryBloc>().add(
+                              context.read<CategoryDetailBloc>().add(
                                   EventAddScrapCategoryUnit(
                                       controllers: _unitControllers));
                             },
@@ -112,23 +126,7 @@ class CategoryDetailView extends StatelessWidget {
                   ),
                 ),
                 //Form submit button
-                Flexible(
-                  flex: 10,
-                  fit: FlexFit.loose,
-                  child: Container(
-                    height: 40,
-                    child: rowFlexibleBuilder(
-                      cancelButtonBuilder(context, "Huỷ"),
-                      elevatedButtonBuilder(context, "Thêm danh mục", () {
-                        if (_formKey.currentState!.validate()) {
-                          //TODO: add new scrap category
-                          Navigator.of(context).pop();
-                        }
-                      }),
-                      rowFlexibleType.smallToBig,
-                    ),
-                  ),
-                ),
+                if (state.isEdited) _buttons(),
               ],
             ),
           ),
@@ -138,25 +136,44 @@ class CategoryDetailView extends StatelessWidget {
   }
 
   _scrapImage() {
-    return BlocBuilder<AddCategoryBloc, AddCategoryState>(
+    return BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
       builder: (context, state) {
-        return InkWell(
-          onTap: () {
-            context.read<AddCategoryBloc>().add(EventChangeScrapImageRequest());
-          },
-          child: state.pickedImageUrl != ''
-              ? Image.file(File(state.pickedImageUrl))
-              : Icon(
-                  Icons.add_a_photo,
-                  size: 100,
-                ),
-        );
+        try {
+          return InkWell(
+            onTap: () {
+              context
+                  .read<CategoryDetailBloc>()
+                  .add(EventChangeScrapImageRequest());
+            },
+            child: state.pickedImageUrl.isNotEmpty
+                ? Image.file(File(state.pickedImageUrl))
+                : state.imageUrl.isNotEmpty
+                    ? Image.network(state.imageUrl)
+                    : Icon(
+                        Icons.add_a_photo,
+                        size: 100,
+                      ),
+          );
+        } catch (e) {
+          print(e);
+          return InkWell(
+            onTap: () {
+              context
+                  .read<CategoryDetailBloc>()
+                  .add(EventChangeScrapImageRequest());
+            },
+            child: Icon(
+              Icons.add_a_photo,
+              size: 100,
+            ),
+          );
+        }
       },
     );
   }
 
   _scrapUnit() {
-    return BlocBuilder<AddCategoryBloc, AddCategoryState>(
+    return BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
       builder: (context, state) {
         return ListView.builder(
             primary: false,
@@ -188,6 +205,9 @@ class CategoryDetailView extends StatelessWidget {
                       else
                         return null;
                     },
+                    onFieldSubmitted: (value) => context
+                        .read<CategoryDetailBloc>()
+                        .add(EventChangeEditStatus(isEdited: true)),
                   ),
                 ),
                 SizedBox(
@@ -199,6 +219,9 @@ class CategoryDetailView extends StatelessWidget {
                       labelText: "Đơn giá",
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
                     ),
+                    onFieldSubmitted: (value) => context
+                        .read<CategoryDetailBloc>()
+                        .add(EventChangeEditStatus(isEdited: true)),
                   ),
                 ),
                 rowFlexibleType.bigToSmall,
@@ -208,10 +231,34 @@ class CategoryDetailView extends StatelessWidget {
     );
   }
 
+  _buttons() {
+    return BlocBuilder<CategoryDetailBloc, CategoryDetailState>(
+      builder: (context, state) {
+        return Flexible(
+          flex: 10,
+          fit: FlexFit.loose,
+          child: Container(
+            height: 40,
+            child: rowFlexibleBuilder(
+              cancelButtonBuilder(context, "Huỷ"),
+              elevatedButtonBuilder(context, "Thêm danh mục", () {
+                if (_formKey.currentState!.validate()) {
+                  //TODO: add new scrap category
+                  Navigator.of(context).pop();
+                }
+              }),
+              rowFlexibleType.smallToBig,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void _showImageSourceActionSheet(BuildContext context) {
     Function(ImageSource) selectImageSource = (imageSource) {
       context
-          .read<AddCategoryBloc>()
+          .read<CategoryDetailBloc>()
           .add(EventOpenImagePicker(imageSource: imageSource));
     };
 
