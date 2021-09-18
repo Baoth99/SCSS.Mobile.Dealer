@@ -19,7 +19,7 @@ class CategoryDetailBloc
       yield state.copyWith(isImageSourceActionSheetVisible: false);
       final pickedImage = await _picker.pickImage(source: event.imageSource);
       if (pickedImage != null) {
-        yield state.copyWith(pickedImageUrl: pickedImage.path);
+        yield state.copyWith(pickedImageUrl: pickedImage.path, isEdited: true);
       } else
         return;
     }
