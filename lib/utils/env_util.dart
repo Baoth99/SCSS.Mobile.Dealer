@@ -46,4 +46,5 @@ class BotNavUtils {
 class ScreenTitles {
   static const String categoryScreenTitle = "Danh mục";
   static const String addCategoryScreenTitle = "Thêm danh mục";
+  static const String categoryDetailScreenTitle = "Chi tiết";
 }

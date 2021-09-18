@@ -1,5 +1,6 @@
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
+import 'package:dealer_app/ui/layouts/category_detail_view.dart';
 import 'package:dealer_app/ui/layouts/category_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class DealerApp extends StatelessWidget {
           theme: _themeData(),
           routes: {
             '/addCategory': (_) => AddCategoryView(),
+            '/categoryDetail': (_) => CategoryDetailView(),
           },
           home: _homeWidget(),
         ),
