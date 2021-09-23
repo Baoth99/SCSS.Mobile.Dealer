@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/repositories/events/bot_nav_event.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
-import 'package:dealer_app/utils/env_util.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

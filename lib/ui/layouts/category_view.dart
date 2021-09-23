@@ -1,6 +1,6 @@
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
-import 'package:dealer_app/utils/env_util.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 
 class CategoryView extends StatelessWidget {
