@@ -50,7 +50,7 @@ class CategoryDetailView extends StatelessWidget {
           appBar: AppBar(
             elevation: 1,
             title: Text(
-              ScreenTitles.categoryDetailScreenTitle,
+              CustomTexts.categoryDetailScreenTitle,
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -75,7 +75,7 @@ class CategoryDetailView extends StatelessWidget {
                   flex: 90,
                   child: ListView(
                     children: [
-                      textBuilder("Hình ảnh"),
+                      customText(text: 'Hình ảnh'),
                       Container(
                         padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                         height: 150,
@@ -102,7 +102,7 @@ class CategoryDetailView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          textBuilder("Chi tiết"),
+                          customText(text: 'Chi tiết'),
                           InkWell(
                             onTap: () {
                               var newUnitController = TextEditingController();
@@ -241,7 +241,7 @@ class CategoryDetailView extends StatelessWidget {
             height: 40,
             child: rowFlexibleBuilder(
               cancelButtonBuilder(context, "Huỷ"),
-              elevatedButtonBuilder(context, "Thêm danh mục", () {
+              customElevatedButton(context, "Thêm danh mục", () {
                 if (_formKey.currentState!.validate()) {
                   //TODO: save scrap category
                   Navigator.of(context).pop();

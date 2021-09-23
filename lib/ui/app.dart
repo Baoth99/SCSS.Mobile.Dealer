@@ -3,6 +3,7 @@ import 'package:dealer_app/repositories/states/bot_nav_state.dart';
 import 'package:dealer_app/ui/layouts/category_detail_view.dart';
 import 'package:dealer_app/ui/layouts/category_view.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
@@ -24,8 +25,9 @@ class DealerApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: _themeData(),
           routes: {
-            '/addCategory': (_) => AddCategoryView(),
-            '/categoryDetail': (_) => CategoryDetailView(),
+            CustomRoutes.addCategory: (_) => AddCategoryView(),
+            CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
+            CustomRoutes.botNav: (_) => BotNavView(),
           },
           home: LoginView(),
         ),
@@ -55,32 +57,6 @@ class DealerApp extends StatelessWidget {
         ),
       ),
       primarySwatch: Colors.green,
-    );
-  }
-
-  _homeWidget() {
-    return BlocBuilder<BotNavBloc, BotNavState>(
-      builder: (_, state) {
-        return Scaffold(
-          body: state is StateHome
-              //todo: homepage
-              ? Container()
-              : state is StateNotification
-                  //todo: noti
-                  ? Container()
-                  : state is StateCategory
-                      ? CategoryView()
-                      //todo history
-                      : Container(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            child: Icon(Icons.add),
-          ),
-          bottomNavigationBar: BotNavView(),
-        );
-      },
     );
   }
 }

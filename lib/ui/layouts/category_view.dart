@@ -60,7 +60,7 @@ class CategoryView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ScreenTitles.categoryScreenTitle,
+          CustomTexts.categoryScreenTitle,
           style: Theme.of(context).textTheme.headline1,
         ),
         actions: [

@@ -15,16 +15,32 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (event is EventLoginPhoneNumberChanged) {
       yield state.copyWith(phone: event.phoneNumber);
     } else if (event is EventLoginPasswordChanged) {
-      yield state.copyWith(phone: event.password);
+      yield state.copyWith(password: event.password);
     } else if (event is EventLoginButtonSubmmited) {
-      yield state.copyWith(process: Process.processing);
-      print('fetching token');
-      AccessTokenHolderModel a = await _apiCaller.fectchAccessToken();
-      print('fetching userinfo');
-      UserInfoModel b =
-          await _apiCaller.fectchUserInfo(bearerToken: a.accessToken);
-
-      yield state.copyWith(process: Process.finishProcessing);
+      try {
+        //start progress indicator
+        yield state.copyWith(process: Process.processing);
+        //get access token
+        AccessTokenHolderModel accessTokenHolderModel = await _apiCaller
+            .fectchAccessToken(phone: state.phone, password: state.password);
+        //get user information
+        UserInfoModel userInfoModel = await _apiCaller.fectchUserInfo(
+            bearerToken: accessTokenHolderModel.accessToken);
+        //validated
+        yield state.copyWith(process: Process.validated);
+      } on Exception catch (e) {
+        //close progress indicator
+        yield state.copyWith(process: Process.finishProcessing);
+        //wrong password or phone number
+        if (e.toString().contains('Login failed')) {
+          yield state.copyWith(process: Process.invalid);
+          yield state.copyWith(process: Process.notSubmitted);
+        } else
+          yield state.copyWith(process: Process.error);
+        yield state.copyWith(process: Process.notSubmitted);
+      }
+    } else if (event is EventShowHidePassword) {
+      yield state.copyWith(isPasswordObscured: !state.isPasswordObscured);
     }
   }
 }

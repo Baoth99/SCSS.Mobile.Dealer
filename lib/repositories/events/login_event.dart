@@ -24,3 +24,8 @@ class EventLoginButtonSubmmited extends LoginEvent {
   @override
   List<Object?> get props => [];
 }
+
+class EventShowHidePassword extends LoginEvent {
+  @override
+  List<bool> get props => [];
+}

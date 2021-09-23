@@ -6,7 +6,8 @@ import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 
 class APICaller {
-  Future<AccessTokenHolderModel> fectchAccessToken() async {
+  Future<AccessTokenHolderModel> fectchAccessToken(
+      {required String phone, required String password}) async {
     String scope = EnvID4AppSettingValue.scopeRole +
         ' ' +
         EnvID4AppSettingValue.scopeIdCard +
@@ -26,8 +27,8 @@ class APICaller {
       'client_id': EnvID4AppSettingValue.clientId,
       'client_secret': EnvID4AppSettingValue.clientSecret,
       'grant_type': EnvID4AppSettingValue.grantTypePassword,
-      'username': '0358155207',
-      'password': 'P@sswordDemo123',
+      'username': phone,
+      'password': password,
       'scope': scope
     };
     final response = await http.post(
@@ -38,10 +39,10 @@ class APICaller {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       return AccessTokenHolderModel.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 400) {
+      throw Exception('Login failed');
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to fetch token');
     }
   }
 

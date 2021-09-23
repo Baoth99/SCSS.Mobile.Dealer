@@ -8,6 +8,6 @@ OutlinedButton cancelButtonBuilder(context, text) {
   );
 }
 
-ElevatedButton elevatedButtonBuilder(context, text, action) {
+ElevatedButton customElevatedButton(context, text, action) {
   return ElevatedButton(onPressed: action, child: Text(text));
 }
