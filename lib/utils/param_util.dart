@@ -10,3 +10,7 @@ class ScreenTitles {
   static const String addCategoryScreenTitle = "Thêm danh mục";
   static const String categoryDetailScreenTitle = "Chi tiết";
 }
+
+class CustomFormats {
+  static const String birthday = 'dd/MM/yyyy';
+}
