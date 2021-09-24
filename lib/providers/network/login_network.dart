@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:dealer_app/repositories/models/user_profile_model.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 
-class APICaller {
-  Future<AccessTokenHolderModel> fectchAccessToken(
+class LoginNetwork {
+  static Future<AccessTokenHolderModel> fectchAccessToken(
       {required String phone, required String password}) async {
     String scope = EnvID4AppSettingValue.scopeRole +
         ' ' +
@@ -32,7 +33,7 @@ class APICaller {
       'scope': scope
     };
     final response = await http.post(
-        Uri.parse(EnvID4AppSettingValue.apiUrl + 'connect/token'),
+        Uri.parse(EnvID4AppSettingValue.apiUrl + CustomTexts.apiUrlTokenLink),
         body: body);
 
     if (response.statusCode == 200) {
@@ -40,20 +41,22 @@ class APICaller {
       // then parse the JSON.
       return AccessTokenHolderModel.fromJson(jsonDecode(response.body));
     } else if (response.statusCode == 400) {
-      throw Exception('Login failed');
+      throw Exception(CustomTexts.loginFailedException);
     } else {
-      throw Exception('Failed to fetch token');
+      throw Exception(CustomTexts.fetchTokenFailedException);
     }
   }
 
-  Future<UserInfoModel> fectchUserInfo({required String bearerToken}) async {
+  static Future<UserInfoModel> fectchUserInfo(
+      {required String bearerToken}) async {
     //add headers
     Map<String, String> headers = {
       'Authorization': 'Bearer $bearerToken',
     };
 
     final response = await http.get(
-        Uri.parse(EnvID4AppSettingValue.apiUrl + 'connect/userinfo'),
+        Uri.parse(
+            EnvID4AppSettingValue.apiUrl + CustomTexts.apiUrlUserInfoLink),
         headers: headers);
 
     if (response.statusCode == 200) {
@@ -63,7 +66,7 @@ class APICaller {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to fetch user info');
+      throw Exception(CustomTexts.fetchUserInfoFailedException);
     }
   }
 }

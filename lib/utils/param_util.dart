@@ -26,6 +26,13 @@ class CustomTexts {
   static const String forgetPasswordTextButton = 'Lấy lại mật khẩu';
   static const String register = 'Bạn chưa có tài khoản?';
   static const String registerTextButton = 'Đăng ký';
+  //api
+  static const String apiUrlTokenLink = 'connect/token';
+  static const String apiUrlUserInfoLink = 'connect/userinfo';
+  static const String loginFailedException = 'Login failed';
+  static const String fetchTokenFailedException = 'Failed to fetch token';
+  static const String fetchUserInfoFailedException =
+      'Failed to fetch user info';
 }
 
 class CustomFormats {

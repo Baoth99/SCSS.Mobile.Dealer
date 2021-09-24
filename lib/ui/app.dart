@@ -1,15 +1,14 @@
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
 import 'package:dealer_app/ui/layouts/category_detail_view.dart';
-import 'package:dealer_app/ui/layouts/category_view.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'layouts/add_category_view.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
 
+import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
 
 class DealerApp extends StatelessWidget {
