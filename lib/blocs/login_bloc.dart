@@ -6,7 +6,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  var _loginHandler = getIt.get<LoginHandler>();
+  var _loginHandler = getIt.get<ILoginHandler>();
   LoginBloc({required LoginState initialState}) : super(initialState);
 
   @override
