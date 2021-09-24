@@ -7,7 +7,7 @@ import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 
 class LoginNetwork {
-  Future<AccessTokenHolderModel> fectchAccessToken(
+  static Future<AccessTokenHolderModel> fectchAccessToken(
       {required String phone, required String password}) async {
     String scope = EnvID4AppSettingValue.scopeRole +
         ' ' +
@@ -47,7 +47,8 @@ class LoginNetwork {
     }
   }
 
-  Future<UserInfoModel> fectchUserInfo({required String bearerToken}) async {
+  static Future<UserInfoModel> fectchUserInfo(
+      {required String bearerToken}) async {
     //add headers
     Map<String, String> headers = {
       'Authorization': 'Bearer $bearerToken',
