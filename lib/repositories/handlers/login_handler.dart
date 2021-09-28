@@ -1,4 +1,3 @@
-import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/providers/network/login_network.dart';
 import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/repositories/models/user_profile_model.dart';

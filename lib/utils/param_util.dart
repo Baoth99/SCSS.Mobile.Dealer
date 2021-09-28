@@ -33,6 +33,18 @@ class CustomTexts {
   static const String fetchTokenFailedException = 'Failed to fetch token';
   static const String fetchUserInfoFailedException =
       'Failed to fetch user info';
+  //register
+  static const String registerWelcomeText =
+      'Xin chào, số điện thoại của bạn là?';
+
+  static const String next = 'Tiếp';
+  static const String otpMessage =
+      'Một mã số gồm 6 chữ số vừa được gửi đến số điện thoại';
+  static const String otpErrorMessage =
+      'Gửi mã số thất bại, xin đợi 5 phút và thử lại';
+  static const String invalidOTP = 'Mã số không hợp lệ';
+  static const String checkOTPErrorMessage =
+      'Đã có lỗi xảy ra, xin đợi 5 phút và thử lại';
 }
 
 class CustomFormats {
@@ -43,6 +55,7 @@ class CustomRegexs {
   static const String phoneRegex = r'^0[0-9]{9}$';
   static const String passwordRegex =
       r'^(?=.*[A-Z])(?=.*[!@#$%^&*\\()\-_+=[\].,;:{}|~`<>]).{8,64}$';
+  static const String otpRegex = r'^[0-9]{6}$';
 }
 
 class CustomAssets {
@@ -53,4 +66,19 @@ class CustomRoutes {
   static const String botNav = '/navBar';
   static const String addCategory = '/addCategory';
   static const String categoryDetail = '/categoryDetail';
+  static const String register = '/register';
+  static const String registerOTP = '/registerOTP';
+  static const String registerPersonalDetail = '/registerPersonalDetail';
+  static const String registerStoreBranchOption = '/registerStoreBranchOption';
+  static const String registerStoreDetail = '/registerStoreDetail';
+  static const String registerComplete = '/registerComplete';
+}
+
+enum Process {
+  neutral,
+  processing,
+  processed,
+  valid,
+  invalid,
+  error,
 }

@@ -2,7 +2,7 @@ import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/handlers/login_handler.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/utils/param_util.dart';
+import 'package:dealer_app/utils/param_util.dart' hide Process;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
