@@ -109,7 +109,6 @@ class RegisterOTPView extends StatelessWidget {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onChanged: (value) => context
                       .read<RegisterOTPBloc>()
                       .add(EventOTPChanged(otp: value)),

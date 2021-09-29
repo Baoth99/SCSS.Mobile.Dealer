@@ -90,11 +90,11 @@ class RegisterView extends StatelessWidget {
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (value) => context
                 .read<RegisterBloc>()
                 .add(EventPhoneNumberChanged(phoneNumber: value)),
             validator: (value) {
+              if (value == null || value.isEmpty) return CustomTexts.phoneBlank;
               if (!state.isPhoneValid) return CustomTexts.invalidPhone;
             },
           ),

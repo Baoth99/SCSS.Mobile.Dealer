@@ -16,6 +16,7 @@ class CustomTexts {
   static const String invalidPassword =
       'Mật khẩu cần chứa ít nhất 1 ký tự in hoa, 1 ký tự đặc biệt';
   static const String invalidPhone = 'Số điện thoại không hợp lệ';
+  static const String phoneBlank = 'Số điện thoại không được để trống';
   static const String blankPassword = 'Nhập mật khẩu';
   static const String blankPhone = 'Nhập số điện thoại';
   static const String passwordLabel = 'Mật khẩu';
