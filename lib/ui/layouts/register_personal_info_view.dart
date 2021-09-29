@@ -3,6 +3,7 @@ import 'package:dealer_app/repositories/events/register_personal_info_event.dart
 import 'package:dealer_app/repositories/states/register_personal_info_state.dart';
 import 'package:dealer_app/ui/widgets/cancel_button.dart';
 import 'package:dealer_app/utils/param_util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,16 +26,16 @@ class RegisterPersonalInfoView extends StatelessWidget {
       child: BlocListener<RegisterPersonalInfoBloc, RegisterPersonalInfoState>(
         listener: (context, state) {
           if (state.process == Process.valid) {
-            // Navigator.of(context)
-            //     .pushNamed(CustomRoutes., arguments: {
-            //   'phone': state.phone,
-            //   'name': state.name,
-            //   'id': state.id,
-            //   'birthdate': state.birthdate,
-            //   'address': state.address,
-            //   'sex': state.sex,
-            //   'password': state.password,
-            // });
+            Navigator.of(context).pushNamed(CustomRoutes.registerBranchOption,
+                arguments: <String, dynamic>{
+                  'phone': state.phone,
+                  'name': state.name,
+                  'id': state.id,
+                  'birthdate': state.birthdate,
+                  'address': state.address,
+                  'sex': state.sex,
+                  'password': state.password,
+                });
           }
         },
         child: BlocBuilder<RegisterPersonalInfoBloc, RegisterPersonalInfoState>(
@@ -63,15 +64,13 @@ class RegisterPersonalInfoView extends StatelessWidget {
       builder: (context, state) {
         return Form(
           key: _formKey,
-          child: Container(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _textFields(),
-                  _submitButton(),
-                ],
-              ),
+            child: Column(
+              children: [
+                _textFields(),
+                _submitButton(),
+              ],
             ),
           ),
         );

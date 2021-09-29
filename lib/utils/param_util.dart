@@ -60,6 +60,11 @@ class CustomTexts {
   static const String passwordError = 'Mật khẩu phải chứa ít nhất 6 ký tự';
   static const String passwordBlank = 'Mật khẩu không được để trống';
   static const String nameBlank = 'Tên không được để trống';
+  static const String appBarBranchOptionText = 'Thông tin vựa';
+  static const String isBranchText =
+      'Vựa mới của bạn có phải là chi nhánh của một vựa khác đã đăng ký trước đó không?';
+  static const String mainBranchIdLabel = 'Tên vựa chính';
+  static const String mainBranchIdBlank = 'Tên vựa chính không được để trống';
 }
 
 class CustomFormats {
@@ -84,7 +89,7 @@ class CustomRoutes {
   static const String register = '/register';
   static const String registerOTP = '/registerOTP';
   static const String registerPersonalInfo = '/registerPersonalInfo';
-  static const String registerStoreBranchOption = '/registerStoreBranchOption';
+  static const String registerBranchOption = '/registerBranchOption';
   static const String registerStoreInfo = '/registerStoreInfo';
   static const String registerComplete = '/registerComplete';
 }
@@ -107,4 +112,10 @@ enum Sex {
 const Map<Sex, String> sexFormFieldItems = {
   Sex.male: 'Nam',
   Sex.female: 'Nữ',
+};
+
+//isBranch options
+const Map<bool, String> isBranchRadioOptions = {
+  false: 'Không',
+  true: 'Có',
 };
