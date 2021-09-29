@@ -7,6 +7,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class RegisterBranchOptionView extends StatelessWidget {
   RegisterBranchOptionView({Key? key}) : super(key: key);
@@ -33,18 +34,18 @@ class RegisterBranchOptionView extends StatelessWidget {
       child: BlocListener<RegisterBranchOptionBloc, RegisterBranchOptionState>(
         listener: (context, state) {
           if (state.process == Process.valid) {
-            // Navigator.of(context)
-            //     .pushNamed(CustomRoutes., arguments: {
-            //   'phone': state.phone,
-            //   'name': state.name,
-            //   'id': state.id,
-            //   'birthdate': state.birthdate,
-            //   'address': state.address,
-            //   'sex': state.sex,
-            //   'password': state.password,
-            //   'isBranch' : state.isBranch,
-            //   'mainBranchId' : state.mainBranchId,
-            // });
+            Navigator.of(context)
+                .pushNamed(CustomRoutes.registerStoreInfo, arguments: {
+              'phone': state.phone,
+              'name': state.name,
+              'id': state.id,
+              'birthdate': state.birthdate,
+              'address': state.address,
+              'sex': state.sex,
+              'password': state.password,
+              'isBranch': state.isBranch,
+              'mainBranchId': state.mainBranchId,
+            });
           }
         },
         child: BlocBuilder<RegisterBranchOptionBloc, RegisterBranchOptionState>(
@@ -130,24 +131,18 @@ class RegisterBranchOptionView extends StatelessWidget {
     );
   }
 
-//TODO:
-//main branch dropdown form field
-  static const Map<int, String> _mainBracnhIdFormFieldItems = {
-    1: 'Vựa ve chai Lê Văn Việt',
-    2: 'Vựa ve chai 69',
-    3: 'Vựa ve chai FPT chi nhánh 1',
-  };
-
   _mainBranchIdField() {
     return BlocBuilder<RegisterBranchOptionBloc, RegisterBranchOptionState>(
       builder: (context, state) {
         return SizedBox(
           height: 90,
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: CustomTexts.mainBranchIdLabel,
-            ),
+          child: DropdownSearch(
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: true,
+            onFind: (String? filter) => _getData(filter),
+            label: CustomTexts.mainBranchIdLabel,
+            selectedItem: _mainBracnhIdFormFieldItems[state.mainBranchId],
             validator: (value) {
               if (state.isBranch && (value == null || value == ''))
                 return CustomTexts.mainBranchIdBlank;
@@ -162,13 +157,6 @@ class RegisterBranchOptionView extends StatelessWidget {
                     ),
                   );
             },
-            value: _mainBracnhIdFormFieldItems[state.mainBranchId],
-            items: _mainBracnhIdFormFieldItems.values.map((String value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
           ),
         );
       },
@@ -190,5 +178,22 @@ class RegisterBranchOptionView extends StatelessWidget {
         );
       },
     );
+  }
+
+//TODO getdata
+
+//main branch dropdown form field
+  static const Map<int, String> _mainBracnhIdFormFieldItems = {
+    1: 'Vựa ve chai Lê Văn Việt',
+    2: 'Vựa ve chai 69',
+    3: 'Vựa ve chai FPT chi nhánh 1',
+  };
+
+  Future<List<String>> _getData(filter) async {
+    final data = _mainBracnhIdFormFieldItems.values.toList();
+    if (data != null) {
+      return data;
+    }
+    return [];
   }
 }
