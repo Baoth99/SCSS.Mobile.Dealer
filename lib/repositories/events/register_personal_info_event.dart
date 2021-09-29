@@ -66,7 +66,7 @@ class EventRePasswordChanged extends RegisterPersonalInfoEvent {
   List<String> get props => [rePassword];
 }
 
-class EventNextbuttonPressed extends RegisterPersonalInfoEvent {
+class EventNextButtonPressed extends RegisterPersonalInfoEvent {
   @override
   List<Object?> get props => [];
 }

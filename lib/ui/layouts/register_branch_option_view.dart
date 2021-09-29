@@ -173,7 +173,7 @@ class RegisterBranchOptionView extends StatelessWidget {
             if (_formKey.currentState!.validate())
               context
                   .read<RegisterBranchOptionBloc>()
-                  .add(EventNextbuttonPressed());
+                  .add(EventNextButtonPressed());
           },
         );
       },

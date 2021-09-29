@@ -15,7 +15,7 @@ class RegisterBranchOptionBloc
       yield state.copyWith(isBranch: event.isBranch);
     } else if (event is EventMainBranchChanged) {
       yield state.copyWith(mainBranchId: event.mainBranchId);
-    } else if (event is EventNextbuttonPressed) {
+    } else if (event is EventNextButtonPressed) {
       yield state.copyWith(process: Process.valid);
       yield state.copyWith(process: Process.neutral);
     }

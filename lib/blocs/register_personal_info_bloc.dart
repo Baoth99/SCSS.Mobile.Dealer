@@ -25,7 +25,7 @@ class RegisterPersonalInfoBloc
       yield state.copyWith(password: event.password);
     } else if (event is EventRePasswordChanged) {
       yield state.copyWith(rePassword: event.rePassword);
-    } else if (event is EventNextbuttonPressed) {
+    } else if (event is EventNextButtonPressed) {
       yield state.copyWith(process: Process.valid);
       yield state.copyWith(process: Process.neutral);
     }

@@ -11,8 +11,10 @@ import 'package:flutter_flavor/flutter_flavor.dart';
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
 import 'layouts/register_branch_option_view.dart';
+import 'layouts/register_complete_view.dart';
 import 'layouts/register_otp_view.dart';
 import 'layouts/register_personal_info_view.dart';
+import 'layouts/register_store_info_view.dart';
 import 'layouts/register_view.dart';
 
 class DealerApp extends StatelessWidget {
@@ -37,6 +39,8 @@ class DealerApp extends StatelessWidget {
                 RegisterPersonalInfoView(),
             CustomRoutes.registerBranchOption: (_) =>
                 RegisterBranchOptionView(),
+            CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
+            CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
           },
           home: LoginView(),
         ),

@@ -20,7 +20,7 @@ class EventMainBranchChanged extends RegisterBranchOptionEvent {
   List<int> get props => [mainBranchId];
 }
 
-class EventNextbuttonPressed extends RegisterBranchOptionEvent {
+class EventNextButtonPressed extends RegisterBranchOptionEvent {
   @override
   List<Object?> get props => [];
 }

@@ -65,6 +65,17 @@ class CustomTexts {
       'Vựa mới của bạn có phải là chi nhánh của một vựa khác đã đăng ký trước đó không?';
   static const String mainBranchIdLabel = 'Tên vựa chính';
   static const String mainBranchIdBlank = 'Tên vựa chính không được để trống';
+  static const String storeNameLabel = 'Tên vựa';
+  static const String storePhoneLabel = 'Số điện thoại vựa';
+  static const String storeAddressLabel = 'Địa chỉ vựa';
+  static const String storeNameBlank = 'Tên vựa không được để trống';
+  static const String storePhoneBlank = 'Số điện thoại vựa không được để trống';
+  static const String storePhoneError = 'Số điện thoại vựa không hợp lệ';
+  static const String storeAddressBlank = 'Địa chỉ vựa không được để trống';
+  static const String appBarStoreInfoText = 'Thông tin vựa';
+  static const String cameraText = 'Máy ảnh';
+  static const String galleryText = 'Thư viện';
+  static const String storeFrontImageText = 'Ảnh chụp mặt trước cửa hàng';
 }
 
 class CustomFormats {

@@ -278,7 +278,7 @@ class RegisterPersonalInfoView extends StatelessWidget {
             if (_formKey.currentState!.validate())
               context
                   .read<RegisterPersonalInfoBloc>()
-                  .add(EventNextbuttonPressed());
+                  .add(EventNextButtonPressed());
           },
         );
       },
