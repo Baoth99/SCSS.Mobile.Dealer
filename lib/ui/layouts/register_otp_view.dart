@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/register_otp_bloc.dart';
 import 'package:dealer_app/repositories/events/register_otp_event.dart';
 import 'package:dealer_app/repositories/states/register_otp_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +70,7 @@ class RegisterOTPView extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.fromLTRB(30, 100, 30, 50),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _logo(),
                 customText(text: CustomTexts.otpMessage + ' ' + state.phone),

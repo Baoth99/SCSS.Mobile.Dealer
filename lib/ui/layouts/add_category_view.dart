@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dealer_app/blocs/add_category_bloc.dart';
 import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart';

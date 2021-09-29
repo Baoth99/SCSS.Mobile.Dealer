@@ -76,6 +76,12 @@ class CustomTexts {
   static const String cameraText = 'Máy ảnh';
   static const String galleryText = 'Thư viện';
   static const String storeFrontImageText = 'Ảnh chụp mặt trước cửa hàng';
+  static const String logoutButtonText = 'Đăng xuất';
+  static const String registerCompleteGreeting = 'Xin chào ';
+  static const String registerCompleteCongrat =
+      'Bạn đã đăng ký làm đối tác chủ vựa phế liệu của VeChaiXANH thành công';
+  static const String registerCompleteNote =
+      'Vui lòng lên văn phòng VeChaiXANH để hoàn tất thủ tục để bạn có thể sử dụng dịch vụ của chúng tôi';
 }
 
 class CustomFormats {

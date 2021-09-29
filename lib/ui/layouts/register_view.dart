@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/register_bloc.dart';
 import 'package:dealer_app/repositories/events/register_event.dart';
 import 'package:dealer_app/repositories/states/register_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +65,7 @@ class RegisterView extends StatelessWidget {
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 customText(text: CustomTexts.registerWelcomeText),
                 _phoneNumberField(),

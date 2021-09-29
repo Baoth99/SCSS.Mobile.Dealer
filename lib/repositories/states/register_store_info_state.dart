@@ -8,7 +8,6 @@ class RegisterStoreInfoState {
   String address;
   Sex sex;
   String password;
-  String rePassword;
   bool isBranch;
   int? mainBranchId;
 
@@ -32,7 +31,6 @@ class RegisterStoreInfoState {
     String? address,
     Sex? sex,
     String? password,
-    String? rePassword,
     Process? process,
     bool? isBranch,
     int? mainBranchId,
@@ -48,7 +46,6 @@ class RegisterStoreInfoState {
         address = address ?? '',
         sex = sex ?? Sex.male,
         password = password ?? '',
-        rePassword = rePassword ?? '',
         process = process ?? Process.neutral,
         isBranch = isBranch ?? false,
         mainBranchId = mainBranchId,
@@ -67,7 +64,6 @@ class RegisterStoreInfoState {
     String? address,
     Sex? sex,
     String? password,
-    String? rePassword,
     Process? process,
     bool? isBranch,
     int? mainBranchId,
@@ -85,7 +81,6 @@ class RegisterStoreInfoState {
       address: address ?? this.address,
       sex: sex ?? this.sex,
       password: password ?? this.password,
-      rePassword: rePassword ?? this.rePassword,
       process: process ?? this.process,
       isBranch: isBranch ?? this.isBranch,
       mainBranchId: mainBranchId ?? this.mainBranchId,

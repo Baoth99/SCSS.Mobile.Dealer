@@ -1,4 +1,6 @@
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 
 class RegisterCompleteView extends StatelessWidget {
@@ -9,27 +11,51 @@ class RegisterCompleteView extends StatelessWidget {
     final Map _argumentMap =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
-      body: _body(_argumentMap),
+      body: _body(context, _argumentMap),
     );
   }
 
-  _body(argumentMap) {
-    return SingleChildScrollView(
+  _body(context, argumentMap) {
+    var _deviceSize = MediaQuery.of(context).size;
+    return Container(
+      width: _deviceSize.width,
+      height: _deviceSize.height,
+      padding: const EdgeInsets.fromLTRB(30, 100, 30, 50),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          customText(
-              text: 'Xin chào ${argumentMap['name']}',
-              alignment: Alignment.center),
-          customText(
-              text:
-                  'Bạn đã đăng ký làm đối tác chủ vựa phế liệu của VeChaiXANH thành công',
-              alignment: Alignment.center),
-          customText(
-              text:
-                  'Vui lòng lên văn phòng VeChaiXANH để hoàn tất thủ tục để bạn có thể sử dụng dịch vụ của chúng tôi',
-              alignment: Alignment.center),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              customText(
+                  text: CustomTexts.registerCompleteGreeting +
+                      argumentMap['name'],
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center),
+              customText(
+                  text: CustomTexts.registerCompleteCongrat,
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center),
+              customText(
+                  text: CustomTexts.registerCompleteNote,
+                  alignment: Alignment.center,
+                  textAlign: TextAlign.center),
+            ],
+          ),
+          _logoutButton(context),
         ],
       ),
+    );
+  }
+
+  _logoutButton(context) {
+    return customElevatedButton(
+      context,
+      CustomTexts.logoutButtonText,
+      () {
+        //TODO: logout
+      },
     );
   }
 }

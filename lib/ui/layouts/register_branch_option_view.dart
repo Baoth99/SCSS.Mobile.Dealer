@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/register_branch_option_bloc.dart';
 import 'package:dealer_app/repositories/events/register_branch_option_event.dart';
 import 'package:dealer_app/repositories/states/register_branch_option_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
@@ -79,6 +79,7 @@ class RegisterBranchOptionView extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 customText(text: CustomTexts.isBranchText),
                 _radioButtons(),

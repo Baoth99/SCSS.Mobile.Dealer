@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:dealer_app/blocs/register_store_info_option_bloc.dart';
+import 'package:dealer_app/blocs/register_store_info_bloc.dart';
 import 'package:dealer_app/repositories/events/register_store_info_event.dart';
 import 'package:dealer_app/repositories/states/register_store_info_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
@@ -41,10 +41,13 @@ class RegisterStoreInfoView extends StatelessWidget {
           if (state.isImageSourceActionSheetVisible) {
             _showImageSourceActionSheet(context);
           } else if (state.process == Process.valid) {
-            Navigator.of(context).pushNamed(CustomRoutes.registerComplete,
-                arguments: <String, dynamic>{
-                  'name': state.name,
-                });
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              CustomRoutes.registerComplete,
+              (route) => false,
+              arguments: <String, dynamic>{
+                'name': state.name,
+              },
+            );
           }
         },
         child: BlocBuilder<RegisterStoreInfoBloc, RegisterStoreInfoState>(
@@ -76,6 +79,7 @@ class RegisterStoreInfoView extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 customText(text: CustomTexts.storeFrontImageText),
                 _scrapImage(),

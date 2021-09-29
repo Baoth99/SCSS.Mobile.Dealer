@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/param_util.dart' hide Process;
 import 'package:flutter/material.dart';
