@@ -236,7 +236,7 @@ class RegisterPersonalInfoView extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty)
                 return CustomTexts.passwordBlank;
-              if (!state.isRePasswordValid) return CustomTexts.passwordError;
+              if (!state.isPasswordValid) return CustomTexts.passwordError;
             },
           ),
         );
