@@ -18,8 +18,7 @@ class RegisterOTPBloc extends Bloc<RegisterOTPEvent, RegisterOTPState> {
         //TODO: send OTP
         await Future.delayed(Duration(seconds: 5));
         yield state.copyWith(process: Process.processed);
-        // yield state.copyWith(process: Process.valid);
-        yield state.copyWith(process: Process.error);
+        yield state.copyWith(process: Process.valid);
       } on Exception {
         yield state.copyWith(process: Process.processed);
         yield state.copyWith(process: Process.error);

@@ -36,7 +36,6 @@ class CustomTexts {
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
-
   static const String next = 'Tiếp';
   static const String otpMessage =
       'Một mã số gồm 6 chữ số vừa được gửi đến số điện thoại';
@@ -45,6 +44,21 @@ class CustomTexts {
   static const String invalidOTP = 'Mã số không hợp lệ';
   static const String checkOTPErrorMessage =
       'Đã có lỗi xảy ra, xin đợi 5 phút và thử lại';
+  static const String appBarPersonalInfoText = 'Thông tin cá nhân';
+  static const String nameLabel = 'Họ và Tên';
+  static const String invalidName = 'Tên không hợp lệ';
+  static const String idLabel = 'CMND/CCCD/Bằng lái xe';
+  static const String idBlank = 'Mục này không được để trống';
+  static const String birthDateLabel = 'Ngày sinh';
+  static const String birthDatePickerHelpText = 'Chọn ngày sinh';
+  static const String addressLabel = 'Địa chỉ';
+  static const String sexLabel = 'Giới tính';
+  static const String rePasswordLabel = 'Nhập lại mật khẩu';
+  static const String rePasswordError = 'Nhập lại mật khẩu không khớp';
+  static const String rePasswordBlank = 'Nhập lại mật khẩu không được để trống';
+  static const String passwordError = 'Mật khẩu phải chứa ít nhất 6 ký tự';
+  static const String passwordBlank = 'Mật khẩu không được để trống';
+  static const String nameBlank = 'Tên không được để trống';
 }
 
 class CustomFormats {
@@ -68,9 +82,9 @@ class CustomRoutes {
   static const String categoryDetail = '/categoryDetail';
   static const String register = '/register';
   static const String registerOTP = '/registerOTP';
-  static const String registerPersonalDetail = '/registerPersonalDetail';
+  static const String registerPersonalInfo = '/registerPersonalInfo';
   static const String registerStoreBranchOption = '/registerStoreBranchOption';
-  static const String registerStoreDetail = '/registerStoreDetail';
+  static const String registerStoreInfo = '/registerStoreInfo';
   static const String registerComplete = '/registerComplete';
 }
 
@@ -82,3 +96,14 @@ enum Process {
   invalid,
   error,
 }
+
+enum Sex {
+  male,
+  female,
+}
+
+//sex dropdown form field
+const Map<Sex, String> sexFormFieldItems = {
+  Sex.male: 'Nam',
+  Sex.female: 'Nữ',
+};

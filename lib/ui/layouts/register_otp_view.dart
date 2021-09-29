@@ -42,11 +42,10 @@ class RegisterOTPView extends StatelessWidget {
             Navigator.of(context).pop();
           } else if (state.process == Process.error) {
             _showSnackBar(context, CustomTexts.checkOTPErrorMessage);
+          } else if (state.process == Process.valid) {
+            Navigator.of(context).pushNamed(CustomRoutes.registerPersonalInfo,
+                arguments: {'phone': state.phone});
           }
-          // else if (state.process == Process.valid) {
-          //   Navigator.of(context).pushNamed(CustomRoutes.registerOTP,
-          //       arguments: {'phone': state.phone});
-          // }
         },
         child: BlocBuilder<RegisterOTPBloc, RegisterOTPState>(
           builder: (context, state) {

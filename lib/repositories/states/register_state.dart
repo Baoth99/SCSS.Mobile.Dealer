@@ -17,13 +17,6 @@ class RegisterState {
 
   RegisterState({
     phone,
-    // name,
-    // id,
-    // birthdate,
-    // address,
-    // sex,
-    // password,
-    // rePassword,
     // isBranch,
     // mainBranchId,
     // storeName,
