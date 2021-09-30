@@ -1,9 +1,9 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/ui/widgets/cancel_button.dart';
+import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
-import 'package:dealer_app/utils/param_util.dart';
+import 'package:dealer_app/utils/param_util.dart' hide Process;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -189,14 +189,20 @@ class LoginView extends StatelessWidget {
   }
 
   _registerOption() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        customText(text: CustomTexts.register),
-        //TODO: register
-        customTextButton(
-            text: CustomTexts.registerTextButton, onPressed: () {}),
-      ],
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            customText(text: CustomTexts.register),
+            customTextButton(
+                text: CustomTexts.registerTextButton,
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CustomRoutes.register);
+                }),
+          ],
+        );
+      },
     );
   }
 }

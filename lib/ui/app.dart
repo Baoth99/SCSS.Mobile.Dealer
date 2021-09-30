@@ -10,6 +10,12 @@ import 'package:flutter_flavor/flutter_flavor.dart';
 
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
+import 'layouts/register_branch_option_view.dart';
+import 'layouts/register_complete_view.dart';
+import 'layouts/register_otp_view.dart';
+import 'layouts/register_personal_info_view.dart';
+import 'layouts/register_store_info_view.dart';
+import 'layouts/register_view.dart';
 
 class DealerApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -27,6 +33,14 @@ class DealerApp extends StatelessWidget {
             CustomRoutes.addCategory: (_) => AddCategoryView(),
             CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
             CustomRoutes.botNav: (_) => BotNavView(),
+            CustomRoutes.register: (_) => RegisterView(),
+            CustomRoutes.registerOTP: (_) => RegisterOTPView(),
+            CustomRoutes.registerPersonalInfo: (_) =>
+                RegisterPersonalInfoView(),
+            CustomRoutes.registerBranchOption: (_) =>
+                RegisterBranchOptionView(),
+            CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
+            CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
           },
           home: LoginView(),
         ),
