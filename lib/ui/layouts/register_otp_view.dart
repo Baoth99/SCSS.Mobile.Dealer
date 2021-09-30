@@ -75,6 +75,7 @@ class RegisterOTPView extends StatelessWidget {
                 _logo(),
                 customText(text: CustomTexts.otpMessage + ' ' + state.phone),
                 _otpField(),
+                _resend(),
                 _submitButton(),
               ],
             ),
@@ -119,65 +120,30 @@ class RegisterOTPView extends StatelessWidget {
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: 90,
-            //   width: 50,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     keyboardType: TextInputType.phone,
-            //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 90,
-            //   width: 50,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     keyboardType: TextInputType.phone,
-            //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 90,
-            //   width: 50,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     keyboardType: TextInputType.phone,
-            //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 90,
-            //   width: 50,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     keyboardType: TextInputType.phone,
-            //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: 90,
-            //   width: 50,
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //     ),
-            //     keyboardType: TextInputType.phone,
-            //     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            //   ),
-            // ),
           ],
         );
       },
     );
+  }
+
+  _resend() {
+    return BlocBuilder<RegisterOTPBloc, RegisterOTPState>(
+        builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          customText(text: CustomTexts.resendOTPText),
+          customTextButton(
+            text: state.timer > 0
+                ? '${CustomTexts.resendOTPButton} (${state.timer.toString()})'
+                : '${CustomTexts.resendOTPButton}',
+            onPressed: state.timer > 0
+                ? null
+                : () => context.read<RegisterOTPBloc>().add(EventResendOTP()),
+          ),
+        ],
+      );
+    });
   }
 
   _submitButton() {

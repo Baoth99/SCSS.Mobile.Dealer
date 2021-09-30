@@ -38,6 +38,8 @@ class CustomTexts {
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
   static const String next = 'Tiếp';
+  static const String resendOTPButton = 'Gửi lại mã số';
+  static const String resendOTPText = 'Bạn chưa nhận được mã số?';
   static const String otpMessage =
       'Một mã số gồm 6 chữ số vừa được gửi đến số điện thoại';
   static const String otpErrorMessage =
@@ -109,6 +111,10 @@ class CustomRoutes {
   static const String registerBranchOption = '/registerBranchOption';
   static const String registerStoreInfo = '/registerStoreInfo';
   static const String registerComplete = '/registerComplete';
+}
+
+class CustomTickerDurations {
+  static const int resendOTPDuration = 30;
 }
 
 enum Process {
