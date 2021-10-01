@@ -105,7 +105,7 @@ class LoginView extends StatelessWidget {
                 .read<LoginBloc>()
                 .add(EventLoginPhoneNumberChanged(phoneNumber: value)),
             validator: (value) {
-              if (!state.isPhoneValid) return CustomTexts.invalidPhone;
+              if (!state.isPhoneValid) return CustomTexts.phoneError;
             },
           ),
         );
@@ -144,7 +144,7 @@ class LoginView extends StatelessWidget {
                   .read<LoginBloc>()
                   .add(EventLoginPasswordChanged(password: value)),
               validator: (value) {
-                if (!state.isPasswordValid) return CustomTexts.invalidPassword;
+                if (!state.isPasswordValid) return CustomTexts.passwordError;
               }),
         );
       },
