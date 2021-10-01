@@ -101,7 +101,6 @@ class LoginView extends StatelessWidget {
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (value) => context
                 .read<LoginBloc>()
                 .add(EventLoginPhoneNumberChanged(phoneNumber: value)),
@@ -144,7 +143,6 @@ class LoginView extends StatelessWidget {
               onChanged: (value) => context
                   .read<LoginBloc>()
                   .add(EventLoginPasswordChanged(password: value)),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) {
                 if (!state.isPasswordValid) return CustomTexts.invalidPassword;
               }),
