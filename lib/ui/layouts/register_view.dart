@@ -96,7 +96,7 @@ class RegisterView extends StatelessWidget {
                 .add(EventPhoneNumberChanged(phoneNumber: value)),
             validator: (value) {
               if (value == null || value.isEmpty) return CustomTexts.phoneBlank;
-              if (!state.isPhoneValid) return CustomTexts.invalidPhone;
+              if (!state.isPhoneValid) return CustomTexts.phoneError;
             },
           ),
         );

@@ -13,12 +13,8 @@ class CustomTexts {
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';
   static const String loginButton = 'Đăng nhập';
-  static const String invalidPassword =
-      'Mật khẩu cần chứa ít nhất 1 ký tự in hoa, 1 ký tự đặc biệt';
-  static const String invalidPhone = 'Số điện thoại không hợp lệ';
+  static const String phoneError = 'Số điện thoại không hợp lệ';
   static const String phoneBlank = 'Số điện thoại không được để trống';
-  static const String blankPassword = 'Nhập mật khẩu';
-  static const String blankPhone = 'Nhập số điện thoại';
   static const String passwordLabel = 'Mật khẩu';
   static const String phoneLabel = 'Số điện thoại';
   static const String wrongPasswordOrPhone =
@@ -92,8 +88,7 @@ class CustomFormats {
 
 class CustomRegexs {
   static const String phoneRegex = r'^0[0-9]{9}$';
-  static const String passwordRegex =
-      r'^(?=.*[A-Z])(?=.*[!@#$%^&*\\()\-_+=[\].,;:{}|~`<>]).{8,64}$';
+  static const String passwordRegex = r'^.{6,}$';
   static const String otpRegex = r'^[0-9]{6}$';
 }
 
