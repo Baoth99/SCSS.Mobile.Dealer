@@ -79,7 +79,6 @@ class AddCategoryView extends StatelessWidget {
                           labelText: "Tên loại phế liệu",
                           floatingLabelBehavior: FloatingLabelBehavior.auto,
                         ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null || value.isEmpty)
                             return "Nhập tên loại phế liệu";
@@ -173,7 +172,6 @@ class AddCategoryView extends StatelessWidget {
                       labelText: "Đơn vị",
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
                     ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value == '') return null;
                       var text = 'Đơn vị đã có';
