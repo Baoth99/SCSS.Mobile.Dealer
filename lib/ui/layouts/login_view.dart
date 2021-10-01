@@ -59,7 +59,7 @@ class LoginView extends StatelessWidget {
         return Scaffold(
           body: Form(
             key: _formKey,
-            child: Container(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(30, 100, 30, 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
