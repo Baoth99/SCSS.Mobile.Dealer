@@ -3,7 +3,7 @@ import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
 import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
-import 'package:dealer_app/utils/param_util.dart' hide Process;
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +19,7 @@ class LoginView extends StatelessWidget {
       create: (context) => LoginBloc(initialState: LoginState()),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
+          print(state.process.toString());
           if (state.process == Process.processing) {
             showDialog(
               context: context,
@@ -37,7 +38,7 @@ class LoginView extends StatelessWidget {
               },
             );
           }
-          if (state.process == Process.finishProcessing) {
+          if (state.process == Process.processed) {
             Navigator.of(context).pop();
           }
           if (state.process == Process.invalid) {
@@ -46,7 +47,7 @@ class LoginView extends StatelessWidget {
           if (state.process == Process.error) {
             _showSnackBar(context, CustomTexts.loginError);
           }
-          if (state.process == Process.validated) {
+          if (state.process == Process.valid) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(CustomRoutes.botNav, (route) => false);
           }
