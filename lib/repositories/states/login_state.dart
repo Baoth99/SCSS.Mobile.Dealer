@@ -18,7 +18,7 @@ class LoginState {
 
   bool get isPhoneValid => RegExp(CustomRegexs.phoneRegex).hasMatch(phone);
   bool get isPasswordValid =>
-      RegExp(CustomRegexs.passwordRegex).hasMatch(password) && password != '';
+      RegExp(CustomRegexs.passwordRegex).hasMatch(password);
 
   LoginState(
       {String? phone,

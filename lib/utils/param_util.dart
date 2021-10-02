@@ -19,6 +19,8 @@ class CustomTexts {
   static const String phoneLabel = 'Số điện thoại';
   static const String wrongPasswordOrPhone =
       'Số điện thoại hoặc mật khẩu không chính xác';
+  static const String loginError =
+      'Đăng nhập thất bại, xin thử lại sau vài phút';
   static const String forgetPassword = 'Bạn quên mật khẩu?';
   static const String forgetPasswordTextButton = 'Lấy lại mật khẩu';
   static const String register = 'Bạn chưa có tài khoản?';
