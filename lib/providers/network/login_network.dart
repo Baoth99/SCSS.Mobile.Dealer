@@ -41,9 +41,9 @@ class LoginNetwork {
       // then parse the JSON.
       return AccessTokenHolderModel.fromJson(jsonDecode(response.body));
     } else if (response.statusCode == 400) {
-      throw Exception(CustomTexts.loginFailedException);
-    } else {
       throw Exception(CustomTexts.fetchTokenFailedException);
+    } else {
+      throw Exception(CustomTexts.loginFailedException);
     }
   }
 

@@ -22,18 +22,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         //TODO: do something about usermodel
         var userModel = await _loginHandler.login(
             phone: state.phone, password: state.password);
+        //close progress indicator
+        yield state.copyWith(process: Process.finishProcessing);
         //validated
         yield state.copyWith(process: Process.validated);
       } on Exception catch (e) {
-        //close progress indicator
-        yield state.copyWith(process: Process.finishProcessing);
         //wrong password or phone number
-        if (e.toString() == CustomTexts.loginFailedException) {
+        if (e.toString().contains(CustomTexts.fetchTokenFailedException)) {
           yield state.copyWith(process: Process.invalid);
-          yield state.copyWith(process: Process.notSubmitted);
+          //close progress indicator
+          yield state.copyWith(process: Process.finishProcessing);
         } else {
           yield state.copyWith(process: Process.error);
-          yield state.copyWith(process: Process.notSubmitted);
+          //close progress indicator
+          yield state.copyWith(process: Process.finishProcessing);
         }
       }
     } else if (event is EventShowHidePassword) {

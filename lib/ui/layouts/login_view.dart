@@ -43,6 +43,9 @@ class LoginView extends StatelessWidget {
           if (state.process == Process.invalid) {
             _showSnackBar(context, CustomTexts.wrongPasswordOrPhone);
           }
+          if (state.process == Process.error) {
+            _showSnackBar(context, CustomTexts.loginError);
+          }
           if (state.process == Process.validated) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(CustomRoutes.botNav, (route) => false);
@@ -105,6 +108,7 @@ class LoginView extends StatelessWidget {
                 .read<LoginBloc>()
                 .add(EventLoginPhoneNumberChanged(phoneNumber: value)),
             validator: (value) {
+              if (value == null || value.isEmpty) return CustomTexts.phoneBlank;
               if (!state.isPhoneValid) return CustomTexts.phoneError;
             },
           ),
@@ -144,6 +148,8 @@ class LoginView extends StatelessWidget {
                   .read<LoginBloc>()
                   .add(EventLoginPasswordChanged(password: value)),
               validator: (value) {
+                if (value == null || value.isEmpty)
+                  return CustomTexts.passwordBlank;
                 if (!state.isPasswordValid) return CustomTexts.passwordError;
               }),
         );
