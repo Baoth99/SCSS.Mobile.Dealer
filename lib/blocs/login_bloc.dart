@@ -2,7 +2,7 @@ import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/handlers/login_handler.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/utils/param_util.dart' hide Process;
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -23,20 +23,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         var userModel = await _loginHandler.login(
             phone: state.phone, password: state.password);
         //close progress indicator
-        yield state.copyWith(process: Process.finishProcessing);
-        //validated
-        yield state.copyWith(process: Process.validated);
+        yield state.copyWith(process: Process.processed);
+        yield state.copyWith(process: Process.valid);
       } on Exception catch (e) {
         //wrong password or phone number
         if (e.toString().contains(CustomTexts.fetchTokenFailedException)) {
+          //close progress indicator
+          yield state.copyWith(process: Process.processed);
           yield state.copyWith(process: Process.invalid);
-          //close progress indicator
-          yield state.copyWith(process: Process.finishProcessing);
         } else {
-          yield state.copyWith(process: Process.error);
           //close progress indicator
-          yield state.copyWith(process: Process.finishProcessing);
+          yield state.copyWith(process: Process.processed);
+          yield state.copyWith(process: Process.error);
         }
+      } finally {
+        yield state.copyWith(process: Process.neutral);
       }
     } else if (event is EventShowHidePassword) {
       yield state.copyWith(isPasswordObscured: !state.isPasswordObscured);

@@ -1,14 +1,5 @@
 import 'package:dealer_app/utils/param_util.dart';
 
-enum Process {
-  notSubmitted,
-  processing,
-  finishProcessing,
-  invalid,
-  validated,
-  error
-}
-
 class LoginState {
   String phone;
   String password;
@@ -27,7 +18,7 @@ class LoginState {
       bool? isPasswordObscured})
       : phone = phone ?? '',
         password = password ?? '',
-        process = process ?? Process.notSubmitted,
+        process = process ?? Process.neutral,
         isPasswordObscured = isPasswordObscured ?? true;
 
   LoginState copyWith(
