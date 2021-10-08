@@ -1,97 +1,62 @@
-class PromotionModel {
-  int id;
-  String name;
-  int dealerCategoryId;
-  int dealerAccountId;
-  String code;
-  int appliedAmount;
-  int bonusAmount;
-  DateTime fromTime;
-  DateTime toTime;
-  int status;
-  int createdBy;
-  DateTime createdTime;
-  bool isDeleted;
-  int? updatedBy;
-  DateTime? updatedTime;
+// To parse this JSON data, do
+//
+//     final promotionModel = promotionModelFromJson(jsonString);
 
+import 'dart:convert';
+
+PromotionModel promotionModelFromJson(String str) =>
+    PromotionModel.fromJson(json.decode(str));
+
+String promotionModelToJson(PromotionModel data) => json.encode(data.toJson());
+
+class PromotionModel {
   PromotionModel({
     required this.id,
-    required this.name,
-    required this.dealerCategoryId,
-    required this.dealerAccountId,
     required this.code,
-    required this.appliedAmount,
-    required this.bonusAmount,
-    required this.fromTime,
-    required this.toTime,
-    required this.status,
-    required this.createdBy,
-    required this.createdTime,
-    required this.isDeleted,
-    this.updatedBy,
-    this.updatedTime,
+    required this.promotionName,
+    required this.appliedScrapCategory,
+    required this.appliedScrapCategoryImageUrl,
+    this.appliedAmount,
+    this.bonusAmount,
+    required this.appliedFromTime,
+    required this.appliedToTime,
+    this.status,
   });
 
-  get getId => this.id;
+  String id;
+  String code;
+  String promotionName;
+  String appliedScrapCategory;
+  String appliedScrapCategoryImageUrl;
+  int? appliedAmount;
+  int? bonusAmount;
+  DateTime appliedFromTime;
+  DateTime appliedToTime;
+  int? status;
 
-  set setId(id) => this.id = id;
+  factory PromotionModel.fromJson(Map<String, dynamic> json) => PromotionModel(
+        id: json["id"],
+        code: json["code"],
+        promotionName: json["promotionName"],
+        appliedScrapCategory: json["appliedScrapCategory"],
+        appliedScrapCategoryImageUrl: json["appliedScrapCategoryImageUrl"],
+        appliedAmount: json["appliedAmount"],
+        bonusAmount: json["bonusAmount"],
+        appliedFromTime: DateTime.parse(json["appliedFromTime"]),
+        appliedToTime: DateTime.parse(json["appliedToTime"]),
+        status: json["status"],
+      );
 
-  get getName => this.name;
-
-  set setName(name) => this.name = name;
-
-  get getDealerCategoryId => this.dealerCategoryId;
-
-  set setDealerCategoryId(dealerCategoryId) =>
-      this.dealerCategoryId = dealerCategoryId;
-
-  get getDealerAccountId => this.dealerAccountId;
-
-  set setDealerAccountId(dealerAccountId) =>
-      this.dealerAccountId = dealerAccountId;
-
-  get getCode => this.code;
-
-  set setCode(code) => this.code = code;
-
-  get getAppliedAmount => this.appliedAmount;
-
-  set setAppliedAmount(appliedAmount) => this.appliedAmount = appliedAmount;
-
-  get getBonusAmount => this.bonusAmount;
-
-  set setBonusAmount(bonusAmount) => this.bonusAmount = bonusAmount;
-
-  get getFromTime => this.fromTime;
-
-  set setFromTime(fromTime) => this.fromTime = fromTime;
-
-  get getToTime => this.toTime;
-
-  set setToTime(toTime) => this.toTime = toTime;
-
-  get getStatus => this.status;
-
-  set setStatus(status) => this.status = status;
-
-  get getCreatedBy => this.createdBy;
-
-  set setCreatedBy(createdBy) => this.createdBy = createdBy;
-
-  get getCreatedTime => this.createdTime;
-
-  set setCreatedTime(createdTime) => this.createdTime = createdTime;
-
-  get getIsDeleted => this.isDeleted;
-
-  set setIsDeleted(isDeleted) => this.isDeleted = isDeleted;
-
-  get getUpdatedBy => this.updatedBy;
-
-  set setUpdatedBy(updatedBy) => this.updatedBy = updatedBy;
-
-  get getUpdatedTime => this.updatedTime;
-
-  set setUpdatedTime(updatedTime) => this.updatedTime = updatedTime;
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "code": code,
+        "promotionName": promotionName,
+        "appliedScrapCategory": appliedScrapCategory,
+        "appliedScrapCategoryImageUrl": appliedScrapCategoryImageUrl,
+        "appliedAmount": appliedAmount.toString(),
+        "bonusAmount": bonusAmount.toString(),
+        "appliedFromTime": appliedFromTime.toString(),
+        "appliedToTime": appliedToTime.toString(),
+        "status": status.toString(),
+      };
 }

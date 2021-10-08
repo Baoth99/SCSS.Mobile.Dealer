@@ -1,5 +1,6 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
+import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
 import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
@@ -16,10 +17,12 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(initialState: LoginState()),
+      create: (context) => LoginBloc(
+          initialState: LoginState(),
+          authenticationHandler:
+              RepositoryProvider.of<AuthenticationHandler>(context)),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
-          print(state.process.toString());
           if (state.process == Process.processing) {
             showDialog(
               context: context,
@@ -46,10 +49,6 @@ class LoginView extends StatelessWidget {
           }
           if (state.process == Process.error) {
             _showSnackBar(context, CustomTexts.loginError);
-          }
-          if (state.process == Process.valid) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(CustomRoutes.botNav, (route) => false);
           }
         },
         child: _body(),

@@ -1,7 +1,7 @@
 class CollectDealTransactionDetailModel {
-  int id;
-  int collectDealTransactionId;
-  int dealerCategoryDetailId;
+  int? id;
+  int? collectDealTransactionId;
+  int? dealerCategoryDetailId;
   int price;
   int quantity;
   int total;
@@ -14,9 +14,9 @@ class CollectDealTransactionDetailModel {
   DateTime? updatedTime;
 
   CollectDealTransactionDetailModel({
-    required this.id,
-    required this.collectDealTransactionId,
-    required this.dealerCategoryDetailId,
+    this.id,
+    this.collectDealTransactionId,
+    this.dealerCategoryDetailId,
     required this.price,
     required this.quantity,
     required this.total,

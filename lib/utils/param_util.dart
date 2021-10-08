@@ -25,13 +25,17 @@ class CustomTexts {
   static const String forgetPasswordTextButton = 'Lấy lại mật khẩu';
   static const String register = 'Bạn chưa có tài khoản?';
   static const String registerTextButton = 'Đăng ký';
-  //api
+  //api id4
   static const String apiUrlTokenLink = 'connect/token';
-  static const String apiUrlUserInfoLink = 'connect/userinfo';
+  //app api
+  static const String apiUrlDealerInfoLink = 'dealer/account/dealer-info';
+  static const String apiUrlPutDeviceId = 'dealer/account/device-id';
+  //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
-  static const String fetchUserInfoFailedException =
+  static const String fetchDealerInfoFailedException =
       'Failed to fetch user info';
+  static const String putDeviceIdFailedException = 'Failed to put device Id';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -108,6 +112,11 @@ class CustomRoutes {
   static const String registerBranchOption = '/registerBranchOption';
   static const String registerStoreInfo = '/registerStoreInfo';
   static const String registerComplete = '/registerComplete';
+  static const String login = '/login';
+}
+
+class CustomKeys {
+  static const String accessToken = 'accessToken';
 }
 
 class CustomTickerDurations {

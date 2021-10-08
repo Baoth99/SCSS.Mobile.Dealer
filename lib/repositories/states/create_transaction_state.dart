@@ -1,5 +1,4 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
-import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 
 class CreateTransactionState {

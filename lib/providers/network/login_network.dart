@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'package:dealer_app/repositories/models/user_profile_model.dart';
-import 'package:dealer_app/utils/param_util.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
+import 'package:dealer_app/utils/param_util.dart';
+import 'package:http/http.dart' as http;
 
 class LoginNetwork {
   static Future<AccessTokenHolderModel> fectchAccessToken(
@@ -44,29 +43,6 @@ class LoginNetwork {
       throw Exception(CustomTexts.fetchTokenFailedException);
     } else {
       throw Exception(CustomTexts.loginFailedException);
-    }
-  }
-
-  static Future<UserInfoModel> fectchUserInfo(
-      {required String bearerToken}) async {
-    //add headers
-    Map<String, String> headers = {
-      'Authorization': 'Bearer $bearerToken',
-    };
-
-    final response = await http.get(
-        Uri.parse(
-            EnvID4AppSettingValue.apiUrl + CustomTexts.apiUrlUserInfoLink),
-        headers: headers);
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return UserInfoModel.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception(CustomTexts.fetchUserInfoFailedException);
     }
   }
 }
