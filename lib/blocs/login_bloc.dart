@@ -9,9 +9,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   var _authenticationHandler = getIt.get<IAuthenticationHandler>();
   LoginBloc({
     required LoginState initialState,
-    required AuthenticationHandler authenticationHandler,
-  })  : _authenticationHandler = authenticationHandler,
-        super(initialState);
+  }) : super(initialState);
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is EventLoginPhoneNumberChanged) {

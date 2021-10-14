@@ -1,85 +1,64 @@
 class CollectDealTransactionDetailModel {
-  int? id;
-  int? collectDealTransactionId;
-  int? dealerCategoryDetailId;
-  int price;
+  String dealerCategoryId;
+  String dealerCategoryDetailId;
   int quantity;
-  int total;
+  String promotionId;
   int bonusAmount;
-  int? promotionId;
-  int createdBy;
-  DateTime createdTime;
-  bool isDeleted;
-  int? updatedBy;
-  DateTime? updatedTime;
+  int total;
+  int price;
+
+  bool isCalculatedByUnitPrice;
+
+  int get totalCalculated {
+    if (isCalculatedByUnitPrice && price != 0)
+      return price * quantity;
+    else
+      return 0;
+  }
 
   CollectDealTransactionDetailModel({
-    this.id,
-    this.collectDealTransactionId,
-    this.dealerCategoryDetailId,
-    required this.price,
+    required this.dealerCategoryId,
+    required this.dealerCategoryDetailId,
     required this.quantity,
-    required this.total,
+    required this.promotionId,
     required this.bonusAmount,
-    required this.createdBy,
-    required this.createdTime,
-    required this.isDeleted,
-    this.updatedBy,
-    this.updatedTime,
-    this.promotionId,
+    required this.total,
+    required this.price,
+    required this.isCalculatedByUnitPrice,
   });
 
-  get getId => this.id;
+  String get getDealerCategoryId => this.dealerCategoryId;
 
-  set setId(id) => this.id = id;
+  set setDealerCategoryId(String dealerCategoryId) =>
+      this.dealerCategoryId = dealerCategoryId;
 
-  get getCollectDealTransactionId => this.collectDealTransactionId;
+  String get getDealerCategoryDetailId => this.dealerCategoryDetailId;
 
-  set setCollectDealTransactionId(collectDealTransactionId) =>
-      this.collectDealTransactionId = collectDealTransactionId;
-
-  get getDealerCategoryDetailId => this.dealerCategoryDetailId;
-
-  set setDealerCategoryDetailId(dealerCategoryDetailId) =>
+  set setDealerCategoryDetailId(String dealerCategoryDetailId) =>
       this.dealerCategoryDetailId = dealerCategoryDetailId;
-
-  get getPrice => this.price;
-
-  set setPrice(price) => this.price = price;
 
   get getQuantity => this.quantity;
 
   set setQuantity(quantity) => this.quantity = quantity;
 
-  get getTotal => this.total;
+  get getPromotionId => this.promotionId;
 
-  set setTotal(total) => this.total = total;
+  set setPromotionId(promotionId) => this.promotionId = promotionId;
 
   get getBonusAmount => this.bonusAmount;
 
   set setBonusAmount(bonusAmount) => this.bonusAmount = bonusAmount;
 
-  get getPromotionId => this.promotionId;
+  get getTotal => this.total;
 
-  set setPromotionId(promotionId) => this.promotionId = promotionId;
+  set setTotal(total) => this.total = total;
 
-  get getCreatedBy => this.createdBy;
+  get getPrice => this.price;
 
-  set setCreatedBy(createdBy) => this.createdBy = createdBy;
+  set setPrice(price) => this.price = price;
 
-  get getCreatedTime => this.createdTime;
+  get getIsCalculatedByUnitPrice => this.isCalculatedByUnitPrice;
 
-  set setCreatedTime(createdTime) => this.createdTime = createdTime;
-
-  get getIsDeleted => this.isDeleted;
-
-  set setIsDeleted(isDeleted) => this.isDeleted = isDeleted;
-
-  get getUpdatedBy => this.updatedBy;
-
-  set setUpdatedBy(updatedBy) => this.updatedBy = updatedBy;
-
-  get getUpdatedTime => this.updatedTime;
-
-  set setUpdatedTime(updatedTime) => this.updatedTime = updatedTime;
+  set setIsCalculatedByUnitPrice(isCalculatedByUnitPrice) =>
+      this.isCalculatedByUnitPrice = isCalculatedByUnitPrice;
 }

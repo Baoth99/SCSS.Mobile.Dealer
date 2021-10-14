@@ -4,12 +4,12 @@ import 'package:equatable/equatable.dart';
 abstract class CreateTransactionEvent extends Equatable {}
 
 class EventPhoneNumberChanged extends CreateTransactionEvent {
-  final String phoneNumber;
+  final String collectorPhone;
 
-  EventPhoneNumberChanged({required this.phoneNumber});
+  EventPhoneNumberChanged({required this.collectorPhone});
 
   @override
-  List<String> get props => [phoneNumber];
+  List<String> get props => [collectorPhone];
 }
 
 class EventOpenQRScanner extends CreateTransactionEvent {
@@ -17,35 +17,91 @@ class EventOpenQRScanner extends CreateTransactionEvent {
   List<Object?> get props => [];
 }
 
-class EventSellerNameChanged extends CreateTransactionEvent {
-  final String sellerName;
+class EventCalculatedByUnitPriceChanged extends CreateTransactionEvent {
+  final bool isCalculatedByUnitPrice;
 
-  EventSellerNameChanged({required this.sellerName});
-
-  @override
-  List<String> get props => [sellerName];
-}
-
-class EventDetailAdded extends CreateTransactionEvent {
-  final CollectDealTransactionDetailModel detail;
-
-  EventDetailAdded({required this.detail});
+  EventCalculatedByUnitPriceChanged({required this.isCalculatedByUnitPrice});
 
   @override
-  List<CollectDealTransactionDetailModel> get props => [detail];
+  List<bool> get props => [isCalculatedByUnitPrice];
 }
 
-class EventDetailedChanged extends CreateTransactionEvent {
+class EventDealerCategoryChanged extends CreateTransactionEvent {
+  final String dealerCategoryId;
+
+  EventDealerCategoryChanged({required this.dealerCategoryId});
+
+  @override
+  List<String> get props => [dealerCategoryId];
+}
+
+class EventDealerCategoryUnitChanged extends CreateTransactionEvent {
+  final String dealerCategoryDetailId;
+
+  EventDealerCategoryUnitChanged({required this.dealerCategoryDetailId});
+
+  @override
+  List<String> get props => [dealerCategoryDetailId];
+}
+
+class EventTotalChanged extends CreateTransactionEvent {
+  final String total;
+
+  EventTotalChanged({required this.total});
+
+  @override
+  List<String> get props => [total];
+}
+
+class EventQuantityChanged extends CreateTransactionEvent {
+  final String quantity;
+
+  EventQuantityChanged({required this.quantity});
+
+  @override
+  List<String> get props => [quantity];
+}
+
+class EventUnitPriceChanged extends CreateTransactionEvent {
+  final String unitPrice;
+
+  EventUnitPriceChanged({required this.unitPrice});
+
+  @override
+  List<String> get props => [unitPrice];
+}
+
+class EventAddNewItem extends CreateTransactionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventEditItem extends CreateTransactionEvent {
   final int key;
   final CollectDealTransactionDetailModel detail;
 
-  EventDetailedChanged({required this.detail, required this.key});
+  EventEditItem({required this.detail, required this.key});
 
   @override
   List<Object> get props => [key, detail];
 }
 
-class EventSendOTP extends CreateTransactionEvent {
+class EventSubmitNewTransaction extends CreateTransactionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventShowModalBottomSheet extends CreateTransactionEvent {
+  final int? key;
+  final CollectDealTransactionDetailModel? detail;
+
+  EventShowModalBottomSheet({this.detail, this.key});
+
+  @override
+  List<Object?> get props => [key, detail];
+}
+
+class EventInitValues extends CreateTransactionEvent {
   @override
   List<Object?> get props => [];
 }

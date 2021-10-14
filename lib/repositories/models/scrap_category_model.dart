@@ -1,6 +1,55 @@
+// To parse this JSON data, do
+//
+//     final scrapCategoryModel = scrapCategoryModelFromJson(jsonString);
+
+import 'dart:convert';
+
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 
-class ScrapCategoryModel extends Comparable<ScrapCategoryModel> {
+ScrapCategoryModel scrapCategoryModelFromJson(String str) =>
+    ScrapCategoryModel.fromJson(json.decode(str));
+
+String scrapCategoryModelToJson(ScrapCategoryModel data) =>
+    json.encode(data.toJson());
+
+class ScrapCategoryModel {
+  ScrapCategoryModel({
+    required this.id,
+    required this.name,
+    this.promotionId,
+    this.promotionCode,
+    required this.appliedAmount,
+    required this.bonusAmount,
+  });
+
+  String id;
+  String name;
+  dynamic promotionId;
+  dynamic promotionCode;
+  dynamic appliedAmount;
+  dynamic bonusAmount;
+
+  factory ScrapCategoryModel.fromJson(Map<String, dynamic> json) =>
+      ScrapCategoryModel(
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        promotionId: json["promotionId"],
+        promotionCode: json["promotionCode"],
+        appliedAmount: json["appliedAmount"],
+        bonusAmount: json["bonusAmount"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "promotionId": promotionId,
+        "promotionCode": promotionCode,
+        "appliedAmount": appliedAmount,
+        "bonusAmount": bonusAmount,
+      };
+}
+
+class ScrapCategoryModelTemp extends Comparable<ScrapCategoryModelTemp> {
   int id;
   String name;
   String? imageUrl;
@@ -10,9 +59,9 @@ class ScrapCategoryModel extends Comparable<ScrapCategoryModel> {
   int status;
   int updatedBy;
   DateTime updatedTime;
-  List<ScrapCategoryDetailModel>? unitList;
+  List<ScrapCategoryDetailModelTemp>? unitList;
 
-  ScrapCategoryModel({
+  ScrapCategoryModelTemp({
     required this.id,
     required this.name,
     this.imageUrl,
@@ -66,7 +115,7 @@ class ScrapCategoryModel extends Comparable<ScrapCategoryModel> {
   set setUnitList(unitList) => this.unitList = unitList;
 
   @override
-  int compareTo(ScrapCategoryModel other) {
+  int compareTo(ScrapCategoryModelTemp other) {
     return this.name.compareTo(other.name);
   }
 }

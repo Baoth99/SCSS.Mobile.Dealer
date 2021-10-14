@@ -1,6 +1,5 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
-import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
 import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
@@ -18,9 +17,8 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(
-          initialState: LoginState(),
-          authenticationHandler:
-              RepositoryProvider.of<AuthenticationHandler>(context)),
+        initialState: LoginState(),
+      ),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.process == Process.processing) {

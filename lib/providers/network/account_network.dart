@@ -12,11 +12,10 @@ class AccountNetwork {
     Map<String, String> headers = {
       'Authorization': 'Bearer $bearerToken',
     };
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlDealerInfoLink);
 
-    final response = await http.get(
-        Uri.parse(
-            EnvAppApiSettingValue.apiUrl + CustomTexts.apiUrlDealerInfoLink),
-        headers: headers);
+    final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -38,11 +37,10 @@ class AccountNetwork {
     var body = jsonEncode(<String, String>{
       'deviceId': deivceId,
     });
+    final uri =
+        Uri.http(EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPutDeviceId);
 
-    final response = await http.put(
-        Uri.parse(EnvAppApiSettingValue.apiUrl + CustomTexts.apiUrlPutDeviceId),
-        headers: headers,
-        body: body);
+    final response = await http.put(uri, headers: headers, body: body);
 
     if (response.statusCode == 200) {
       return true;

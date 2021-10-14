@@ -11,6 +11,7 @@ import 'package:dealer_app/utils/secure_storage.dart';
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 abstract class IAuthenticationHandler {
+  Stream<AuthenticationStatus> get stream;
   Future<void> login({required String phone, required String password});
   void logout();
   void dispose();

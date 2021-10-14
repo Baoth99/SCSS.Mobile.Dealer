@@ -1,3 +1,6 @@
+import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:intl/intl.dart';
+
 class BotNavUtils {
   static const int stateHomeIndex = 0;
   static const int stateNotificationIndex = 1;
@@ -9,6 +12,7 @@ class CustomTexts {
   static const String categoryScreenTitle = 'Danh mục';
   static const String addCategoryScreenTitle = 'Thêm danh mục';
   static const String categoryDetailScreenTitle = 'Chi tiết';
+  static const String createTransactionScreenTitle = 'Tạo giao dịch';
   //login_view
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';
@@ -28,14 +32,25 @@ class CustomTexts {
   //api id4
   static const String apiUrlTokenLink = 'connect/token';
   //app api
-  static const String apiUrlDealerInfoLink = 'dealer/account/dealer-info';
-  static const String apiUrlPutDeviceId = 'dealer/account/device-id';
+  static const String apiUrlDealerInfoLink =
+      '/api/v3/dealer/account/dealer-info';
+  static const String apiUrlPutDeviceId = '/api/v3/dealer/account/device-id';
+  static const String apiUrlGetPromotions = '/api/v3/promotion/get';
+  static const String apiUrlGetScrapCategories =
+      '/api/v3/trans/scrap-categories';
+  static const String apiUrlGetScrapCategoryDetails =
+      '/api/v3/trans/scrap-category-detail';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
   static const String fetchDealerInfoFailedException =
       'Failed to fetch user info';
   static const String putDeviceIdFailedException = 'Failed to put device Id';
+  static const String getPromotionsFailedException = 'Failed to get promotions';
+  static const String getScrapCategoriesFailedException =
+      'Failed to get scrap categories';
+  static const String getScrapCategoryDetailsFailedException =
+      'Failed to get scrap category details';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -86,10 +101,48 @@ class CustomTexts {
       'Bạn đã đăng ký làm đối tác chủ vựa phế liệu của VeChaiXANH thành công';
   static const String registerCompleteNote =
       'Vui lòng lên văn phòng VeChaiXANH để hoàn tất thủ tục để bạn có thể sử dụng dịch vụ của chúng tôi';
+  //create transaction
+  static const String cancelButtonText = 'Huỷ';
+  static const String createTransactionButtonText = 'Tạo giao dịch';
+  static const String detailText = 'Chi tiết';
+  static const String subTotalText = 'Tạm tính';
+  static const String totalText = 'Khách hàng nhận';
+  static const String promotionText = 'Khuyến mãi';
+  static const String collectorPhoneLabel = 'SĐT người bán';
+  static const String collectorNameLabel = 'Tên người bán';
+  static const String calculatedByUnitPriceText = 'Tính theo đơn giá';
+  static const String calculatedByUnitPriceExplainationText =
+      'Tính tiền bằng đơn giá nhân số lượng';
+  static const String scrapTypeLabel = 'Loại phế liệu';
+  static const String unitLabel = 'Đơn vị';
+  static const String quantityLabel = 'Số lượng';
+  static const String unitPriceLabel = 'Đơn giá';
+  static const String totalLabel = 'Tổng cộng';
+  static const String vndSymbolText = 'đ';
+  static String promotionAppliedText({required String promotionId}) =>
+      '* Khuyến mãi $promotionId đang được áp dụng';
+  static const String generalErrorMessage =
+      'Đã có lỗi xảy ra, vui lòng thử lại';
+  static const String totalBlank = 'Tổng cộng không được để trống';
+  static const String quantityBlank = '$quantityLabel không được để trống';
+  static const String quantityZero = '$quantityLabel phải lớn hơn 0';
+  static const String unitPriceBlank = '$unitPriceLabel không được để trống';
+  static const String unitPriceNegative = '$unitPriceLabel không được là số âm';
+  static const String scrapTypeBlank = '$scrapTypeLabel không được để trống';
+  static const String emptyString = '';
+  static const String promotionNotAppliedText =
+      'Không có khuyến mãi nào được áp dụng';
+  static const String addScrapButtonText = 'Thêm phế liệu';
+  static const String totalNegative = '$totalLabel không được là số âm';
+  static const String scrapCategoryUnitBlank = '$unitLabel không được để trống';
+  static const String zeroString = '0';
 }
 
 class CustomFormats {
   static const String birthday = 'dd/MM/yyyy';
+  static NumberFormat numberFormat = NumberFormat('###,###');
+  static NumberFormat currencyFormat =
+      NumberFormat('###,### ${CustomTexts.vndSymbolText}');
 }
 
 class CustomRegexs {
@@ -113,6 +166,7 @@ class CustomRoutes {
   static const String registerStoreInfo = '/registerStoreInfo';
   static const String registerComplete = '/registerComplete';
   static const String login = '/login';
+  static const String createTransaction = '/createTransaction';
 }
 
 class CustomKeys {
@@ -148,3 +202,12 @@ const Map<bool, String> isBranchRadioOptions = {
   false: 'Không',
   true: 'Có',
 };
+
+class CustomVar {
+  static final unnamedScrapCategory = ScrapCategoryModel(
+    id: '00000000-0000-0000-0000-000000000000',
+    appliedAmount: null,
+    name: 'Chưa phân loại',
+    bonusAmount: null,
+  );
+}

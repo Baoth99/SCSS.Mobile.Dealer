@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'category_view.dart';
+import 'home_view.dart';
 
 class BotNavView extends StatelessWidget {
   const BotNavView({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class BotNavView extends StatelessWidget {
           return Scaffold(
             body: state is StateHome
                 //todo: homepage
-                ? Container()
+                ? HomeView()
                 : state is StateNotification
                     //todo: noti
                     ? Container()
@@ -29,16 +30,22 @@ class BotNavView extends StatelessWidget {
                         : Container(),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              child: Icon(Icons.add),
-            ),
+            floatingActionButton: _floatingActionButton(context),
             bottomNavigationBar: _botnav(),
           );
         },
       ),
     );
   }
+}
+
+_floatingActionButton(context) {
+  return FloatingActionButton(
+    child: Icon(Icons.add),
+    onPressed: () {
+      Navigator.pushNamed(context, CustomRoutes.createTransaction);
+    },
+  );
 }
 
 _botnav() {

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class CategoryView extends StatelessWidget {
   //temporary list
-  final List<ScrapCategoryModel> scrapList = [
-    ScrapCategoryModel(
+  final List<ScrapCategoryModelTemp> scrapList = [
+    ScrapCategoryModelTemp(
         id: 1,
         name: 'Đồng đỏ',
         imageUrl: 'https://phelieusatthep.com/upload/daj1432025718.jpg',
@@ -17,7 +17,7 @@ class CategoryView extends StatelessWidget {
         updatedBy: 0,
         updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 1,
             scrapCategoryId: 1,
             unit: "kg",
@@ -28,7 +28,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 2,
             scrapCategoryId: 1,
             unit: "g",
@@ -39,7 +39,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 3,
             scrapCategoryId: 1,
             unit: "cái",
@@ -51,7 +51,7 @@ class CategoryView extends StatelessWidget {
             updatedTime: DateTime(2021, 10, 2),
           ),
         ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
         id: 2,
         name: 'Sắt vụn',
         imageUrl:
@@ -63,7 +63,7 @@ class CategoryView extends StatelessWidget {
         updatedBy: 0,
         updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 1,
             scrapCategoryId: 2,
             unit: "kg",
@@ -74,7 +74,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 2,
             scrapCategoryId: 2,
             unit: "g",
@@ -85,7 +85,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 3,
             scrapCategoryId: 2,
             unit: "cái",
@@ -97,7 +97,7 @@ class CategoryView extends StatelessWidget {
             updatedTime: DateTime(2021, 10, 2),
           ),
         ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
         id: 3,
         name: 'Chai nhựa',
         imageUrl:
@@ -109,7 +109,7 @@ class CategoryView extends StatelessWidget {
         updatedBy: 0,
         updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 1,
             scrapCategoryId: 3,
             unit: "kg",
@@ -120,7 +120,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 2,
             scrapCategoryId: 3,
             unit: "g",
@@ -131,7 +131,7 @@ class CategoryView extends StatelessWidget {
             updatedBy: 0,
             updatedTime: DateTime(2021, 10, 2),
           ),
-          ScrapCategoryDetailModel(
+          ScrapCategoryDetailModelTemp(
             id: 3,
             scrapCategoryId: 3,
             unit: "cái",
@@ -143,7 +143,7 @@ class CategoryView extends StatelessWidget {
             updatedTime: DateTime(2021, 10, 2),
           ),
         ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
       id: 4,
       name: 'Nhôm loại 3 không có unit',
       imageUrl:
@@ -155,7 +155,7 @@ class CategoryView extends StatelessWidget {
       updatedBy: 0,
       updatedTime: DateTime(2021, 10, 2),
     ),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
       id: 5,
       name:
           'Inox 304 k hình ảnh nhưng tên dài dàiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii rất dàiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
@@ -204,7 +204,7 @@ class CategoryView extends StatelessWidget {
     );
   }
 
-  _listTileBuilder(ScrapCategoryModel model, context) {
+  _listTileBuilder(ScrapCategoryModelTemp model, context) {
     return Column(
       children: [
         ListTile(

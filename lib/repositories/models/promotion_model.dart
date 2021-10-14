@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 PromotionModel promotionModelFromJson(String str) =>
     PromotionModel.fromJson(json.decode(str));
 
@@ -42,8 +44,9 @@ class PromotionModel {
         appliedScrapCategoryImageUrl: json["appliedScrapCategoryImageUrl"],
         appliedAmount: json["appliedAmount"],
         bonusAmount: json["bonusAmount"],
-        appliedFromTime: DateTime.parse(json["appliedFromTime"]),
-        appliedToTime: DateTime.parse(json["appliedToTime"]),
+        appliedFromTime:
+            DateFormat('dd-MM-yyyy').parse(json["appliedFromTime"]),
+        appliedToTime: DateFormat('dd-MM-yyyy').parse(json["appliedToTime"]),
         status: json["status"],
       );
 

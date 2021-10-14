@@ -1,4 +1,41 @@
+// To parse this JSON data, do
+//
+//     final scrapCategoryDetailModel = scrapCategoryDetailModelFromJson(jsonString);
+
+import 'dart:convert';
+
+ScrapCategoryDetailModel scrapCategoryDetailModelFromJson(String str) =>
+    ScrapCategoryDetailModel.fromJson(json.decode(str));
+
+String scrapCategoryDetailModelToJson(ScrapCategoryDetailModel data) =>
+    json.encode(data.toJson());
+
 class ScrapCategoryDetailModel {
+  ScrapCategoryDetailModel({
+    required this.id,
+    required this.unit,
+    required this.price,
+  });
+
+  String id;
+  String unit;
+  int price;
+
+  factory ScrapCategoryDetailModel.fromJson(Map<String, dynamic> json) =>
+      ScrapCategoryDetailModel(
+        id: json["id"] == null ? null : json["id"],
+        unit: json["unit"] == null ? null : json["unit"],
+        price: json["price"] == null ? null : json["price"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "unit": unit == null ? null : unit,
+        "price": price == null ? null : price,
+      };
+}
+
+class ScrapCategoryDetailModelTemp {
   int id;
   int scrapCategoryId;
   String unit;
@@ -9,7 +46,7 @@ class ScrapCategoryDetailModel {
   int updatedBy;
   DateTime updatedTime;
 
-  ScrapCategoryDetailModel({
+  ScrapCategoryDetailModelTemp({
     required int id,
     required int scrapCategoryId,
     required String unit,

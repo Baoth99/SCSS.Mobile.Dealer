@@ -18,7 +18,7 @@ void main() async {
   final firebase = getIt.get<FirebaseNotification>();
   await firebase.initialize();
   print(await firebase.getToken());
-  runApp(DealerApp(
+runApp(DealerApp(
     authenticationHandler: AuthenticationHandler(),
     userHandler: UserHandler(),
   ));

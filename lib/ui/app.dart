@@ -3,6 +3,7 @@ import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/user_handler.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/ui/layouts/category_detail_view.dart';
+import 'package:dealer_app/ui/layouts/create_transaction_view.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,60 +36,45 @@ class DealerApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationHandler,
-      child: BlocProvider(
-        create: (context) => AuthenticationBloc(
-          authenticationHandler: authenticationHandler,
-          userHandler: userHandler,
-        ),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: _themeData(),
-          navigatorKey: _navigatorKey,
-          routes: {
-            CustomRoutes.addCategory: (_) => AddCategoryView(),
-            CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
-            CustomRoutes.botNav: (_) => BotNavView(),
-            CustomRoutes.register: (_) => RegisterView(),
-            CustomRoutes.registerOTP: (_) => RegisterOTPView(),
-            CustomRoutes.registerPersonalInfo: (_) =>
-                RegisterPersonalInfoView(),
-            CustomRoutes.registerBranchOption: (_) =>
-                RegisterBranchOptionView(),
-            CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
-            CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
-            CustomRoutes.login: (_) => LoginView(),
-          },
-          home: LoginView(),
-          builder: (context, child) {
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) {
-                switch (state.status) {
-                  case AuthenticationStatus.authenticated:
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute<void>(builder: (_) => HomePage()),
-                    //     (route) => false);
-                    _navigator.pushNamedAndRemoveUntil(
-                        CustomRoutes.botNav, (route) => false);
-                    break;
-                  case AuthenticationStatus.unauthenticated:
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute<void>(builder: (_) => LoginView()),
-                    //     (route) => false);
-                    _navigator.pushNamedAndRemoveUntil(
-                        CustomRoutes.login, (route) => false);
-                    break;
-                  default:
-                    break;
-                }
-              },
-              child: child,
-            );
-          },
-        ),
+    return BlocProvider(
+      create: (context) => AuthenticationBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: _themeData(),
+        navigatorKey: _navigatorKey,
+        routes: {
+          CustomRoutes.addCategory: (_) => AddCategoryView(),
+          CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
+          CustomRoutes.botNav: (_) => BotNavView(),
+          CustomRoutes.register: (_) => RegisterView(),
+          CustomRoutes.registerOTP: (_) => RegisterOTPView(),
+          CustomRoutes.registerPersonalInfo: (_) => RegisterPersonalInfoView(),
+          CustomRoutes.registerBranchOption: (_) => RegisterBranchOptionView(),
+          CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
+          CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
+          CustomRoutes.login: (_) => LoginView(),
+          CustomRoutes.createTransaction: (_) => CreateTransactionView(),
+        },
+        home: LoginView(),
+        builder: (context, child) {
+          return BlocListener<AuthenticationBloc, AuthenticationState>(
+            listener: (context, state) {
+              switch (state.status) {
+                case AuthenticationStatus.authenticated:
+                  _navigator.pushNamedAndRemoveUntil(
+                      CustomRoutes.botNav, (route) => false);
+                  break;
+                case AuthenticationStatus.unauthenticated:
+                  _navigator.pushNamedAndRemoveUntil(
+                      CustomRoutes.login, (route) => false);
+                  break;
+                default:
+                  break;
+              }
+            },
+            child: child,
+          );
+        },
       ),
     );
   }
@@ -105,12 +91,17 @@ class DealerApp extends StatelessWidget {
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 25,
-          color: Colors.black,
+          color: Color.fromARGB(255, 20, 20, 21),
           fontWeight: FontWeight.bold,
         ),
         headline2: TextStyle(
           fontSize: 20,
-          color: Colors.black,
+          color: Color.fromARGB(255, 20, 20, 21),
+          fontWeight: FontWeight.w500,
+        ),
+        bodyText1: TextStyle(
+          fontSize: 15,
+          color: Color.fromARGB(255, 20, 20, 21),
           fontWeight: FontWeight.w500,
         ),
       ),
