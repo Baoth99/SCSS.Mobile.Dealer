@@ -95,6 +95,11 @@ class CreateTransactionView extends StatelessWidget {
                       _nameField(),
                       _detailText(),
                       _items(),
+                      const Divider(),
+                      _subTotal(),
+                      _promotioBonusnAmount(),
+                      const Divider(),
+                      _total(),
                     ],
                   ),
                 ),
@@ -121,12 +126,19 @@ class CreateTransactionView extends StatelessWidget {
               labelText: CustomTexts.collectorPhoneLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
-            keyboardType: TextInputType.text,
-            onChanged: (value) => context
-                .read<CreateTransactionBloc>()
-                .add(EventPhoneNumberChanged(collectorPhone: value)),
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            onChanged: (value) {
+              context
+                  .read<CreateTransactionBloc>()
+                  .add(EventPhoneNumberChanged(collectorPhone: value));
+            },
             validator: (value) {
               if (value == null || value.isEmpty) return CustomTexts.phoneBlank;
+              if (!state.isPhoneValid) return CustomTexts.phoneError;
+              if (!state.isCollectorPhoneExist)
+                return CustomTexts.phoneNotExist;
             },
           ),
         );
@@ -136,11 +148,15 @@ class CreateTransactionView extends StatelessWidget {
 
   _nameField() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      buildWhen: (previous, current) {
+        return current.collectorName != previous.collectorName;
+      },
       builder: (context, state) {
         return SizedBox(
           height: 90,
           child: TextFormField(
             enabled: false,
+            key: UniqueKey(),
             initialValue: state.collectorName,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -182,50 +198,150 @@ class CreateTransactionView extends StatelessWidget {
             current.isItemsUpdated == true;
       },
       builder: (context, state) {
-        return ListView.builder(
-            primary: true,
-            shrinkWrap: true,
-            itemCount: state.items.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: state.items[index] != null
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
+        return ListView.separated(
+          primary: false,
+          shrinkWrap: true,
+          itemCount: state.items.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              tileColor: CustomColors.lightGray,
+              title: state.items[index] != null
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 4,
+                          fit: FlexFit.tight,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              state.scrapCategories
+                                  .firstWhere((element) =>
+                                      element.id ==
+                                      state.items[index]!.dealerCategoryId)
+                                  .name,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 2,
+                          fit: FlexFit.loose,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              state.items[index]!.quantity != 0 &&
+                                      state.items[index]!.unit != null
+                                  ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
+                                  : CustomTexts.emptyString,
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 4,
+                          fit: FlexFit.tight,
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(CustomFormats.currencyFormat
+                                .format(state.items[index]!.total)),
+                          ),
+                        ),
+                      ],
+                    )
+                  : null,
+              subtitle: state.items[index] != null
+                  ? state.items[index]!.bonusAmount != 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
                               width: 150,
                               child: Text(
-                                state.scrapCategories
-                                    .firstWhere((element) =>
-                                        element.id ==
-                                        state.items[index]!.dealerCategoryId)
-                                    .name,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                maxLines: 1,
-                              )),
-                          Text(CustomFormats.currencyFormat
-                              .format(state.items[index]!.total)),
-                        ],
-                      )
-                    : null,
-                subtitle: state.items[index] != null
-                    ? state.items[index]!.bonusAmount != 0
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 150,
-                                child: Text(CustomTexts.promotionText),
+                                CustomTexts.promotionText,
+                                style: Theme.of(context).textTheme.bodyText2,
                               ),
-                              Text(CustomFormats.currencyFormat
-                                  .format(state.items[index]!.bonusAmount)),
-                            ],
-                          )
-                        : null
-                    : null,
-              );
-            });
+                            ),
+                            Text(
+                              CustomFormats.currencyFormat
+                                  .format(state.items[index]!.bonusAmount),
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ],
+                        )
+                      : null
+                  : null,
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              height: 10,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  _subTotal() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            customText(
+              text: CustomTexts.subTotalText,
+              height: 30,
+            ),
+            customText(
+              text: CustomFormats.currencyFormat.format(state.total),
+              height: 30,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _promotioBonusnAmount() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            customText(
+              text: CustomTexts.promotionText,
+              height: 30,
+            ),
+            customText(
+              text: CustomFormats.currencyFormat.format(state.totalBonus),
+              height: 30,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _total() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            customText(
+              text: CustomTexts.totalText,
+              height: 30,
+            ),
+            customText(
+              text: CustomFormats.currencyFormat.format(state.grandTotal),
+              height: 30,
+            ),
+          ],
+        );
       },
     );
   }
@@ -264,7 +380,7 @@ class CreateTransactionView extends StatelessWidget {
         insetPadding: EdgeInsets.zero,
         content: SizedBox(
           width: 320,
-          height: 350,
+          height: 400,
           child: BlocProvider.value(
             value: BlocProvider.of<CreateTransactionBloc>(context),
             child: Form(
@@ -342,6 +458,8 @@ class CreateTransactionView extends StatelessWidget {
             validator: (value) {
               if (value == null || value == CustomTexts.emptyString)
                 return CustomTexts.scrapTypeBlank;
+              if (!state.isScrapCategoryValid)
+                return CustomTexts.scrapTypeNotChoosenError;
             },
             onChanged: (String? selectedValue) {
               if (selectedValue != null)
@@ -363,8 +481,7 @@ class CreateTransactionView extends StatelessWidget {
           child: DropdownSearch(
             enabled: state.scrapCategoryDetails.isNotEmpty &&
                 state.isItemTotalCalculatedByUnitPrice,
-            selectedItem: state.itemDealerCategoryDetailId !=
-                    CustomTexts.emptyString
+            selectedItem: state.itemDealerCategoryDetailId != null
                 ? state.scrapCategoryDetails.firstWhere(
                     (element) => element.id == state.itemDealerCategoryDetailId)
                 : null,
@@ -444,7 +561,9 @@ class CreateTransactionView extends StatelessWidget {
           child: SizedBox(
             height: 90,
             child: TextFormField(
-              key: Key(state.itemDealerCategoryDetailId),
+              key: state.itemDealerCategoryDetailId != null
+                  ? Key(state.itemDealerCategoryDetailId!)
+                  : null,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: CustomTexts.unitPriceLabel,
@@ -500,12 +619,12 @@ class CreateTransactionView extends StatelessWidget {
                 : CustomFormats.numberFormat.format(state.itemTotal),
             onChanged: (value) {
               if (value != CustomTexts.emptyString) {
-                context.read<CreateTransactionBloc>().add(EventTotalChanged(
+                context.read<CreateTransactionBloc>().add(EventItemTotalChanged(
                     total: value.replaceAll(RegExp(r'[^0-9]'), '')));
               } else {
                 context
                     .read<CreateTransactionBloc>()
-                    .add(EventTotalChanged(total: CustomTexts.zeroString));
+                    .add(EventItemTotalChanged(total: CustomTexts.zeroString));
               }
             },
             validator: (value) {
@@ -526,7 +645,7 @@ class CreateTransactionView extends StatelessWidget {
         return Visibility(
           visible: state.isBonusAmountApplied,
           child: customText(
-            color: Color.fromARGB(204, 228, 121, 7),
+            textStyle: Theme.of(context).textTheme.bodyText2,
             text: state.promotionBonusAmount != null
                 ? '+ ${CustomFormats.numberFormat.format(int.parse(state.promotionBonusAmount!))}'
                 : CustomTexts.emptyString,
@@ -542,7 +661,7 @@ class CreateTransactionView extends StatelessWidget {
         return Visibility(
           visible: state.isBonusAmountApplied,
           child: customText(
-              color: Color.fromARGB(204, 228, 121, 7),
+              textStyle: Theme.of(context).textTheme.bodyText2,
               text: state.promotionCode != null
                   ? CustomTexts.promotionAppliedText(
                       promotionId:

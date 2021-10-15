@@ -1,4 +1,5 @@
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BotNavUtils {
@@ -19,6 +20,7 @@ class CustomTexts {
   static const String loginButton = 'Đăng nhập';
   static const String phoneError = 'Số điện thoại không hợp lệ';
   static const String phoneBlank = 'Số điện thoại không được để trống';
+  static const String phoneNotExist = 'Số điện thoại không tồn tại';
   static const String passwordLabel = 'Mật khẩu';
   static const String phoneLabel = 'Số điện thoại';
   static const String wrongPasswordOrPhone =
@@ -40,6 +42,10 @@ class CustomTexts {
       '/api/v3/trans/scrap-categories';
   static const String apiUrlGetScrapCategoryDetails =
       '/api/v3/trans/scrap-category-detail';
+  static const String apiUrlGetCollectorPhones =
+      '/api/v3/auto-complete/collector-phone';
+  static const String apiUrlGetInfoReview =
+      '/api/v3/transaction/collect-deal/info-review';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -51,6 +57,10 @@ class CustomTexts {
       'Failed to get scrap categories';
   static const String getScrapCategoryDetailsFailedException =
       'Failed to get scrap category details';
+  static const String getCollectorPhonesFailedException =
+      'Failed to get collector phones';
+  static const String getInfoReviewFailedException =
+      'Failed to get info review';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -129,12 +139,13 @@ class CustomTexts {
   static const String unitPriceBlank = '$unitPriceLabel không được để trống';
   static const String unitPriceNegative = '$unitPriceLabel không được là số âm';
   static const String scrapTypeBlank = '$scrapTypeLabel không được để trống';
+  static const String scrapTypeNotChoosenError = 'Xin chọn $scrapTypeLabel';
   static const String emptyString = '';
   static const String promotionNotAppliedText =
       'Không có khuyến mãi nào được áp dụng';
   static const String addScrapButtonText = 'Thêm phế liệu';
   static const String totalNegative = '$totalLabel không được là số âm';
-  static const String scrapCategoryUnitBlank = '$unitLabel không được để trống';
+  static const String scrapCategoryUnitBlank = 'Xin chọn $unitLabel';
   static const String zeroString = '0';
 }
 
@@ -175,6 +186,10 @@ class CustomKeys {
 
 class CustomTickerDurations {
   static const int resendOTPDuration = 30;
+}
+
+class CustomColors {
+  static const Color lightGray = const Color.fromARGB(255, 248, 248, 248);
 }
 
 enum Process {

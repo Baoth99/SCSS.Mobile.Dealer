@@ -1,4 +1,5 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
+import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -15,16 +16,17 @@ class CreateTransactionState {
   Process process;
   bool isModalBottomSheetShowed;
   bool isItemsUpdated;
+  bool isCollectorPhoneExist;
 
   //item data
   bool isNewItem;
-  int key;
+  int? key;
   String itemDealerCategoryId;
-  String itemDealerCategoryDetailId;
-  int itemQuantity;
-  String itemPromotionId;
+  String? itemDealerCategoryDetailId;
+  String? itemPromotionId;
   int itemBonusAmount;
   int itemTotal;
+  int itemQuantity;
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
   List<ScrapCategoryDetailModel> scrapCategoryDetails;
@@ -33,6 +35,7 @@ class CreateTransactionState {
   List<ScrapCategoryModel> scrapCategories;
   Map<String, String>
       scrapCategoryMap; //map contains unique categories <id, name> for dropdown list
+  List<CollectorPhoneModel> collectorPhoneList;
 
   bool get isBonusAmountApplied {
     //check category id
@@ -89,9 +92,15 @@ class CreateTransactionState {
     return itemPrice;
   }
 
+  int get grandTotal {
+    return total + totalBonus;
+  }
+
   //validators
   bool get isScrapCategoryValid {
-    if (itemDealerCategoryId == CustomTexts.emptyString) {
+    if (itemDealerCategoryId == CustomTexts.emptyString ||
+        (isItemTotalCalculatedByUnitPrice &&
+            itemDealerCategoryId == CustomVar.unnamedScrapCategory.id)) {
       return false;
     } else
       return true;
@@ -99,7 +108,8 @@ class CreateTransactionState {
 
   bool get isScrapCategoryUnitValid {
     if (isItemTotalCalculatedByUnitPrice) {
-      if (itemDealerCategoryDetailId == CustomTexts.emptyString) {
+      if (itemDealerCategoryDetailId == CustomTexts.emptyString ||
+          itemDealerCategoryDetailId == null) {
         return false;
       } else
         return true;
@@ -141,6 +151,9 @@ class CreateTransactionState {
     }
   }
 
+  bool get isPhoneValid =>
+      RegExp(CustomRegexs.phoneRegex).hasMatch(collectorPhone);
+
   CreateTransactionState({
     String? collectorId,
     String? collectorPhone,
@@ -151,6 +164,7 @@ class CreateTransactionState {
     Process? process,
     bool? isModalBottomSheetShowed,
     bool? isItemsUpdated,
+    bool? isCollectorPhoneExist,
     //New item
     bool? isNewItem,
     int? key,
@@ -163,32 +177,38 @@ class CreateTransactionState {
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
     List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    //Data
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
-  })  : collectorId = collectorId ?? '',
+    List<CollectorPhoneModel>? collectorPhoneList,
+  })  : collectorId = collectorId,
         collectorPhone = collectorPhone ?? '',
-        collectorName = collectorName ?? '',
+        collectorName = collectorName,
         total = total ?? 0,
         totalBonus = totalBonus ?? 0,
         items = items ?? {},
         process = process ?? Process.neutral,
         isModalBottomSheetShowed = isModalBottomSheetShowed ?? false,
         isItemsUpdated = isItemsUpdated ?? false,
+        isCollectorPhoneExist = isCollectorPhoneExist ?? false,
         //New item
         isNewItem = isNewItem ?? true,
-        key = key ?? 0,
-        itemDealerCategoryId = itemDealerCategoryId ?? '',
-        itemDealerCategoryDetailId = itemDealerCategoryDetailId ?? '',
+        key = key,
+        itemDealerCategoryId =
+            itemDealerCategoryId ?? CustomVar.unnamedScrapCategory.id,
+        itemDealerCategoryDetailId = itemDealerCategoryDetailId,
         itemQuantity = itemQuantity ?? 0,
-        itemPromotionId = itemPromotionId ?? '',
+        itemPromotionId = itemPromotionId,
         itemBonusAmount = itemBonusAmount ?? 0,
         itemTotal = itemTotal ?? 0,
         itemPrice = itemPrice ?? 0,
         isItemTotalCalculatedByUnitPrice =
             isItemTotalCalculatedByUnitPrice ?? false,
         scrapCategoryDetails = scrapCategoryDetails ?? [],
+        //Data
         scrapCategories = scrapCategories ?? [],
-        scrapCategoryMap = scrapCategoryMap ?? {};
+        scrapCategoryMap = scrapCategoryMap ?? {},
+        collectorPhoneList = collectorPhoneList ?? [];
 
   CreateTransactionState copyWith({
     String? collectorId,
@@ -200,6 +220,7 @@ class CreateTransactionState {
     Process? process,
     bool? isModalBottomSheetShowed,
     bool? isItemsUpdated,
+    bool? isCollectorPhoneExist,
     //New item
     bool? isNewItem,
     int? key,
@@ -212,8 +233,10 @@ class CreateTransactionState {
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
     List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    //Data
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
+    List<CollectorPhoneModel>? collectorPhoneList,
   }) {
     return CreateTransactionState(
       collectorId: collectorId ?? this.collectorId,
@@ -226,6 +249,8 @@ class CreateTransactionState {
       isModalBottomSheetShowed:
           isModalBottomSheetShowed ?? this.isModalBottomSheetShowed,
       isItemsUpdated: isItemsUpdated ?? this.isItemsUpdated,
+      isCollectorPhoneExist:
+          isCollectorPhoneExist ?? this.isCollectorPhoneExist,
       //New item
       isNewItem: isNewItem ?? this.isNewItem,
       key: key ?? this.key,
@@ -240,8 +265,72 @@ class CreateTransactionState {
       isItemTotalCalculatedByUnitPrice: isItemTotalCalculatedByUnitPrice ??
           this.isItemTotalCalculatedByUnitPrice,
       scrapCategoryDetails: scrapCategoryDetails ?? this.scrapCategoryDetails,
+      //Data
       scrapCategories: scrapCategories ?? this.scrapCategories,
       scrapCategoryMap: scrapCategoryMap ?? this.scrapCategoryMap,
+      collectorPhoneList: collectorPhoneList ?? this.collectorPhoneList,
+    );
+  }
+
+  CreateTransactionState clearItem() {
+    return CreateTransactionState(
+      collectorId: this.collectorId,
+      collectorPhone: this.collectorPhone,
+      collectorName: this.collectorName,
+      total: this.total,
+      totalBonus: this.totalBonus,
+      items: this.items,
+      process: this.process,
+      isModalBottomSheetShowed: this.isModalBottomSheetShowed,
+      isItemsUpdated: this.isItemsUpdated,
+      isCollectorPhoneExist: this.isCollectorPhoneExist,
+      //New item
+      isNewItem: null,
+      key: null,
+      itemDealerCategoryId: null,
+      itemDealerCategoryDetailId: null,
+      itemQuantity: null,
+      itemPromotionId: null,
+      itemBonusAmount: null,
+      itemTotal: null,
+      itemPrice: null,
+      isItemTotalCalculatedByUnitPrice: null,
+      scrapCategoryDetails: null,
+      //data
+      scrapCategories: this.scrapCategories,
+      scrapCategoryMap: this.scrapCategoryMap,
+      collectorPhoneList: this.collectorPhoneList,
+    );
+  }
+
+  CreateTransactionState clearCollector() {
+    return CreateTransactionState(
+      collectorId: null,
+      collectorPhone: this.collectorPhone,
+      collectorName: null,
+      total: this.total,
+      totalBonus: this.totalBonus,
+      items: this.items,
+      process: this.process,
+      isModalBottomSheetShowed: this.isModalBottomSheetShowed,
+      isItemsUpdated: this.isItemsUpdated,
+      isCollectorPhoneExist: false,
+      //New item
+      isNewItem: this.isNewItem,
+      key: this.key,
+      itemDealerCategoryId: this.itemDealerCategoryId,
+      itemDealerCategoryDetailId: this.itemDealerCategoryDetailId,
+      itemQuantity: this.itemQuantity,
+      itemPromotionId: this.itemPromotionId,
+      itemBonusAmount: this.itemBonusAmount,
+      itemTotal: this.itemTotal,
+      itemPrice: this.itemPrice,
+      isItemTotalCalculatedByUnitPrice: this.isItemTotalCalculatedByUnitPrice,
+      scrapCategoryDetails: this.scrapCategoryDetails,
+      //data
+      scrapCategories: this.scrapCategories,
+      scrapCategoryMap: this.scrapCategoryMap,
+      collectorPhoneList: this.collectorPhoneList,
     );
   }
 }

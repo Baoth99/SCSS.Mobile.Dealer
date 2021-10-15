@@ -88,6 +88,12 @@ class DealerApp extends StatelessWidget {
         iconTheme: IconThemeData(size: 25),
         actionsIconTheme: IconThemeData(size: 25),
       ),
+      scaffoldBackgroundColor: Colors.white,
+      dividerTheme: DividerThemeData(
+        color: Color.fromARGB(255, 20, 20, 21),
+        thickness: 0.2,
+        space: 30,
+      ),
       textTheme: TextTheme(
         headline1: TextStyle(
           fontSize: 25,
@@ -102,7 +108,13 @@ class DealerApp extends StatelessWidget {
         bodyText1: TextStyle(
           fontSize: 15,
           color: Color.fromARGB(255, 20, 20, 21),
-          fontWeight: FontWeight.w500,
+          // fontWeight: FontWeight.w500,
+        ),
+        //orange subtitle
+        bodyText2: TextStyle(
+          fontSize: 15,
+          color: Color.fromARGB(204, 228, 121, 7),
+          // fontWeight: FontWeight.w500,
         ),
       ),
       primarySwatch: Colors.green,

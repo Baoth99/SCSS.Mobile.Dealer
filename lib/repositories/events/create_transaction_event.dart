@@ -44,10 +44,10 @@ class EventDealerCategoryUnitChanged extends CreateTransactionEvent {
   List<String> get props => [dealerCategoryDetailId];
 }
 
-class EventTotalChanged extends CreateTransactionEvent {
+class EventItemTotalChanged extends CreateTransactionEvent {
   final String total;
 
-  EventTotalChanged({required this.total});
+  EventItemTotalChanged({required this.total});
 
   @override
   List<String> get props => [total];
@@ -102,6 +102,16 @@ class EventShowModalBottomSheet extends CreateTransactionEvent {
 }
 
 class EventInitValues extends CreateTransactionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventClearItemValues extends CreateTransactionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventRecalculateTotalAndBonusAmount extends CreateTransactionEvent {
   @override
   List<Object?> get props => [];
 }

@@ -1,4 +1,5 @@
 import 'package:dealer_app/providers/network/data_network.dart';
+import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -8,6 +9,7 @@ abstract class IDataHandler {
   Future<List<ScrapCategoryModel>?> getScrapCategoryList();
   Future<List<ScrapCategoryDetailModel>?> getScrapCategoryDetailList(
       {required String scrapCategoryId});
+  Future<List<CollectorPhoneModel>?> getCollectorPhoneList();
 }
 
 class DataHandler implements IDataHandler {
@@ -53,6 +55,25 @@ class DataHandler implements IDataHandler {
         }
         //get scrap category details
         return scrapCategoryDetails;
+      } else
+        return null;
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<List<CollectorPhoneModel>?> getCollectorPhoneList() async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var collectorPhones = (await DataNetWork.getCollectorPhones(
+          bearerToken: accessToken,
+        ))
+            .collectorPhoneModels;
+        //get collector phones
+        return collectorPhones;
       } else
         return null;
     } catch (e) {

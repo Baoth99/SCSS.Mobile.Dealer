@@ -1,8 +1,9 @@
 class CollectDealTransactionDetailModel {
   String dealerCategoryId;
-  String dealerCategoryDetailId;
+  String? dealerCategoryDetailId;
   int quantity;
-  String promotionId;
+  String? unit;
+  String? promotionId;
   int bonusAmount;
   int total;
   int price;
@@ -18,47 +19,13 @@ class CollectDealTransactionDetailModel {
 
   CollectDealTransactionDetailModel({
     required this.dealerCategoryId,
-    required this.dealerCategoryDetailId,
+    this.dealerCategoryDetailId,
     required this.quantity,
-    required this.promotionId,
+    this.unit,
+    this.promotionId,
     required this.bonusAmount,
     required this.total,
     required this.price,
     required this.isCalculatedByUnitPrice,
   });
-
-  String get getDealerCategoryId => this.dealerCategoryId;
-
-  set setDealerCategoryId(String dealerCategoryId) =>
-      this.dealerCategoryId = dealerCategoryId;
-
-  String get getDealerCategoryDetailId => this.dealerCategoryDetailId;
-
-  set setDealerCategoryDetailId(String dealerCategoryDetailId) =>
-      this.dealerCategoryDetailId = dealerCategoryDetailId;
-
-  get getQuantity => this.quantity;
-
-  set setQuantity(quantity) => this.quantity = quantity;
-
-  get getPromotionId => this.promotionId;
-
-  set setPromotionId(promotionId) => this.promotionId = promotionId;
-
-  get getBonusAmount => this.bonusAmount;
-
-  set setBonusAmount(bonusAmount) => this.bonusAmount = bonusAmount;
-
-  get getTotal => this.total;
-
-  set setTotal(total) => this.total = total;
-
-  get getPrice => this.price;
-
-  set setPrice(price) => this.price = price;
-
-  get getIsCalculatedByUnitPrice => this.isCalculatedByUnitPrice;
-
-  set setIsCalculatedByUnitPrice(isCalculatedByUnitPrice) =>
-      this.isCalculatedByUnitPrice = isCalculatedByUnitPrice;
 }
