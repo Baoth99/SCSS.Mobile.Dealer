@@ -9,6 +9,7 @@ class CollectDealTransactionDetailModel {
   int price;
 
   bool isCalculatedByUnitPrice;
+  bool isPromotionnApplied;
 
   int get totalCalculated {
     if (isCalculatedByUnitPrice && price != 0)
@@ -27,5 +28,6 @@ class CollectDealTransactionDetailModel {
     required this.total,
     required this.price,
     required this.isCalculatedByUnitPrice,
+    this.isPromotionnApplied = false,
   });
 }

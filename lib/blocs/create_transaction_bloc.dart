@@ -7,6 +7,8 @@ import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_m
 import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/promotion_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,27 +97,71 @@ class CreateTransactionBloc
       }
     } else if (event is EventOpenQRScanner) {
       //TODO:
-    } else if (event is EventShowModalBottomSheet) {
-      yield state.copyWith(isModalBottomSheetShowed: true);
-      yield state.copyWith(isModalBottomSheetShowed: false);
-      if (event.key != null && event.detail != null)
-        yield state.copyWith(
-          key: event.key,
-          itemBonusAmount: event.detail!.bonusAmount,
-          itemDealerCategoryDetailId: event.detail!.dealerCategoryDetailId,
-          itemDealerCategoryId: event.detail!.dealerCategoryId,
-          isItemTotalCalculatedByUnitPrice:
-              event.detail!.isCalculatedByUnitPrice,
-          itemPrice: event.detail!.price,
-          itemPromotionId: event.detail!.promotionId,
-          itemQuantity: event.detail!.quantity,
-          itemTotal: event.detail!.total,
+    } else if (event is EventShowItemDialog) {
+      // Update dropdown list
+      _updateScrapCategoryMap();
+      if (event.key == null || event.detail == null)
+        _updateItemDealerCategoryId();
+      // If item is choosen instead
+      else {
+        // Add scrap category back to the dropdown list
+        var scrapCategory = state.scrapCategories.firstWhere(
+            (element) => element.id == event.detail!.dealerCategoryId);
+        _addScrapCategoryOnItemSelected(
+          id: scrapCategory.id,
+          name: scrapCategory.name,
         );
+        // Get details
+        List<ScrapCategoryDetailModel>? details;
+        if (event.detail!.dealerCategoryId !=
+            CustomVar.unnamedScrapCategory.id) {
+          details = await dataHandler.getScrapCategoryDetailList(
+              scrapCategoryId: event.detail!.dealerCategoryId);
+        }
+        // Add item data
+        state.isNewItem = false;
+        state.key = event.key;
+        state.itemBonusAmount = event.detail!.bonusAmount;
+        state.itemDealerCategoryDetailId = event.detail!.dealerCategoryDetailId;
+        state.itemDealerCategoryId = event.detail!.dealerCategoryId;
+        state.isItemTotalCalculatedByUnitPrice =
+            event.detail!.isCalculatedByUnitPrice;
+        state.itemPrice = event.detail!.price;
+        state.itemPromotionId = event.detail!.promotionId;
+        state.itemQuantity = event.detail!.quantity;
+        state.itemTotal = event.detail!.total;
+        state.scrapCategoryDetails = details ?? [];
+        state.isPromotionApplied = event.detail!.isPromotionnApplied;
+      }
+      // Open dialog
+      yield state.copyWith(isItemDialogShowed: true);
+      yield state.copyWith(isItemDialogShowed: false);
     } else if (event is EventCalculatedByUnitPriceChanged) {
-      yield state.copyWith(
-        isItemTotalCalculatedByUnitPrice: event.isCalculatedByUnitPrice,
-        itemDealerCategoryDetailId: null,
-      );
+      state.isItemTotalCalculatedByUnitPrice = event.isCalculatedByUnitPrice;
+      state.itemDealerCategoryDetailId = null;
+      // Check if false
+      if (event.isCalculatedByUnitPrice != false &&
+          state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id) {
+        try {
+          //get category details
+          yield state.copyWith(process: Process.processing);
+          var scrapCategoryDetailList =
+              await dataHandler.getScrapCategoryDetailList(
+                  scrapCategoryId: state.itemDealerCategoryId);
+          if (scrapCategoryDetailList != null)
+            yield state.copyWith(scrapCategoryDetails: scrapCategoryDetailList);
+          yield state.copyWith(process: Process.processed);
+        } catch (e) {
+          yield state.copyWith(process: Process.processed);
+          yield state.copyWith(process: Process.error);
+        } finally {
+          yield state.copyWith(process: Process.neutral);
+        }
+      } else {
+        yield state.copyWith(scrapCategoryDetails: []);
+      }
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventDealerCategoryChanged) {
       yield state.copyWith(itemDealerCategoryId: event.dealerCategoryId);
       yield state.copyWith(itemDealerCategoryDetailId: null);
@@ -138,6 +184,8 @@ class CreateTransactionBloc
       } else {
         yield state.copyWith(scrapCategoryDetails: []);
       }
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventDealerCategoryUnitChanged) {
       var unitPrice = state.scrapCategoryDetails
           .firstWhere((element) => element.id == event.dealerCategoryDetailId)
@@ -150,6 +198,8 @@ class CreateTransactionBloc
         yield state.copyWith(
             itemDealerCategoryDetailId: event.dealerCategoryDetailId);
       }
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventItemTotalChanged) {
       var totalInt = int.tryParse(event.total);
       if (totalInt != null)
@@ -158,11 +208,8 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.error);
         yield state.copyWith(process: Process.neutral);
       }
-      if (state.isBonusAmountApplied) if (state.promotionBonusAmount != null)
-        yield state.copyWith(
-          itemBonusAmount: int.parse(state.promotionBonusAmount!),
-          itemPromotionId: state.promotionCode,
-        );
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventQuantityChanged) {
       var quantity = int.tryParse(event.quantity);
       if (quantity != null)
@@ -171,11 +218,8 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.error);
         yield state.copyWith(process: Process.neutral);
       }
-      if (state.isBonusAmountApplied) if (state.promotionBonusAmount != null)
-        yield state.copyWith(
-          itemBonusAmount: int.parse(state.promotionBonusAmount!),
-          itemPromotionId: state.promotionCode,
-        );
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventUnitPriceChanged) {
       var unitPrice = int.tryParse(event.unitPrice);
       if (unitPrice != null)
@@ -184,14 +228,11 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.error);
         yield state.copyWith(process: Process.neutral);
       }
-      if (state.isBonusAmountApplied) if (state.promotionBonusAmount != null)
-        yield state.copyWith(
-          itemBonusAmount: int.parse(state.promotionBonusAmount!),
-          itemPromotionId: state.promotionCode,
-        );
+      //Check promotion
+      _setItemPromotion();
     } else if (event is EventAddNewItem) {
-      var newItemList = state.items;
-      newItemList.putIfAbsent(
+      // Put new item
+      state.items.putIfAbsent(
           state.items.length,
           () => CollectDealTransactionDetailModel(
                 dealerCategoryId: state.itemDealerCategoryId,
@@ -206,22 +247,21 @@ class CreateTransactionBloc
                 promotionId: state.itemPromotionId,
                 bonusAmount: state.itemBonusAmount,
                 total: state.isItemTotalCalculatedByUnitPrice
-                    ? state.totalCalculated
+                    ? state.itemTotalCalculated
                     : state.itemTotal,
                 price: state.itemPrice,
                 isCalculatedByUnitPrice: state.isItemTotalCalculatedByUnitPrice,
+                isPromotionnApplied: state.isPromotionApplied,
               ));
+      // Update category dropdown
+      _updateScrapCategoryMap();
       // Update the item list
       yield state.copyWith(isItemsUpdated: true);
       yield state.copyWith(isItemsUpdated: false);
       //clear item values
-      add(EventClearItemValues());
-      // Recalculate total and total bonus amount
-      add(EventRecalculateTotalAndBonusAmount());
-    } else if (event is EventEditItem) {
-      var modifiedItemList = state.items;
-      modifiedItemList.putIfAbsent(event.key, () => event.detail);
-      yield state.copyWith(items: modifiedItemList);
+      _resetItemValue();
+      // Reload values
+      add(EventReloadValues());
     } else if (event is EventSubmitNewTransaction) {
       //start progress indicator
       yield state.copyWith(process: Process.processing);
@@ -236,18 +276,186 @@ class CreateTransactionBloc
       } finally {
         yield state.copyWith(process: Process.neutral);
       }
-    } else if (event is EventClearItemValues) {
-      yield state.clearItem();
-    } else if (event is EventRecalculateTotalAndBonusAmount) {
-      var total = 0;
-      var totalBonus = 0;
-      state.items.forEach((key, value) {
-        total +=
-            value.isCalculatedByUnitPrice ? value.totalCalculated : value.total;
-        totalBonus += value.bonusAmount;
-      });
+    } else if (event is EventUpdateItem) {
+      if (state.key != null) {
+        // update item
+        state.items.update(
+            state.key!,
+            (value) => CollectDealTransactionDetailModel(
+                  dealerCategoryId: state.itemDealerCategoryId,
+                  dealerCategoryDetailId: state.itemDealerCategoryDetailId,
+                  quantity: state.itemQuantity,
+                  unit: state.itemDealerCategoryDetailId != null
+                      ? state.scrapCategoryDetails
+                          .firstWhere((element) =>
+                              element.id == state.itemDealerCategoryDetailId)
+                          .unit
+                      : null,
+                  promotionId: state.itemPromotionId,
+                  bonusAmount: state.itemBonusAmount,
+                  total: state.isItemTotalCalculatedByUnitPrice
+                      ? state.itemTotalCalculated
+                      : state.itemTotal,
+                  price: state.itemPrice,
+                  isCalculatedByUnitPrice:
+                      state.isItemTotalCalculatedByUnitPrice,
+                  isPromotionnApplied: state.isPromotionApplied,
+                ));
+        // Update category dropdown
+        _updateScrapCategoryMap();
+        // Update the item list
+        yield state.copyWith(isItemsUpdated: true);
+        yield state.copyWith(isItemsUpdated: false);
+        //clear item values
+        _resetItemValue();
+        // Reload values
+        add(EventReloadValues());
+      }
+    } else if (event is EventReloadValues) {
+      // // Activate highest bonus amount promotion, and disable the others
+      // _enablePromotionInItems();
+      // Recalculate total and total bonus amount
+      _recalculateTotalAndBonusAmount();
 
-      yield state.copyWith(total: total, totalBonus: totalBonus);
+      yield state.copyWith();
     }
   }
+
+  _updateScrapCategoryMap() {
+    state.items.forEach((itemKey, itemValue) {
+      state.scrapCategoryMap.removeWhere(
+          (mapKey, mapValue) => mapKey == itemValue.dealerCategoryId);
+    });
+  }
+
+  _updateItemDealerCategoryId() {
+    state.itemDealerCategoryId = state.scrapCategoryMap.keys.first;
+  }
+
+  _addScrapCategoryOnItemSelected({required id, required name}) {
+    state.scrapCategoryMap.putIfAbsent(id, () => name);
+  }
+
+  // ScrapCategoryModel? _getScrapCategoryWithActivePromotion() {
+  //   var promotionId;
+  //   state.items.forEach((key, value) {
+  //     if (value.isPromotionnApplied) promotionId = value.promotionId;
+  //   });
+  //   if (promotionId == null)
+  //     return null;
+  //   else {
+  //     var model = state.scrapCategories
+  //         .firstWhere((element) => element.promotionId == promotionId);
+  //     return model;
+  //   }
+  // }
+
+  _setItemPromotion() {
+    //Get sublist of selected category from dropdown
+    List<ScrapCategoryModel> scrapSublist = state.scrapCategories
+        .where((element) => element.id == state.itemDealerCategoryId)
+        .toList();
+    // If there is no promotion
+    if (scrapSublist.isEmpty) {
+      state.itemPromotionId = null;
+      state.itemBonusAmount = 0;
+    }
+    // If there is promotion
+    else {
+      // var scrapCategoryWithActivePromotion =
+      //     _getScrapCategoryWithActivePromotion();
+      var itemPromotionId;
+      var itemBonusAmount = 0;
+      var isPromotionApplied = false;
+      var total = 0;
+      if (state.isItemTotalCalculatedByUnitPrice)
+        total = state.itemTotalCalculated;
+      else
+        total = state.itemTotal;
+      //Searching for suitable promotion
+      scrapSublist.forEach((element) {
+        if (element.appliedAmount != null &&
+            total >= element.appliedAmount &&
+            element.bonusAmount > itemBonusAmount) {
+          // Found suitable promotion
+          // // If there is no active promotion
+          // if (scrapCategoryWithActivePromotion == null) {
+          itemPromotionId = element.promotionId;
+          itemBonusAmount = element.bonusAmount;
+          isPromotionApplied = true;
+          // } else {
+          // // If this one is the active one or has bonus amount > active one
+          // if (element.promotionId ==
+          //         scrapCategoryWithActivePromotion.promotionId ||
+          //     element.bonusAmount >
+          //         scrapCategoryWithActivePromotion.bonusAmount) {
+          //   itemPromotionId = element.promotionId;
+          //   itemBonusAmount = element.bonusAmount;
+          //   isPromotionApplied = true;
+          // }
+          // // If this one is not the active one
+          // else if (element.promotionId !=
+          //     scrapCategoryWithActivePromotion.promotionId) {
+          //   itemPromotionId = element.promotionId;
+          //   itemBonusAmount = element.bonusAmount;
+          //   isPromotionApplied = false;
+          // }
+          // }
+        }
+      });
+      //Set promotion
+      state.itemPromotionId = itemPromotionId;
+      state.itemBonusAmount = itemBonusAmount;
+      state.isPromotionApplied = isPromotionApplied;
+    }
+  }
+
+  _resetItemValue() {
+    state.isNewItem = true;
+    state.key = null;
+    state.itemDealerCategoryId = state.scrapCategoryMap.isNotEmpty
+        ? state.scrapCategoryMap.keys.first
+        : '';
+    state.itemDealerCategoryDetailId = null;
+    state.itemQuantity = 0;
+    state.itemPromotionId = null;
+    state.itemBonusAmount = 0;
+    state.itemTotal = 0;
+    state.itemPrice = 0;
+    state.isItemTotalCalculatedByUnitPrice = false;
+    state.scrapCategoryDetails = [];
+    state.isPromotionApplied = false;
+  }
+
+  _recalculateTotalAndBonusAmount() {
+    var total = 0;
+    var totalBonus = 0;
+    state.items.forEach((key, value) {
+      total +=
+          value.isCalculatedByUnitPrice ? value.totalCalculated : value.total;
+      if (value.isPromotionnApplied) totalBonus += value.bonusAmount;
+    });
+    // Set value
+    state.total = total;
+    state.totalBonus = totalBonus;
+  }
+
+  // _enablePromotionInItems() {
+  //   var itemKey;
+  //   var bonusAmount = 0;
+  //   // Find the promotion with highest bonus amount
+  //   state.items.forEach((key, value) {
+  //     if (value.bonusAmount > bonusAmount) {
+  //       itemKey = key;
+  //       bonusAmount = value.bonusAmount;
+  //     }
+  //   });
+  //   // Activate the promotion with highest bonus amount
+  //   state.items.forEach((key, value) {
+  //     if (key != itemKey)
+  //       value.isPromotionnApplied = false;
+  //     else
+  //       value.isPromotionnApplied = true;
+  //   });
+  // }
 }

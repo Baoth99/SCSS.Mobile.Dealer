@@ -30,6 +30,7 @@ class CreateTransactionState {
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
   List<ScrapCategoryDetailModel> scrapCategoryDetails;
+  bool isPromotionApplied;
 
   //data
   List<ScrapCategoryModel> scrapCategories;
@@ -37,45 +38,7 @@ class CreateTransactionState {
       scrapCategoryMap; //map contains unique categories <id, name> for dropdown list
   List<CollectorPhoneModel> collectorPhoneList;
 
-  bool get isBonusAmountApplied {
-    //check category id
-    if (scrapCategories.isNotEmpty &&
-        itemDealerCategoryId != '' &&
-        itemDealerCategoryId != CustomVar.unnamedScrapCategory.id) {
-      var appliedAmount = scrapCategories
-          .firstWhere((element) => element.id == itemDealerCategoryId)
-          .appliedAmount;
-      // Check if appliedAmount is null or zero
-      if (appliedAmount != null) {
-        if (isItemTotalCalculatedByUnitPrice) {
-          return totalCalculated >= appliedAmount;
-        } else {
-          return itemTotal >= appliedAmount;
-        }
-      } else
-        return false;
-    } else
-      return false;
-  }
-
-  String? get promotionCode {
-    if (isBonusAmountApplied) {
-      return scrapCategories
-          .firstWhere((element) => element.id == itemDealerCategoryId)
-          .promotionCode;
-    }
-  }
-
-  String? get promotionBonusAmount {
-    if (isBonusAmountApplied) {
-      return scrapCategories
-          .firstWhere((element) => element.id == itemDealerCategoryId)
-          .bonusAmount
-          .toString();
-    }
-  }
-
-  int get totalCalculated {
+  int get itemTotalCalculated {
     if (isItemTotalCalculatedByUnitPrice && itemPrice != 0)
       return itemPrice * itemQuantity;
     else
@@ -94,6 +57,12 @@ class CreateTransactionState {
 
   int get grandTotal {
     return total + totalBonus;
+  }
+
+  String get getItemPromotionCode {
+    return scrapCategories
+        .singleWhere((element) => element.promotionId == itemPromotionId)
+        .promotionCode;
   }
 
   //validators
@@ -139,7 +108,7 @@ class CreateTransactionState {
 
   bool get isItemTotalValid {
     if (isItemTotalCalculatedByUnitPrice) {
-      if (totalCalculated < 0) {
+      if (itemTotalCalculated < 0) {
         return false;
       } else
         return true;
@@ -177,6 +146,7 @@ class CreateTransactionState {
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
     List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    bool? isPromotionApplied,
     //Data
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
@@ -205,6 +175,7 @@ class CreateTransactionState {
         isItemTotalCalculatedByUnitPrice =
             isItemTotalCalculatedByUnitPrice ?? false,
         scrapCategoryDetails = scrapCategoryDetails ?? [],
+        isPromotionApplied = isPromotionApplied ?? false,
         //Data
         scrapCategories = scrapCategories ?? [],
         scrapCategoryMap = scrapCategoryMap ?? {},
@@ -218,7 +189,7 @@ class CreateTransactionState {
     int? totalBonus,
     Map<int, CollectDealTransactionDetailModel>? items,
     Process? process,
-    bool? isModalBottomSheetShowed,
+    bool? isItemDialogShowed,
     bool? isItemsUpdated,
     bool? isCollectorPhoneExist,
     //New item
@@ -233,6 +204,7 @@ class CreateTransactionState {
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
     List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    bool? isPromotionApplied,
     //Data
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
@@ -247,7 +219,7 @@ class CreateTransactionState {
       items: items ?? this.items,
       process: process ?? this.process,
       isModalBottomSheetShowed:
-          isModalBottomSheetShowed ?? this.isModalBottomSheetShowed,
+          isItemDialogShowed ?? this.isModalBottomSheetShowed,
       isItemsUpdated: isItemsUpdated ?? this.isItemsUpdated,
       isCollectorPhoneExist:
           isCollectorPhoneExist ?? this.isCollectorPhoneExist,
@@ -265,41 +237,11 @@ class CreateTransactionState {
       isItemTotalCalculatedByUnitPrice: isItemTotalCalculatedByUnitPrice ??
           this.isItemTotalCalculatedByUnitPrice,
       scrapCategoryDetails: scrapCategoryDetails ?? this.scrapCategoryDetails,
+      isPromotionApplied: isPromotionApplied ?? this.isPromotionApplied,
       //Data
       scrapCategories: scrapCategories ?? this.scrapCategories,
       scrapCategoryMap: scrapCategoryMap ?? this.scrapCategoryMap,
       collectorPhoneList: collectorPhoneList ?? this.collectorPhoneList,
-    );
-  }
-
-  CreateTransactionState clearItem() {
-    return CreateTransactionState(
-      collectorId: this.collectorId,
-      collectorPhone: this.collectorPhone,
-      collectorName: this.collectorName,
-      total: this.total,
-      totalBonus: this.totalBonus,
-      items: this.items,
-      process: this.process,
-      isModalBottomSheetShowed: this.isModalBottomSheetShowed,
-      isItemsUpdated: this.isItemsUpdated,
-      isCollectorPhoneExist: this.isCollectorPhoneExist,
-      //New item
-      isNewItem: null,
-      key: null,
-      itemDealerCategoryId: null,
-      itemDealerCategoryDetailId: null,
-      itemQuantity: null,
-      itemPromotionId: null,
-      itemBonusAmount: null,
-      itemTotal: null,
-      itemPrice: null,
-      isItemTotalCalculatedByUnitPrice: null,
-      scrapCategoryDetails: null,
-      //data
-      scrapCategories: this.scrapCategories,
-      scrapCategoryMap: this.scrapCategoryMap,
-      collectorPhoneList: this.collectorPhoneList,
     );
   }
 
@@ -327,6 +269,7 @@ class CreateTransactionState {
       itemPrice: this.itemPrice,
       isItemTotalCalculatedByUnitPrice: this.isItemTotalCalculatedByUnitPrice,
       scrapCategoryDetails: this.scrapCategoryDetails,
+      isPromotionApplied: this.isPromotionApplied,
       //data
       scrapCategories: this.scrapCategories,
       scrapCategoryMap: this.scrapCategoryMap,

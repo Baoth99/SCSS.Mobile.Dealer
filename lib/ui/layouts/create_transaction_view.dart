@@ -27,7 +27,7 @@ class CreateTransactionView extends StatelessWidget {
           BlocListener<CreateTransactionBloc, CreateTransactionState>(
             listener: (context, state) {
               if (state.isModalBottomSheetShowed) {
-                _showModalBottomSheet(context);
+                _showItemDialog(context);
               }
               //process
               if (state.process == Process.processed) {
@@ -177,14 +177,17 @@ class CreateTransactionView extends StatelessWidget {
           children: [
             customText(text: CustomTexts.detailText),
             //add item button
-            InkWell(
-              onTap: () {
-                context
-                    .read<CreateTransactionBloc>()
-                    .add(EventShowModalBottomSheet());
-              },
-              child: Icon(Icons.add),
-            )
+            Visibility(
+              visible: state.scrapCategoryMap.length != 0,
+              child: InkWell(
+                onTap: () {
+                  context
+                      .read<CreateTransactionBloc>()
+                      .add(EventShowItemDialog());
+                },
+                child: Icon(Icons.add),
+              ),
+            ),
           ],
         );
       },
@@ -204,6 +207,12 @@ class CreateTransactionView extends StatelessWidget {
           itemCount: state.items.length,
           itemBuilder: (context, index) {
             return ListTile(
+              onTap: () {
+                context.read<CreateTransactionBloc>().add(EventShowItemDialog(
+                      key: index,
+                      detail: state.items[index],
+                    ));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               tileColor: CustomColors.lightGray,
@@ -253,26 +262,26 @@ class CreateTransactionView extends StatelessWidget {
                       ],
                     )
                   : null,
-              subtitle: state.items[index] != null
-                  ? state.items[index]!.bonusAmount != 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: Text(
-                                CustomTexts.promotionText,
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                            ),
-                            Text(
-                              CustomFormats.currencyFormat
-                                  .format(state.items[index]!.bonusAmount),
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                          ],
-                        )
-                      : null
+              subtitle: state.items[index] != null &&
+                      state.items[index]!.bonusAmount != 0 &&
+                      state.items[index]!.isPromotionnApplied
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            CustomTexts.promotionText,
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                        ),
+                        Text(
+                          CustomFormats.currencyFormat
+                              .format(state.items[index]!.bonusAmount),
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ],
+                    )
                   : null,
             );
           },
@@ -373,16 +382,17 @@ class CreateTransactionView extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
-  void _showModalBottomSheet(BuildContext context) {
+// Item fields
+  void _showItemDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        insetPadding: EdgeInsets.zero,
-        content: SizedBox(
-          width: 320,
-          height: 400,
-          child: BlocProvider.value(
-            value: BlocProvider.of<CreateTransactionBloc>(context),
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<CreateTransactionBloc>(context),
+        child: AlertDialog(
+          insetPadding: EdgeInsets.zero,
+          content: SizedBox(
+            width: 320,
+            height: 400,
             child: Form(
               key: _itemFormKey,
               child: ListView(
@@ -398,20 +408,16 @@ class CreateTransactionView extends StatelessWidget {
                   _totalField(),
                   _promotionApplicationBonusAmount(),
                   _promotionApplicationDescription(),
+                  _promotionRemoveWarning(),
                 ],
               ),
             ),
           ),
+          actions: [
+            cancelButtonBuilder(context, CustomTexts.cancelButtonText),
+            _addAndUpdateItemButton(),
+          ],
         ),
-        actions: [
-          cancelButtonBuilder(context, CustomTexts.cancelButtonText),
-          customElevatedButton(context, CustomTexts.addScrapButtonText, () {
-            if (_itemFormKey.currentState!.validate()) {
-              context.read<CreateTransactionBloc>().add(EventAddNewItem());
-              Navigator.of(context).pop();
-            }
-          }),
-        ],
       ),
     );
   }
@@ -424,12 +430,16 @@ class CreateTransactionView extends StatelessWidget {
           title: Text(CustomTexts.calculatedByUnitPriceText),
           subtitle: Text(CustomTexts.calculatedByUnitPriceExplainationText),
           trailing: Switch(
-              value: state.isItemTotalCalculatedByUnitPrice,
-              onChanged: (value) {
-                context.read<CreateTransactionBloc>().add(
-                    EventCalculatedByUnitPriceChanged(
-                        isCalculatedByUnitPrice: value));
-              }),
+            value: state.isItemTotalCalculatedByUnitPrice,
+            onChanged:
+                state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id
+                    ? (value) {
+                        context.read<CreateTransactionBloc>().add(
+                            EventCalculatedByUnitPriceChanged(
+                                isCalculatedByUnitPrice: value));
+                      }
+                    : null,
+          ),
         );
       },
     );
@@ -531,9 +541,9 @@ class CreateTransactionView extends StatelessWidget {
               initialValue: state.itemQuantity.toString(),
               onChanged: (value) {
                 if (value != CustomTexts.emptyString) {
-                  context
-                      .read<CreateTransactionBloc>()
-                      .add(EventQuantityChanged(quantity: value));
+                  context.read<CreateTransactionBloc>().add(
+                      EventQuantityChanged(
+                          quantity: value.replaceAll(RegExp(r'[^0-9]'), '')));
                 } else {
                   context.read<CreateTransactionBloc>().add(
                       EventQuantityChanged(quantity: CustomTexts.zeroString));
@@ -615,7 +625,7 @@ class CreateTransactionView extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [CurrencyTextFormatter()],
             initialValue: state.isItemTotalCalculatedByUnitPrice
-                ? CustomFormats.numberFormat.format(state.totalCalculated)
+                ? CustomFormats.numberFormat.format(state.itemTotalCalculated)
                 : CustomFormats.numberFormat.format(state.itemTotal),
             onChanged: (value) {
               if (value != CustomTexts.emptyString) {
@@ -643,12 +653,11 @@ class CreateTransactionView extends StatelessWidget {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Visibility(
-          visible: state.isBonusAmountApplied,
+          visible: state.isPromotionApplied,
           child: customText(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            text: state.promotionBonusAmount != null
-                ? '+ ${CustomFormats.numberFormat.format(int.parse(state.promotionBonusAmount!))}'
-                : CustomTexts.emptyString,
+            text:
+                '+ ${CustomFormats.numberFormat.format(state.itemBonusAmount)}',
           ),
         );
       },
@@ -659,15 +668,47 @@ class CreateTransactionView extends StatelessWidget {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
         return Visibility(
-          visible: state.isBonusAmountApplied,
+          visible: state.isPromotionApplied,
           child: customText(
               textStyle: Theme.of(context).textTheme.bodyText2,
-              text: state.promotionCode != null
+              text: state.itemPromotionId != null
                   ? CustomTexts.promotionAppliedText(
-                      promotionId:
-                          state.promotionCode ?? CustomTexts.emptyString)
+                      promotionCode: state.getItemPromotionCode)
                   : CustomTexts.promotionNotAppliedText),
         );
+      },
+    );
+  }
+
+  _promotionRemoveWarning() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: state.isPromotionApplied,
+            child: customText(
+              textStyle: Theme.of(context).textTheme.bodyText2,
+              text: CustomTexts.promotionRemoveWarningText,
+            ));
+      },
+    );
+  }
+
+  _addAndUpdateItemButton() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return customElevatedButton(
+            context,
+            state.key == null
+                ? CustomTexts.addScrapButtonText
+                : CustomTexts.saveUpdateButtonText, () {
+          if (_itemFormKey.currentState!.validate()) {
+            if (state.isNewItem)
+              context.read<CreateTransactionBloc>().add(EventAddNewItem());
+            else
+              context.read<CreateTransactionBloc>().add(EventUpdateItem());
+            Navigator.of(context).pop();
+          }
+        });
       },
     );
   }

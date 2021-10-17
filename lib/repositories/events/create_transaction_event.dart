@@ -76,14 +76,9 @@ class EventAddNewItem extends CreateTransactionEvent {
   List<Object?> get props => [];
 }
 
-class EventEditItem extends CreateTransactionEvent {
-  final int key;
-  final CollectDealTransactionDetailModel detail;
-
-  EventEditItem({required this.detail, required this.key});
-
+class EventUpdateItem extends CreateTransactionEvent {
   @override
-  List<Object> get props => [key, detail];
+  List<Object?> get props => [];
 }
 
 class EventSubmitNewTransaction extends CreateTransactionEvent {
@@ -91,11 +86,11 @@ class EventSubmitNewTransaction extends CreateTransactionEvent {
   List<Object?> get props => [];
 }
 
-class EventShowModalBottomSheet extends CreateTransactionEvent {
+class EventShowItemDialog extends CreateTransactionEvent {
   final int? key;
   final CollectDealTransactionDetailModel? detail;
 
-  EventShowModalBottomSheet({this.detail, this.key});
+  EventShowItemDialog({this.detail, this.key});
 
   @override
   List<Object?> get props => [key, detail];
@@ -106,12 +101,7 @@ class EventInitValues extends CreateTransactionEvent {
   List<Object?> get props => [];
 }
 
-class EventClearItemValues extends CreateTransactionEvent {
-  @override
-  List<Object?> get props => [];
-}
-
-class EventRecalculateTotalAndBonusAmount extends CreateTransactionEvent {
+class EventReloadValues extends CreateTransactionEvent {
   @override
   List<Object?> get props => [];
 }
