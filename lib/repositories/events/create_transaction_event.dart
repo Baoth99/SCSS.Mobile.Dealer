@@ -12,9 +12,13 @@ class EventPhoneNumberChanged extends CreateTransactionEvent {
   List<String> get props => [collectorPhone];
 }
 
-class EventOpenQRScanner extends CreateTransactionEvent {
+class EventCollectorIdChanged extends CreateTransactionEvent {
+  String collectorId;
+
+  EventCollectorIdChanged({required this.collectorId});
+
   @override
-  List<Object?> get props => [];
+  List<String> get props => [collectorId];
 }
 
 class EventCalculatedByUnitPriceChanged extends CreateTransactionEvent {

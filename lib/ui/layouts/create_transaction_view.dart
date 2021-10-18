@@ -7,6 +7,7 @@ import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/param_util.dart';
+import 'package:dealer_app/utils/qr_scanner.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +15,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateTransactionView extends StatelessWidget {
+  final TextEditingController _collectorPhoneController =
+      TextEditingController();
+  final TextEditingController _collectorNameController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _itemFormKey = GlobalKey<FormState>();
 
@@ -60,7 +65,22 @@ class CreateTransactionView extends StatelessWidget {
                 },
               );
             }
-          })
+          }),
+          // Collector phone listener
+          BlocListener<CreateTransactionBloc, CreateTransactionState>(
+              listenWhen: (previous, current) {
+            return current.isQRScanned == true;
+          }, listener: (context, state) {
+            _collectorPhoneController.text = state.collectorPhone;
+          }),
+          // Collector name listener
+          BlocListener<CreateTransactionBloc, CreateTransactionState>(
+              listenWhen: (previous, current) {
+            return previous.collectorName != current.collectorName;
+          }, listener: (context, state) {
+            _collectorNameController.text =
+                state.collectorName ?? CustomTexts.emptyString;
+          }),
         ],
         child: Scaffold(
           appBar: AppBar(
@@ -121,10 +141,12 @@ class CreateTransactionView extends StatelessWidget {
         return SizedBox(
           height: 90,
           child: TextFormField(
+            controller: _collectorPhoneController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: CustomTexts.collectorPhoneLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
+              suffixIcon: _scanQRIcon(),
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -137,7 +159,7 @@ class CreateTransactionView extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty) return CustomTexts.phoneBlank;
               if (!state.isPhoneValid) return CustomTexts.phoneError;
-              if (!state.isCollectorPhoneExist)
+              if (!state.isCollectorPhoneExist && state.collectorId == null)
                 return CustomTexts.phoneNotExist;
             },
           ),
@@ -146,18 +168,30 @@ class CreateTransactionView extends StatelessWidget {
     );
   }
 
+  _scanQRIcon() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return IconButton(
+            onPressed: () async {
+              var collectorId;
+              collectorId = await QRScanner.scanQR();
+              context
+                  .read<CreateTransactionBloc>()
+                  .add(EventCollectorIdChanged(collectorId: collectorId));
+            },
+            icon: Icon(Icons.qr_code_scanner));
+      },
+    );
+  }
+
   _nameField() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      buildWhen: (previous, current) {
-        return current.collectorName != previous.collectorName;
-      },
       builder: (context, state) {
         return SizedBox(
           height: 90,
           child: TextFormField(
             enabled: false,
-            key: UniqueKey(),
-            initialValue: state.collectorName,
+            controller: _collectorNameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               labelText: CustomTexts.collectorNameLabel,
@@ -221,7 +255,7 @@ class CreateTransactionView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                          flex: 4,
+                          flex: 3,
                           fit: FlexFit.tight,
                           child: Align(
                             alignment: Alignment.centerLeft,
@@ -238,7 +272,7 @@ class CreateTransactionView extends StatelessWidget {
                           ),
                         ),
                         Flexible(
-                          flex: 2,
+                          flex: 3,
                           fit: FlexFit.loose,
                           child: Align(
                             alignment: Alignment.center,
@@ -247,6 +281,7 @@ class CreateTransactionView extends StatelessWidget {
                                       state.items[index]!.unit != null
                                   ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
                                   : CustomTexts.emptyString,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
@@ -255,8 +290,11 @@ class CreateTransactionView extends StatelessWidget {
                           fit: FlexFit.tight,
                           child: Align(
                             alignment: Alignment.centerRight,
-                            child: Text(CustomFormats.currencyFormat
-                                .format(state.items[index]!.total)),
+                            child: Text(
+                              CustomFormats.currencyFormat
+                                  .format(state.items[index]!.total),
+                              textAlign: TextAlign.right,
+                            ),
                           ),
                         ),
                       ],

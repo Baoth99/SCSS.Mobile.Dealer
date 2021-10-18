@@ -20,7 +20,7 @@ class CustomTexts {
   static const String loginButton = 'Đăng nhập';
   static const String phoneError = 'Số điện thoại không hợp lệ';
   static const String phoneBlank = 'Số điện thoại không được để trống';
-  static const String phoneNotExist = 'Số điện thoại không tồn tại';
+  static const String phoneNotExist = 'Không tìm thấy số điện thoại';
   static const String passwordLabel = 'Mật khẩu';
   static const String phoneLabel = 'Số điện thoại';
   static const String wrongPasswordOrPhone =

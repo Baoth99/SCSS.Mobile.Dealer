@@ -56,26 +56,26 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.neutral);
       }
     } else if (event is EventPhoneNumberChanged) {
-      yield state.copyWith(collectorPhone: event.collectorPhone);
+      yield state.copyWith(
+        collectorPhone: event.collectorPhone,
+        isQRScanned: false,
+      );
       // Check if phone is valid
       if (state.isPhoneValid) {
         yield state.copyWith(process: Process.processing);
         try {
-          CollectorPhoneModel? collectorModel = state.collectorPhoneList
+          CollectorPhoneModel collectorModel = state.collectorPhoneList
               .firstWhere((element) => element.phone == event.collectorPhone);
-          // Check if collector phone exist, then get collector name + id
-          if (collectorModel != null) {
-            InfoReviewModel? collectorInfo = await collectDealTransactionHandler
-                .getInfoReview(collectorId: collectorModel.id);
-            // Check if collectorInfo is null
-            if (collectorInfo != null) {
-              yield state.copyWith(
-                collectorId: collectorInfo.collectorId,
-                collectorName: collectorInfo.collectorName,
-                isCollectorPhoneExist: true,
-              );
-            } else
-              yield state.copyWith(isCollectorPhoneExist: false);
+          // Get collector name + id
+          InfoReviewModel? collectorInfo = await collectDealTransactionHandler
+              .getInfoReview(collectorId: collectorModel.id);
+          // Check if collectorInfo is null
+          if (collectorInfo != null) {
+            yield state.copyWith(
+              collectorId: collectorInfo.collectorId,
+              collectorName: collectorInfo.collectorName,
+              isCollectorPhoneExist: true,
+            );
           } else
             yield state.copyWith(isCollectorPhoneExist: false);
           //Done processing
@@ -91,12 +91,36 @@ class CreateTransactionBloc
         }
       } else {
         // Remove id and name if phone is not valid
-        if (state.collectorId != null) yield state.clearCollector();
-        if (state.collectorName != null) yield state.clearCollector();
-        if (state.isCollectorPhoneExist) yield state.clearCollector();
+        if (state.collectorId != null ||
+            state.collectorName != null ||
+            state.isCollectorPhoneExist) yield state.clearCollector();
       }
-    } else if (event is EventOpenQRScanner) {
-      //TODO:
+    } else if (event is EventCollectorIdChanged) {
+      yield state.copyWith(process: Process.processing);
+      try {
+        //get phone and name
+        InfoReviewModel? model = await collectDealTransactionHandler
+            .getInfoReview(collectorId: event.collectorId);
+        if (model != null) {
+          yield state.copyWith(
+            process: Process.processed,
+            collectorId: model.collectorId,
+            collectorName: model.collectorName,
+            collectorPhone: model.collectorPhone,
+            isCollectorPhoneExist: true,
+            isQRScanned: true,
+          );
+        }
+      } catch (e) {
+        yield state.clearCollector(
+          collectorPhone: CustomTexts.emptyString,
+          isQRScanned: true,
+        );
+        yield state.copyWith(process: Process.processed);
+        yield state.copyWith(process: Process.error);
+      } finally {
+        yield state.copyWith(process: Process.neutral);
+      }
     } else if (event is EventShowItemDialog) {
       // Update dropdown list
       _updateScrapCategoryMap();

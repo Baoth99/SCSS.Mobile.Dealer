@@ -43,6 +43,7 @@ dependencies:
   dropdown_search: ^1.0.0
   device_info_plus: ^2.2.0
   flutter_secure_storage: ^4.2.1
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:

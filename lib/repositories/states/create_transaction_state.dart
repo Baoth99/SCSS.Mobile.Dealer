@@ -17,6 +17,7 @@ class CreateTransactionState {
   bool isModalBottomSheetShowed;
   bool isItemsUpdated;
   bool isCollectorPhoneExist;
+  bool isQRScanned;
 
   //item data
   bool isNewItem;
@@ -134,6 +135,7 @@ class CreateTransactionState {
     bool? isModalBottomSheetShowed,
     bool? isItemsUpdated,
     bool? isCollectorPhoneExist,
+    bool? isQRScanned,
     //New item
     bool? isNewItem,
     int? key,
@@ -161,6 +163,7 @@ class CreateTransactionState {
         isModalBottomSheetShowed = isModalBottomSheetShowed ?? false,
         isItemsUpdated = isItemsUpdated ?? false,
         isCollectorPhoneExist = isCollectorPhoneExist ?? false,
+        isQRScanned = isQRScanned ?? false,
         //New item
         isNewItem = isNewItem ?? true,
         key = key,
@@ -192,6 +195,7 @@ class CreateTransactionState {
     bool? isItemDialogShowed,
     bool? isItemsUpdated,
     bool? isCollectorPhoneExist,
+    bool? isQRScanned,
     //New item
     bool? isNewItem,
     int? key,
@@ -223,6 +227,7 @@ class CreateTransactionState {
       isItemsUpdated: isItemsUpdated ?? this.isItemsUpdated,
       isCollectorPhoneExist:
           isCollectorPhoneExist ?? this.isCollectorPhoneExist,
+      isQRScanned: isQRScanned ?? this.isQRScanned,
       //New item
       isNewItem: isNewItem ?? this.isNewItem,
       key: key ?? this.key,
@@ -245,10 +250,11 @@ class CreateTransactionState {
     );
   }
 
-  CreateTransactionState clearCollector() {
+  CreateTransactionState clearCollector(
+      {String? collectorPhone, bool? isQRScanned}) {
     return CreateTransactionState(
       collectorId: null,
-      collectorPhone: this.collectorPhone,
+      collectorPhone: collectorPhone ?? this.collectorPhone,
       collectorName: null,
       total: this.total,
       totalBonus: this.totalBonus,
@@ -257,6 +263,7 @@ class CreateTransactionState {
       isModalBottomSheetShowed: this.isModalBottomSheetShowed,
       isItemsUpdated: this.isItemsUpdated,
       isCollectorPhoneExist: false,
+      isQRScanned: isQRScanned ?? this.isQRScanned,
       //New item
       isNewItem: this.isNewItem,
       key: this.key,
