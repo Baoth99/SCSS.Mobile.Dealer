@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/create_transaction_bloc.dart';
 import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
@@ -5,6 +6,7 @@ import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -40,11 +42,13 @@ class CreateTransactionView extends StatelessWidget {
                 Navigator.of(context).pop();
               } else if (state.process == Process.error) {
                 _showSnackBar(context, CustomTexts.generalErrorMessage);
+              } else if (state.process == Process.valid) {
+                CustomCoolAlert.showCoolAlert(
+                  context: context,
+                  title: CustomTexts.createTransactionSuccessfullyText,
+                  type: CoolAlertType.success,
+                );
               }
-              //  else if (state.process == Process.valid) {
-              //   Navigator.of(context).pushNamed(CustomRoutes.registerOTP,
-              //       arguments: {'phone': state.phone});
-              // }
             },
           ),
           BlocListener<CreateTransactionBloc, CreateTransactionState>(
@@ -55,7 +59,7 @@ class CreateTransactionView extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => const CustomProgressIndicatorDialog(
-                  text: 'Xin vui lòng đợi',
+                  text: CustomTexts.pleaseWaitText,
                 ),
               );
             }
@@ -403,7 +407,6 @@ class CreateTransactionView extends StatelessWidget {
                 context
                     .read<CreateTransactionBloc>()
                     .add(EventSubmitNewTransaction());
-                Navigator.of(context).pop();
               }
             }),
             rowFlexibleType.smallToBig,

@@ -154,6 +154,10 @@ class CustomTexts {
   static const String totalOverLimit = '$totalLabel thấp hơn 100 triệu đồng';
   static const String scrapCategoryUnitBlank = 'Xin chọn $unitLabel';
   static const String zeroString = '0';
+  static const String closeText = 'Đóng';
+  static const String pleaseWaitText = 'Xin vui lòng đợi';
+  static const String createTransactionSuccessfullyText =
+      'Tạo giao dịch thành công';
 }
 
 class CustomFormats {
@@ -244,4 +248,15 @@ class CustomVar {
   );
 
   static const totalLimit = 100000000;
+}
+
+class Symbols {
+  static const String vietnamLanguageCode = 'vi';
+  static const String forwardSlash = '/';
+  static const String vietnamISOCode = 'VN';
+  static const String vietnamCallingCode = '+84';
+  static const String empty = '';
+  static const String space = ' ';
+  static const String comma = ',';
+  static const String minus = '-';
 }
