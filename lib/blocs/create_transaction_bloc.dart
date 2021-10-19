@@ -7,6 +7,7 @@ import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_m
 import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/promotion_model.dart';
+import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
@@ -74,6 +75,7 @@ class CreateTransactionBloc
             yield state.copyWith(
               collectorId: collectorInfo.collectorId,
               collectorName: collectorInfo.collectorName,
+              transactionFeePercent: collectorInfo.transactionFeePercent,
               isCollectorPhoneExist: true,
             );
           } else
@@ -93,6 +95,7 @@ class CreateTransactionBloc
         // Remove id and name if phone is not valid
         if (state.collectorId != null ||
             state.collectorName != null ||
+            state.transactionFeePercent != 0 ||
             state.isCollectorPhoneExist) yield state.clearCollector();
       }
     } else if (event is EventCollectorIdChanged) {
@@ -107,6 +110,7 @@ class CreateTransactionBloc
             collectorId: model.collectorId,
             collectorName: model.collectorName,
             collectorPhone: model.collectorPhone,
+            transactionFeePercent: model.transactionFeePercent,
             isCollectorPhoneExist: true,
             isQRScanned: true,
           );
@@ -122,6 +126,8 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.neutral);
       }
     } else if (event is EventShowItemDialog) {
+      //clear item values
+      _resetItemValue();
       // Update dropdown list
       _updateScrapCategoryMap();
       if (event.key == null || event.detail == null)
@@ -290,10 +296,24 @@ class CreateTransactionBloc
       //start progress indicator
       yield state.copyWith(process: Process.processing);
       try {
-        //TODO:
-        await Future.delayed(Duration(seconds: 5));
-        yield state.copyWith(process: Process.processed);
-        yield state.copyWith(process: Process.valid);
+        // Create request model
+        var model = CollectDealTransactionRequestModel(
+          collectorId: state.collectorId!,
+          total: state.total,
+          totalBonus: state.totalBonus,
+          transactionFee: state.transactionFee,
+          items: state.items.values.toList(),
+        );
+
+        bool result = await collectDealTransactionHandler
+            .createCollectDealTransaction(model: model);
+        if (result) {
+          yield state.copyWith(process: Process.processed);
+          yield state.copyWith(process: Process.valid);
+        } else {
+          yield state.copyWith(process: Process.processed);
+          yield state.copyWith(process: Process.error);
+        }
       } on Exception {
         yield state.copyWith(process: Process.processed);
         yield state.copyWith(process: Process.error);

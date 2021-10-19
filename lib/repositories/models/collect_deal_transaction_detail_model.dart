@@ -1,3 +1,5 @@
+import 'package:dealer_app/utils/param_util.dart';
+
 class CollectDealTransactionDetailModel {
   String dealerCategoryId;
   String? dealerCategoryDetailId;
@@ -30,4 +32,17 @@ class CollectDealTransactionDetailModel {
     required this.isCalculatedByUnitPrice,
     this.isPromotionnApplied = false,
   });
+
+  Map<String, dynamic> toJson() => {
+        "dealerCategoryDetailId": dealerCategoryDetailId == null
+            ? CustomVar.unnamedScrapCategory.id
+            : dealerCategoryDetailId,
+        "quantity": quantity,
+        "promotionId": promotionId == null
+            ? CustomVar.noPromotion.promotionId
+            : promotionId,
+        "bonusAmount": bonusAmount,
+        "total": total,
+        "price": price,
+      };
 }

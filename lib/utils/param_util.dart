@@ -1,3 +1,4 @@
+import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -46,6 +47,8 @@ class CustomTexts {
       '/api/v3/auto-complete/collector-phone';
   static const String apiUrlGetInfoReview =
       '/api/v3/transaction/collect-deal/info-review';
+  static const String apiUrlPostCollectDealTransaction =
+      '/api/v3/transaction/collect-deal/create';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -61,6 +64,8 @@ class CustomTexts {
       'Failed to get collector phones';
   static const String getInfoReviewFailedException =
       'Failed to get info review';
+  static const String postCollectDealTransactionFailedException =
+      'Failed to put collect deal transaction';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -146,10 +151,9 @@ class CustomTexts {
   static const String addScrapButtonText = 'Thêm phế liệu';
   static const String saveUpdateButtonText = 'Lưu thay đổi';
   static const String totalNegative = '$totalLabel không được là số âm';
+  static const String totalOverLimit = '$totalLabel thấp hơn 100 triệu đồng';
   static const String scrapCategoryUnitBlank = 'Xin chọn $unitLabel';
   static const String zeroString = '0';
-  static const String promotionRemoveWarningText =
-      '* Mỗi đơn chỉ áp dụng được 1 mã khuyến mãi';
 }
 
 class CustomFormats {
@@ -228,4 +232,16 @@ class CustomVar {
     name: 'Chưa phân loại',
     bonusAmount: null,
   );
+
+  static final noPromotion = CollectDealTransactionDetailModel(
+    dealerCategoryId: '00000000-0000-0000-0000-000000000000',
+    quantity: 0,
+    promotionId: '00000000-0000-0000-0000-000000000000',
+    bonusAmount: 0,
+    total: 0,
+    price: 0,
+    isCalculatedByUnitPrice: false,
+  );
+
+  static const totalLimit = 100000000;
 }

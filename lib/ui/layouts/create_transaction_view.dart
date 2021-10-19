@@ -6,6 +6,7 @@ import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
+import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/qr_scanner.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -53,16 +54,9 @@ class CreateTransactionView extends StatelessWidget {
             if (state.process == Process.processing) {
               showDialog(
                 context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                },
+                builder: (context) => const CustomProgressIndicatorDialog(
+                  text: 'Xin vui lòng đợi',
+                ),
               );
             }
           }),
@@ -265,26 +259,29 @@ class CreateTransactionView extends StatelessWidget {
                                       element.id ==
                                       state.items[index]!.dealerCategoryId)
                                   .name,
-                              overflow: TextOverflow.fade,
+                              overflow: TextOverflow.ellipsis,
                               softWrap: false,
                               maxLines: 1,
                             ),
                           ),
                         ),
-                        Flexible(
-                          flex: 3,
-                          fit: FlexFit.loose,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              state.items[index]!.quantity != 0 &&
-                                      state.items[index]!.unit != null
-                                  ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
-                                  : CustomTexts.emptyString,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+                        state.items[index]!.quantity != 0 &&
+                                state.items[index]!.unit != null
+                            ? Flexible(
+                                flex: 3,
+                                fit: FlexFit.loose,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    state.items[index]!.quantity != 0 &&
+                                            state.items[index]!.unit != null
+                                        ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
+                                        : CustomTexts.emptyString,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                         Flexible(
                           flex: 4,
                           fit: FlexFit.tight,
@@ -443,10 +440,17 @@ class CreateTransactionView extends StatelessWidget {
                   ),
                   _quantityField(),
                   _unitPriceField(),
-                  _totalField(),
-                  _promotionApplicationBonusAmount(),
+                  Stack(
+                    children: [
+                      _totalField(),
+                      Positioned(
+                        top: 3,
+                        right: 30,
+                        child: _promotionApplicationBonusAmount(),
+                      )
+                    ],
+                  ),
                   _promotionApplicationDescription(),
-                  _promotionRemoveWarning(),
                 ],
               ),
             ),
@@ -576,7 +580,8 @@ class CreateTransactionView extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyTextFormatter()],
-              initialValue: state.itemQuantity.toString(),
+              initialValue:
+                  CustomFormats.numberFormat.format(state.itemQuantity),
               onChanged: (value) {
                 if (value != CustomTexts.emptyString) {
                   context.read<CreateTransactionBloc>().add(
@@ -658,6 +663,9 @@ class CreateTransactionView extends StatelessWidget {
               labelText: CustomTexts.totalLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               suffixText: CustomTexts.vndSymbolText,
+              errorStyle: TextStyle(
+                color: Theme.of(context).errorColor, // or any other color
+              ),
             ),
             enabled: !state.isItemTotalCalculatedByUnitPrice,
             keyboardType: TextInputType.number,
@@ -677,8 +685,11 @@ class CreateTransactionView extends StatelessWidget {
             },
             validator: (value) {
               if (value == null || value.isEmpty) return CustomTexts.totalBlank;
-              if (!state.isItemPriceValid) {
+              if (!state.isItemTotalNegative) {
                 return CustomTexts.totalNegative;
+              }
+              if (!state.isItemTotalUnderLimit) {
+                return CustomTexts.totalOverLimit;
               }
             },
           ),
@@ -714,19 +725,6 @@ class CreateTransactionView extends StatelessWidget {
                       promotionCode: state.getItemPromotionCode)
                   : CustomTexts.promotionNotAppliedText),
         );
-      },
-    );
-  }
-
-  _promotionRemoveWarning() {
-    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-      builder: (context, state) {
-        return Visibility(
-            visible: state.isPromotionApplied,
-            child: customText(
-              textStyle: Theme.of(context).textTheme.bodyText2,
-              text: CustomTexts.promotionRemoveWarningText,
-            ));
       },
     );
   }

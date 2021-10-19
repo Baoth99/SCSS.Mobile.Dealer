@@ -10,6 +10,7 @@ class CreateTransactionState {
   String? collectorName;
   int total;
   int totalBonus;
+  int transactionFeePercent;
 
   Map<int, CollectDealTransactionDetailModel> items;
 
@@ -66,6 +67,10 @@ class CreateTransactionState {
         .promotionCode;
   }
 
+  int get transactionFee {
+    return transactionFeePercent * grandTotal;
+  }
+
   //validators
   bool get isScrapCategoryValid {
     if (itemDealerCategoryId == CustomTexts.emptyString ||
@@ -107,7 +112,7 @@ class CreateTransactionState {
       return true;
   }
 
-  bool get isItemTotalValid {
+  bool get isItemTotalNegative {
     if (isItemTotalCalculatedByUnitPrice) {
       if (itemTotalCalculated < 0) {
         return false;
@@ -115,6 +120,20 @@ class CreateTransactionState {
         return true;
     } else {
       if (itemTotal < 0) {
+        return false;
+      } else
+        return true;
+    }
+  }
+
+  bool get isItemTotalUnderLimit {
+    if (isItemTotalCalculatedByUnitPrice) {
+      if (itemTotalCalculated >= CustomVar.totalLimit) {
+        return false;
+      } else
+        return true;
+    } else {
+      if (itemTotal >= CustomVar.totalLimit) {
         return false;
       } else
         return true;
@@ -130,6 +149,7 @@ class CreateTransactionState {
     String? collectorName,
     int? total,
     int? totalBonus,
+    int? transactionFeePercent,
     Map<int, CollectDealTransactionDetailModel>? items,
     Process? process,
     bool? isModalBottomSheetShowed,
@@ -158,6 +178,7 @@ class CreateTransactionState {
         collectorName = collectorName,
         total = total ?? 0,
         totalBonus = totalBonus ?? 0,
+        transactionFeePercent = transactionFeePercent ?? 0,
         items = items ?? {},
         process = process ?? Process.neutral,
         isModalBottomSheetShowed = isModalBottomSheetShowed ?? false,
@@ -190,6 +211,7 @@ class CreateTransactionState {
     String? collectorName,
     int? total,
     int? totalBonus,
+    int? transactionFeePercent,
     Map<int, CollectDealTransactionDetailModel>? items,
     Process? process,
     bool? isItemDialogShowed,
@@ -220,6 +242,8 @@ class CreateTransactionState {
       collectorName: collectorName ?? this.collectorName,
       total: total ?? this.total,
       totalBonus: totalBonus ?? this.totalBonus,
+      transactionFeePercent:
+          transactionFeePercent ?? this.transactionFeePercent,
       items: items ?? this.items,
       process: process ?? this.process,
       isModalBottomSheetShowed:
@@ -258,6 +282,7 @@ class CreateTransactionState {
       collectorName: null,
       total: this.total,
       totalBonus: this.totalBonus,
+      transactionFeePercent: null,
       items: this.items,
       process: this.process,
       isModalBottomSheetShowed: this.isModalBottomSheetShowed,

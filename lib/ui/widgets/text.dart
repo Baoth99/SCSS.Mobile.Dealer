@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-Widget customText({
-  required String text,
-  Alignment? alignment,
-  double? fontSize,
-  TextAlign? textAlign,
-  Color? color,
-  double? height,
-  TextStyle? textStyle,
-}) {
+Widget customText(
+    {required String text,
+    Alignment? alignment,
+    double? fontSize,
+    TextAlign? textAlign,
+    Color? color,
+    double? height,
+    TextStyle? textStyle,
+    FontWeight? fontWeight}) {
   return Container(
     height: height ?? 50,
     alignment: alignment ?? Alignment.centerLeft,
@@ -18,6 +18,7 @@ Widget customText({
           TextStyle(
             fontSize: fontSize ?? 15,
             color: color ?? Color.fromARGB(255, 20, 20, 21),
+            fontWeight: fontWeight,
           ),
       textAlign: textAlign ?? TextAlign.left,
     ),
