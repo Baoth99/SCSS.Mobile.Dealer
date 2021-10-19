@@ -6,36 +6,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'category_view.dart';
+import 'home_view.dart';
 
 class BotNavView extends StatelessWidget {
   const BotNavView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BotNavBloc, BotNavState>(
-      builder: (_, state) {
-        return Scaffold(
-          body: state is StateHome
-              //todo: homepage
-              ? Container()
-              : state is StateNotification
-                  //todo: noti
-                  ? Container()
-                  : state is StateCategory
-                      ? CategoryView()
-                      //todo history
-                      : Container(),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            child: Icon(Icons.add),
-          ),
-          bottomNavigationBar: _botnav(),
-        );
-      },
+    return BlocProvider(
+      create: (context) => BotNavBloc(StateHome()),
+      child: BlocBuilder<BotNavBloc, BotNavState>(
+        builder: (_, state) {
+          return Scaffold(
+            body: state is StateHome
+                //todo: homepage
+                ? HomeView()
+                : state is StateNotification
+                    //todo: noti
+                    ? Container()
+                    : state is StateCategory
+                        ? CategoryView()
+                        //todo history
+                        : Container(),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: _floatingActionButton(context),
+            bottomNavigationBar: _botnav(),
+          );
+        },
+      ),
     );
   }
+}
+
+_floatingActionButton(context) {
+  return FloatingActionButton(
+    child: Icon(Icons.add),
+    onPressed: () {
+      Navigator.pushNamed(context, CustomRoutes.createTransaction);
+    },
+  );
 }
 
 _botnav() {

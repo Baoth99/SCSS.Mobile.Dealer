@@ -35,3 +35,7 @@ class EnvMapSettingValue {
   static String apiKey = dotenv.env['GOONG_MAP_API_KEY'].toString();
   static String mapStype = dotenv.env['GOONG_MAP_STYLE'].toString();
 }
+
+class EnvAppApiSettingValue {
+  static String apiUrl = dotenv.env['APP_API_URL'].toString();
+}

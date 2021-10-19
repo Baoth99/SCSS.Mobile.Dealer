@@ -5,50 +5,166 @@ import 'package:flutter/material.dart';
 
 class CategoryView extends StatelessWidget {
   //temporary list
-  final List<ScrapCategoryModel> scrapList = [
-    ScrapCategoryModel(
+  final List<ScrapCategoryModelTemp> scrapList = [
+    ScrapCategoryModelTemp(
         id: 1,
         name: 'Đồng đỏ',
         imageUrl: 'https://phelieusatthep.com/upload/daj1432025718.jpg',
+        accountId: 0,
+        createdBy: 0,
+        createdTime: DateTime(2021, 9, 2),
+        status: 0,
+        updatedBy: 0,
+        updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel.withPrice(1, "kg", 100000, 0),
-          ScrapCategoryDetailModel.withPrice(2, "g", 100, 0),
-          ScrapCategoryDetailModel.withPrice(3, "cái", 200000, 0),
+          ScrapCategoryDetailModelTemp(
+            id: 1,
+            scrapCategoryId: 1,
+            unit: "kg",
+            price: 100000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 2,
+            scrapCategoryId: 1,
+            unit: "g",
+            price: 100,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 3,
+            scrapCategoryId: 1,
+            unit: "cái",
+            price: 20000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
         ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
         id: 2,
         name: 'Sắt vụn',
         imageUrl:
             'https://m.baotuyenquang.com.vn/media/images/2021/06/img_20210619224824.png',
+        accountId: 0,
+        createdBy: 0,
+        createdTime: DateTime(2021, 9, 2),
+        status: 0,
+        updatedBy: 0,
+        updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel.withPrice(1, "kg", 100000, 0),
-          ScrapCategoryDetailModel.withPrice(2, "g", 100, 0),
-          ScrapCategoryDetailModel.withPrice(3, "cái", 200000, 0),
+          ScrapCategoryDetailModelTemp(
+            id: 1,
+            scrapCategoryId: 2,
+            unit: "kg",
+            price: 100000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 2,
+            scrapCategoryId: 2,
+            unit: "g",
+            price: 100,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 3,
+            scrapCategoryId: 2,
+            unit: "cái",
+            price: 20000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
         ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
         id: 3,
         name: 'Chai nhựa',
         imageUrl:
             'https://phelieuviet.com/wp-content/uploads/2020/05/thu-mua-vo-chai-nhua.png',
+        accountId: 0,
+        createdBy: 0,
+        createdTime: DateTime(2021, 9, 2),
+        status: 0,
+        updatedBy: 0,
+        updatedTime: DateTime(2021, 10, 2),
         unitList: [
-          ScrapCategoryDetailModel.withPrice(1, "kg", 100000, 0),
-          ScrapCategoryDetailModel.withPrice(2, "g", 100, 0),
-          ScrapCategoryDetailModel.withPrice(3, "cái", 200000, 0),
+          ScrapCategoryDetailModelTemp(
+            id: 1,
+            scrapCategoryId: 3,
+            unit: "kg",
+            price: 100000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 2,
+            scrapCategoryId: 3,
+            unit: "g",
+            price: 100,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
+          ScrapCategoryDetailModelTemp(
+            id: 3,
+            scrapCategoryId: 3,
+            unit: "cái",
+            price: 20000,
+            createdBy: 0,
+            createdTime: DateTime(2021, 9, 2),
+            status: 0,
+            updatedBy: 0,
+            updatedTime: DateTime(2021, 10, 2),
+          ),
         ]),
-    ScrapCategoryModel(
-        id: 4,
-        name: 'Nhôm loại 3',
-        imageUrl:
-            'https://thumuaphelieutuankiet.com/upload/sanpham/gia-nhom-phe-lieu-hom-nay-cao-nhat-2020-5405.jpg',
-        unitList: [
-          ScrapCategoryDetailModel.withPrice(1, "kg", 100000, 0),
-          ScrapCategoryDetailModel.withPrice(2, "g", 100, 0),
-          ScrapCategoryDetailModel.withPrice(3, "cái", 200000, 0),
-        ]),
-    ScrapCategoryModel(
+    ScrapCategoryModelTemp(
+      id: 4,
+      name: 'Nhôm loại 3 không có unit',
+      imageUrl:
+          'https://thumuaphelieutuankiet.com/upload/sanpham/gia-nhom-phe-lieu-hom-nay-cao-nhat-2020-5405.jpg',
+      accountId: 0,
+      createdBy: 0,
+      createdTime: DateTime(2021, 9, 2),
+      status: 0,
+      updatedBy: 0,
+      updatedTime: DateTime(2021, 10, 2),
+    ),
+    ScrapCategoryModelTemp(
       id: 5,
       name:
           'Inox 304 k hình ảnh nhưng tên dài dàiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii rất dàiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+      accountId: 0,
+      createdBy: 0,
+      createdTime: DateTime(2021, 9, 2),
+      status: 0,
+      updatedBy: 0,
+      updatedTime: DateTime(2021, 10, 2),
     ),
   ];
 
@@ -88,7 +204,7 @@ class CategoryView extends StatelessWidget {
     );
   }
 
-  _listTileBuilder(ScrapCategoryModel model, context) {
+  _listTileBuilder(ScrapCategoryModelTemp model, context) {
     return Column(
       children: [
         ListTile(

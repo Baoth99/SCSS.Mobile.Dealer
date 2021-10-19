@@ -16,10 +16,11 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(initialState: LoginState()),
+      create: (context) => LoginBloc(
+        initialState: LoginState(),
+      ),
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
-          print(state.process.toString());
           if (state.process == Process.processing) {
             showDialog(
               context: context,
@@ -46,10 +47,6 @@ class LoginView extends StatelessWidget {
           }
           if (state.process == Process.error) {
             _showSnackBar(context, CustomTexts.loginError);
-          }
-          if (state.process == Process.valid) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(CustomRoutes.botNav, (route) => false);
           }
         },
         child: _body(),

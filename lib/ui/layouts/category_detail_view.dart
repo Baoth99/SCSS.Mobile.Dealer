@@ -25,7 +25,7 @@ class CategoryDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     // initialize controllers from arguments
     final model =
-        ModalRoute.of(context)!.settings.arguments as ScrapCategoryModel;
+        ModalRoute.of(context)!.settings.arguments as ScrapCategoryModelTemp;
     _scrapNameController.text = model.getName;
     model.getUnitList?.forEach((element) {
       _unitControllers.putIfAbsent(
