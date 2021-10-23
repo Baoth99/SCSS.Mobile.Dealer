@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/register_personal_info_bloc.dart';
 import 'package:dealer_app/repositories/events/register_personal_info_event.dart';
 import 'package:dealer_app/repositories/states/register_personal_info_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -272,7 +272,7 @@ class RegisterPersonalInfoView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterPersonalInfoBloc, RegisterPersonalInfoState>(
       builder: (context, state) {
-        return customElevatedButton(
+        return CustomWidget.customElevatedButton(
           context,
           CustomTexts.next,
           () {

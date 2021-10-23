@@ -1,4 +1,6 @@
+import 'package:dealer_app/providers/network/account_network.dart';
 import 'package:dealer_app/providers/network/collect_deal_transaction_network.dart';
+import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -8,6 +10,14 @@ abstract class ICollectDealTransactionHandler {
   Future<InfoReviewModel?> getInfoReview({required String collectorId});
   Future<bool> createCollectDealTransaction(
       {required CollectDealTransactionRequestModel model});
+  Future<List<CollectDealTransactionModel>> getCollectDealHistories({
+    DateTime? fromDate,
+    DateTime? toDate,
+    int? fromTotal,
+    int? toTotal,
+    int? page,
+    int? pageSize,
+  });
 }
 
 class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
@@ -25,7 +35,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
         //get info review
         return infoReview;
       } else
-        return null;
+        throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -39,14 +49,53 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
           await SecureStorage.readValue(key: CustomKeys.accessToken);
       if (accessToken != null) {
         var result =
-            (await CollectDealTransactionNetWork.postCollectDealTransaction(
+            await CollectDealTransactionNetWork.postCollectDealTransaction(
           bearerToken: accessToken,
           body: collectDealTransactionRequestModelToJson(model),
-        ));
+        );
         //get info review
         return result;
       } else
-        return false;
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<List<CollectDealTransactionModel>> getCollectDealHistories({
+    DateTime? fromDate,
+    DateTime? toDate,
+    int? fromTotal,
+    int? toTotal,
+    int? page,
+    int? pageSize,
+  }) async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+
+      if (accessToken != null) {
+        // Get dealer account Id
+        var dealer =
+            await AccountNetwork.getDealerInfo(bearerToken: accessToken);
+
+        List<CollectDealTransactionModel> resData =
+            (await CollectDealTransactionNetWork.getCollectDealHistories(
+          bearerToken: accessToken,
+          dealerAccountId: dealer.dealerInfoModel.id,
+          fromDate: fromDate?.toIso8601String(),
+          toDate: toDate?.toIso8601String(),
+          fromTotal: fromTotal?.toString(),
+          toTotal: toTotal?.toString(),
+          page: page?.toString(),
+          pageSize: pageSize?.toString(),
+        ))
+                .resData;
+        //get info review
+        return resData;
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {
       throw (e);
     }

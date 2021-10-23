@@ -6,7 +6,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;
 
 class AccountNetwork {
-  static Future<DealerResponseModel> fectchDealerInfo(
+  static Future<DealerResponseModel> getDealerInfo(
       {required String bearerToken}) async {
     //add headers
     Map<String, String> headers = {

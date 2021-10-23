@@ -15,7 +15,7 @@ class UserHandler implements IUserHandler {
       return _responseModel;
     else
       _responseModel =
-          await AccountNetwork.fectchDealerInfo(bearerToken: bearerToken);
+          await AccountNetwork.getDealerInfo(bearerToken: bearerToken);
     return _responseModel;
   }
 

@@ -1,5 +1,5 @@
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 
@@ -28,16 +28,16 @@ class RegisterCompleteView extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              customText(
+              CustomTextWidget.customText(
                   text: CustomTexts.registerCompleteGreeting +
                       argumentMap['name'],
                   alignment: Alignment.center,
                   textAlign: TextAlign.center),
-              customText(
+              CustomTextWidget.customText(
                   text: CustomTexts.registerCompleteCongrat,
                   alignment: Alignment.center,
                   textAlign: TextAlign.center),
-              customText(
+              CustomTextWidget.customText(
                   text: CustomTexts.registerCompleteNote,
                   alignment: Alignment.center,
                   textAlign: TextAlign.center),
@@ -50,7 +50,7 @@ class RegisterCompleteView extends StatelessWidget {
   }
 
   _logoutButton(context) {
-    return customElevatedButton(
+    return CustomWidget.customElevatedButton(
       context,
       CustomTexts.logoutButtonText,
       () {

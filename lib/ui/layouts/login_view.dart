@@ -1,8 +1,8 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -71,7 +71,7 @@ class LoginView extends StatelessWidget {
                     height: 100,
                     width: 100,
                   ),
-                  customText(
+                  CustomTextWidget.customText(
                     text: CustomTexts.loginToContinue,
                     alignment: Alignment.center,
                   ),
@@ -160,7 +160,7 @@ class LoginView extends StatelessWidget {
       builder: (context, state) {
         return SizedBox(
           height: 50,
-          child: customElevatedButton(
+          child: CustomWidget.customElevatedButton(
             context,
             CustomTexts.loginButton,
             () {
@@ -182,9 +182,9 @@ class LoginView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        customText(text: CustomTexts.forgetPassword),
+        CustomTextWidget.customText(text: CustomTexts.forgetPassword),
         //TODO: forget password
-        customTextButton(
+        CustomTextWidget.customTextButton(
             text: CustomTexts.forgetPasswordTextButton, onPressed: () {}),
       ],
     );
@@ -196,8 +196,8 @@ class LoginView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            customText(text: CustomTexts.register),
-            customTextButton(
+            CustomTextWidget.customText(text: CustomTexts.register),
+            CustomTextWidget.customTextButton(
                 text: CustomTexts.registerTextButton,
                 onPressed: () {
                   Navigator.of(context).pushNamed(CustomRoutes.register);

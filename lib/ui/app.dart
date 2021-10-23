@@ -18,6 +18,9 @@ import 'layouts/register_otp_view.dart';
 import 'layouts/register_personal_info_view.dart';
 import 'layouts/register_store_info_view.dart';
 import 'layouts/register_view.dart';
+import 'layouts/transaction_filter_view.dart';
+import 'layouts/transaction_history_view.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class DealerApp extends StatelessWidget {
   final AuthenticationHandler authenticationHandler;
@@ -54,9 +57,16 @@ class DealerApp extends StatelessWidget {
           CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
           CustomRoutes.login: (_) => LoginView(),
           CustomRoutes.createTransaction: (_) => CreateTransactionView(),
+          CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
+          CustomRoutes.transactionFilter: (_) => TransactionFilterView(),
         },
         home: LoginView(),
         builder: (context, child) {
+          Widget error = Text('...rendering error...');
+          if (child is Scaffold || child is Navigator)
+            error = Scaffold(body: Center(child: error));
+          ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
+
           return BlocListener<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
               switch (state.status) {
@@ -75,6 +85,14 @@ class DealerApp extends StatelessWidget {
             child: child,
           );
         },
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('vi'),
+        ],
+        locale: const Locale('vi'),
       ),
     );
   }

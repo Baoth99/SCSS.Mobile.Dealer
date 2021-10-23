@@ -1,3 +1,4 @@
+import 'package:dealer_app/blocs/transaction_history_bloc.dart';
 import 'package:dealer_app/providers/services/firebase_service.dart';
 import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
@@ -19,4 +20,5 @@ void configureDependencies() async {
   getIt.registerSingleton<IDataHandler>(DataHandler());
   getIt.registerSingleton<ICollectDealTransactionHandler>(
       CollectDealTransactionHandler());
+  getIt.registerSingleton<TransactionHistoryBloc>(TransactionHistoryBloc());
 }

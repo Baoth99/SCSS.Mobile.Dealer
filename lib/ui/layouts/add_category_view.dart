@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:dealer_app/blocs/add_category_bloc.dart';
 import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -64,7 +64,7 @@ class AddCategoryView extends StatelessWidget {
                   flex: 90,
                   child: ListView(
                     children: [
-                      customText(text: 'Hình ảnh'),
+                      CustomTextWidget.customText(text: 'Hình ảnh'),
                       Container(
                         padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                         height: 150,
@@ -87,7 +87,7 @@ class AddCategoryView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          customText(text: 'Chi tiết'),
+                          CustomTextWidget.customText(text: 'Chi tiết'),
                           InkWell(
                             onTap: () {
                               var newUnitController = TextEditingController();
@@ -117,8 +117,9 @@ class AddCategoryView extends StatelessWidget {
                   child: Container(
                     height: 40,
                     child: rowFlexibleBuilder(
-                      cancelButtonBuilder(context, "Huỷ"),
-                      customElevatedButton(context, "Thêm danh mục", () {
+                      CustomWidget.cancelButtonBuilder(context, "Huỷ"),
+                      CustomWidget.customElevatedButton(
+                          context, "Thêm danh mục", () {
                         if (_formKey.currentState!.validate()) {
                           //TODO: add new scrap category
                           Navigator.of(context).pop();
