@@ -117,7 +117,7 @@ class AddCategoryView extends StatelessWidget {
                   child: Container(
                     height: 40,
                     child: rowFlexibleBuilder(
-                      CustomWidget.cancelButtonBuilder(context, "Huỷ"),
+                      CustomWidget.customCancelButton(context, "Huỷ"),
                       CustomWidget.customElevatedButton(
                           context, "Thêm danh mục", () {
                         if (_formKey.currentState!.validate()) {

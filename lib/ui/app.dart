@@ -18,7 +18,6 @@ import 'layouts/register_otp_view.dart';
 import 'layouts/register_personal_info_view.dart';
 import 'layouts/register_store_info_view.dart';
 import 'layouts/register_view.dart';
-import 'layouts/transaction_filter_view.dart';
 import 'layouts/transaction_history_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -58,7 +57,6 @@ class DealerApp extends StatelessWidget {
           CustomRoutes.login: (_) => LoginView(),
           CustomRoutes.createTransaction: (_) => CreateTransactionView(),
           CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
-          CustomRoutes.transactionFilter: (_) => TransactionFilterView(),
         },
         home: LoginView(),
         builder: (context, child) {

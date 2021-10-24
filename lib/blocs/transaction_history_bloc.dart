@@ -25,10 +25,16 @@ class TransactionHistoryBloc
     if (event is EventInitData) {
       yield state.copyWith(process: TransactionHistoryProcess.processing);
       try {
+        _currentPage = 1;
+
         List<CollectDealTransactionModel> transactionList =
             await collectDealTransactionHandler.getCollectDealHistories(
           page: _initPage,
           pageSize: _pageSize,
+          fromDate: state.fromDate,
+          toDate: state.toDate,
+          fromTotal: state.fromTotal,
+          toTotal: state.toTotal,
         );
         yield state.copyWith(transactionList: transactionList);
         yield state.copyWith(process: TransactionHistoryProcess.processed);
@@ -44,14 +50,25 @@ class TransactionHistoryBloc
     if (event is EventLoadMoreTransactions) {
       yield state.copyWith(process: TransactionHistoryProcess.processing);
       try {
-        var oldList = state.transactionList;
+        // Clone list
+        var list =
+            List<CollectDealTransactionModel>.from(state.transactionList);
+        // Get new transactions
         List<CollectDealTransactionModel> newList =
             await collectDealTransactionHandler.getCollectDealHistories(
-          page: ++_currentPage,
+          page: _currentPage + 1,
           pageSize: _pageSize,
+          fromDate: state.fromDate,
+          toDate: state.toDate,
+          fromTotal: state.fromTotal,
+          toTotal: state.toTotal,
         );
-        oldList.addAll(newList);
-        state.transactionList = oldList;
+        // If there is more transactions
+        if (newList.isNotEmpty) {
+          _currentPage += 1;
+          list.addAll(newList);
+          yield state.copyWith(transactionList: list);
+        }
         yield state.copyWith(process: TransactionHistoryProcess.processed);
       } catch (e) {
         yield state.copyWith(process: TransactionHistoryProcess.processed);
@@ -72,6 +89,10 @@ class TransactionHistoryBloc
         fromDate: event.fromDate,
         toDate: event.toDate,
       );
+    }
+    if (event is EventResetFilter) {
+      yield state.resetFilter();
+      add(EventInitData());
     }
   }
 }

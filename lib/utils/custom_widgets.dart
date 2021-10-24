@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomWidget {
-  static OutlinedButton cancelButtonBuilder(context, text) {
+  static OutlinedButton customCancelButton(context, text) {
     return OutlinedButton(
       style:
           ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.grey)),
@@ -12,6 +12,20 @@ class CustomWidget {
 
   static ElevatedButton customElevatedButton(context, text, action) {
     return ElevatedButton(onPressed: action, child: Text(text));
+  }
+
+  static OutlinedButton customSecondaryButton({
+    context,
+    required String text,
+    action,
+  }) {
+    return OutlinedButton(
+      onPressed: action ?? () {},
+      child: Text(text),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.grey),
+      ),
+    );
   }
 
   static AppBar customAppBar(

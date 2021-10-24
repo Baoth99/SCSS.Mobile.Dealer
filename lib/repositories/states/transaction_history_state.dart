@@ -57,4 +57,16 @@ class TransactionHistoryState {
       toTotal: toTotal ?? this.toTotal,
     );
   }
+
+  TransactionHistoryState resetFilter() {
+    return TransactionHistoryState(
+      process: this.process,
+      transactionList: this.transactionList,
+      searchPhone: this.searchPhone,
+      fromDate: null,
+      toDate: null,
+      fromTotal: null,
+      toTotal: null,
+    );
+  }
 }

@@ -41,3 +41,8 @@ class EventChangeTotalRange extends TransactionHistoryEvent {
   @override
   List<Object> get props => [startValue, endValue];
 }
+
+class EventResetFilter extends TransactionHistoryEvent {
+  @override
+  List<Object?> get props => [];
+}

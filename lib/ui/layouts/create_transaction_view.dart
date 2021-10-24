@@ -400,7 +400,7 @@ class CreateTransactionView extends StatelessWidget {
         return Container(
           height: 40,
           child: rowFlexibleBuilder(
-            CustomWidget.cancelButtonBuilder(
+            CustomWidget.customCancelButton(
                 context, CustomTexts.cancelButtonText),
             CustomWidget.customElevatedButton(
                 context, CustomTexts.createTransactionButtonText, () {
@@ -460,7 +460,7 @@ class CreateTransactionView extends StatelessWidget {
             ),
           ),
           actions: [
-            CustomWidget.cancelButtonBuilder(
+            CustomWidget.customCancelButton(
                 context, CustomTexts.cancelButtonText),
             _addAndUpdateItemButton(),
           ],
