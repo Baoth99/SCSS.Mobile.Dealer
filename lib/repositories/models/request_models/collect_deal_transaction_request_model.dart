@@ -4,7 +4,7 @@ import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_m
 
 String collectDealTransactionRequestModelToJson(
         CollectDealTransactionRequestModel data) =>
-    json.encode(data);
+    json.encode(data.toJson());
 
 class CollectDealTransactionRequestModel {
   CollectDealTransactionRequestModel({
@@ -22,10 +22,10 @@ class CollectDealTransactionRequestModel {
   List<CollectDealTransactionDetailModel> items;
 
   Map<String, dynamic> toJson() => {
-        "collectorId": collectorId == null ? null : collectorId,
-        "transactionFee": transactionFee == null ? null : transactionFee,
-        "total": total == null ? null : total,
-        "totalBonus": totalBonus == null ? null : totalBonus,
-        "items": items == null ? null : jsonEncode(items),
+        "collectorId": collectorId,
+        "transactionFee": transactionFee,
+        "total": total,
+        "totalBonus": totalBonus,
+        "items": List<dynamic>.from(items.map((x) => x.toJson())),
       };
 }

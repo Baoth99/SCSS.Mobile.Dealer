@@ -1,8 +1,8 @@
 import 'package:dealer_app/blocs/register_branch_option_bloc.dart';
 import 'package:dealer_app/repositories/events/register_branch_option_event.dart';
 import 'package:dealer_app/repositories/states/register_branch_option_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +81,7 @@ class RegisterBranchOptionView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                customText(text: CustomTexts.isBranchText),
+                CustomTextWidget.customText(text: CustomTexts.isBranchText),
                 _radioButtons(),
                 if (state.isBranch) _mainBranchIdField(),
                 _submitButton(),
@@ -167,7 +167,7 @@ class RegisterBranchOptionView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterBranchOptionBloc, RegisterBranchOptionState>(
       builder: (context, state) {
-        return customElevatedButton(
+        return CustomWidget.customElevatedButton(
           context,
           CustomTexts.next,
           () {

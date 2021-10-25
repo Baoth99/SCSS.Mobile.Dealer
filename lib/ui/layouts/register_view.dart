@@ -1,8 +1,8 @@
 import 'package:dealer_app/blocs/register_bloc.dart';
 import 'package:dealer_app/repositories/events/register_event.dart';
 import 'package:dealer_app/repositories/states/register_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,7 +67,8 @@ class RegisterView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                customText(text: CustomTexts.registerWelcomeText),
+                CustomTextWidget.customText(
+                    text: CustomTexts.registerWelcomeText),
                 _phoneNumberField(),
                 _submitButton(),
               ],
@@ -107,7 +108,7 @@ class RegisterView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterBloc, RegisterState>(
       builder: (context, state) {
-        return customElevatedButton(
+        return CustomWidget.customElevatedButton(
           context,
           CustomTexts.next,
           () {

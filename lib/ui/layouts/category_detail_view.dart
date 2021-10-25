@@ -4,9 +4,9 @@ import 'package:dealer_app/blocs/category_detail_bloc.dart';
 import 'package:dealer_app/repositories/events/category_detail_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/category_detail_state.dart';
-import 'package:dealer_app/ui/widgets/buttons.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/ui/widgets/text.dart';
+import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -75,7 +75,7 @@ class CategoryDetailView extends StatelessWidget {
                   flex: 90,
                   child: ListView(
                     children: [
-                      customText(text: 'Hình ảnh'),
+                      CustomTextWidget.customText(text: 'Hình ảnh'),
                       Container(
                         padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                         height: 150,
@@ -101,7 +101,7 @@ class CategoryDetailView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          customText(text: 'Chi tiết'),
+                          CustomTextWidget.customText(text: 'Chi tiết'),
                           InkWell(
                             onTap: () {
                               var newUnitController = TextEditingController();
@@ -238,8 +238,8 @@ class CategoryDetailView extends StatelessWidget {
           child: Container(
             height: 40,
             child: rowFlexibleBuilder(
-              cancelButtonBuilder(context, "Huỷ"),
-              customElevatedButton(context, "Thêm danh mục", () {
+              CustomWidget.customCancelButton(context, "Huỷ"),
+              CustomWidget.customElevatedButton(context, "Thêm danh mục", () {
                 if (_formKey.currentState!.validate()) {
                   //TODO: save scrap category
                   Navigator.of(context).pop();

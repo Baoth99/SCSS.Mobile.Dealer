@@ -18,7 +18,7 @@ class PromotionHandler implements IPromotionHandler {
         return (await PromotionNetwork.getPromotion(bearerToken: accessToken))
             .promotionModels;
       } else
-        return null;
+        throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {
       throw (e);
     }

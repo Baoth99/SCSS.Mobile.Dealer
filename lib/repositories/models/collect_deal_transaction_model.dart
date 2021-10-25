@@ -1,89 +1,44 @@
-import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
+// To parse this JSON data, do
+//
+//     final collectDealTransactionModel = collectDealTransactionModelFromJson(jsonString);
+
+import 'dart:convert';
+
+CollectDealTransactionModel collectDealTransactionModelFromJson(String str) =>
+    CollectDealTransactionModel.fromJson(json.decode(str));
+
+String collectDealTransactionModelToJson(CollectDealTransactionModel data) =>
+    json.encode(data);
 
 class CollectDealTransactionModel {
-  int id;
-  int dealerAccountId;
-  int collectorAccountId;
-  String transactionCode;
-  int total;
-  double awardPoint;
-  DateTime createdTime;
-  int bonusAmount;
-  int createdBy;
-  bool isDeleted;
-  int? updatedBy;
-  DateTime? updatedTime;
-  List<CollectDealTransactionDetailModel> details;
-
   CollectDealTransactionModel({
     required this.id,
-    required this.dealerAccountId,
-    required this.collectorAccountId,
-    required this.transactionCode,
+    this.collectorImage,
+    required this.collectorName,
+    required this.transactionDateTime,
     required this.total,
-    required this.awardPoint,
-    required this.createdTime,
-    required this.bonusAmount,
-    required this.createdBy,
-    required this.isDeleted,
-    this.updatedBy,
-    this.updatedTime,
-    required this.details,
   });
 
-  List<CollectDealTransactionDetailModel> get getDetails => this.details;
+  String id;
+  String? collectorImage;
+  String collectorName;
+  DateTime transactionDateTime;
+  int total;
 
-  set setDetails(List<CollectDealTransactionDetailModel> details) =>
-      this.details = details;
+  factory CollectDealTransactionModel.fromJson(Map<String, dynamic> json) =>
+      CollectDealTransactionModel(
+        id: json["id"],
+        collectorImage: json["collectorImage"],
+        collectorName: json["collectorName"],
+        transactionDateTime: DateTime.parse(json["transactionDateTime"]),
+        total: json["total"],
+      );
 
-  int get getId => this.id;
-
-  set setId(int id) => this.id = id;
-
-  get getDealerAccountId => this.dealerAccountId;
-
-  set setDealerAccountId(dealerAccountId) =>
-      this.dealerAccountId = dealerAccountId;
-
-  get getCollectorAccountId => this.collectorAccountId;
-
-  set setCollectorAccountId(collectorAccountId) =>
-      this.collectorAccountId = collectorAccountId;
-
-  get getTransactionCode => this.transactionCode;
-
-  set setTransactionCode(transactionCode) =>
-      this.transactionCode = transactionCode;
-
-  get getTotal => this.total;
-
-  set setTotal(total) => this.total = total;
-
-  get getAwardPoint => this.awardPoint;
-
-  set setAwardPoint(awardPoint) => this.awardPoint = awardPoint;
-
-  get getCreatedTime => this.createdTime;
-
-  set setCreatedTime(createdTime) => this.createdTime = createdTime;
-
-  get getBonusAmount => this.bonusAmount;
-
-  set setBonusAmount(bonusAmount) => this.bonusAmount = bonusAmount;
-
-  get getCreatedBy => this.createdBy;
-
-  set setCreatedBy(createdBy) => this.createdBy = createdBy;
-
-  get getIsDeleted => this.isDeleted;
-
-  set setIsDeleted(isDeleted) => this.isDeleted = isDeleted;
-
-  get getUpdatedBy => this.updatedBy;
-
-  set setUpdatedBy(updatedBy) => this.updatedBy = updatedBy;
-
-  get getUpdatedTime => this.updatedTime;
-
-  set setUpdatedTime(updatedTime) => this.updatedTime = updatedTime;
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "collectorImage": collectorImage,
+        "collectorName": collectorName,
+        "transactionDateTime": transactionDateTime.toIso8601String(),
+        "total": total,
+      };
 }

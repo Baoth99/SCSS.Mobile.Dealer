@@ -27,7 +27,7 @@ class CustomProgressIndicatorDialog extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 20),
-                  child: customText(
+                  child: CustomTextWidget.customText(
                     text: text,
                     fontWeight: FontWeight.w400,
                   ),
