@@ -52,6 +52,8 @@ class CustomTexts {
       '/api/v3/transaction/collect-deal/create';
   static const String apiUrlGetCollectDealHistories =
       '/api/v3/transaction/collect-deal/histories';
+  static const String apiUrlGetCollectDealHistoryDetail =
+      '/api/v3/transaction/collect-deal/history-detail';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -73,6 +75,8 @@ class CustomTexts {
       'Failed to Get Collect Deal Histories';
   static const String missingBearerToken =
       'Missing bearer token from secure storage';
+  static const String getCollectDealHistoryDetailFailedException =
+      'Failed to Get Collect Deal History Detail';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
