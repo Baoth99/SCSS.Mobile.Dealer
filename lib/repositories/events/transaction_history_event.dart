@@ -13,13 +13,13 @@ class EventLoadMoreTransactions extends TransactionHistoryEvent {
   List<Object?> get props => [];
 }
 
-class EventChangeSearchPhone extends TransactionHistoryEvent {
-  final String searchphone;
+class EventChangeSearchName extends TransactionHistoryEvent {
+  final String searchName;
 
-  EventChangeSearchPhone({required this.searchphone});
+  EventChangeSearchName({required this.searchName});
 
   @override
-  List<Object> get props => [searchphone];
+  List<Object> get props => [searchName];
 }
 
 class EventChangeDate extends TransactionHistoryEvent {

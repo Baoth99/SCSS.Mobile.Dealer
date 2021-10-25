@@ -18,6 +18,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class TransactionHistoryView extends StatelessWidget {
   final _dateController = TextEditingController();
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,29 +89,97 @@ class TransactionHistoryView extends StatelessWidget {
           }),
         ],
         child: Scaffold(
+          appBar: _appBar(),
           body: _body(),
         ),
       ),
     );
   }
 
+  _appBar() {
+    return AppBar(
+      elevation: 0,
+      title: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
+        builder: (context, state) {
+          return Text(
+            CustomTexts.transactionHistoryScreenTitle,
+            style: Theme.of(context).textTheme.headline1,
+          );
+        },
+      ),
+    );
+  }
+
+  _body() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
+      child: Column(
+        children: [
+          _searchAndFilter(),
+          _transactionList(),
+        ],
+      ),
+    );
+  }
+
+  _searchAndFilter() {
+    return Container(
+      height: 70,
+      color: Colors.white,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            flex: 8,
+            child: _searchField(),
+          ),
+          Flexible(
+            flex: 2,
+            child: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
+              builder: (context, state) {
+                return InkWell(
+                  onTap: () {
+                    _showFilter(context);
+                  },
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.filter_alt,
+                        size: 35,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      Text('Bộ lọc'),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   _searchField() {
     return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
+      buildWhen: (p, c) => false,
       builder: (context, state) {
         return SizedBox(
           height: 90,
           child: TextFormField(
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: CustomTexts.collectorPhoneLabel,
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+              labelText: 'Tìm tên người bán...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
+              prefixIcon:
+                  Icon(Icons.search, color: Theme.of(context).accentColor),
             ),
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (value) {
               context
                   .read<TransactionHistoryBloc>()
-                  .add(EventChangeSearchPhone(searchphone: value));
+                  .add(EventChangeSearchName(searchName: value));
             },
           ),
         );
@@ -278,37 +347,30 @@ class TransactionHistoryView extends StatelessWidget {
     );
   }
 
-  _body() {
-    return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
-      buildWhen: (previous, current) {
-        return previous.transactionList.length !=
-            current.transactionList.length;
-      },
-      builder: (context, state) {
-        if (state.transactionList.isNotEmpty)
-          return LazyLoadScrollView(
-            scrollDirection: Axis.vertical,
-            onEndOfPage: () {
-              print('load more');
-              _loadMoreTransactions(context);
-            },
-            child: RefreshIndicator(
-              onRefresh: () async {
-                print('init');
-                context.read<TransactionHistoryBloc>().add(EventInitData());
+  _transactionList() {
+    return Flexible(
+      child: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
+        buildWhen: (previous, current) {
+          return previous.filteredTransactionList.length !=
+              current.filteredTransactionList.length;
+        },
+        builder: (context, state) {
+          if (state.transactionList.isNotEmpty)
+            return LazyLoadScrollView(
+              scrollDirection: Axis.vertical,
+              onEndOfPage: () {
+                print('load more');
+                _loadMoreTransactions(context);
               },
-              child: NestedScrollView(
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    _appBar(),
-                  ];
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  print('init');
+                  context.read<TransactionHistoryBloc>().add(EventInitData());
                 },
-                body: Container(
-                  padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: Container(
                   child: GroupedListView<CollectDealTransactionModel, DateTime>(
-                    physics: NeverScrollableScrollPhysics(),
-                    elements: state.transactionList,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    elements: state.filteredTransactionList,
                     order: GroupedListOrder.DESC,
                     groupBy: (CollectDealTransactionModel element) => DateTime(
                         element.transactionDateTime.year,
@@ -322,48 +384,13 @@ class TransactionHistoryView extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-          );
-        else
-          return Center(
-            child: Text('Không có giao dịch'),
-          );
-      },
-    );
-  }
-
-  _appBar() {
-    return SliverAppBar(
-      expandedHeight: 100,
-      floating: true,
-      pinned: true,
-      snap: true,
-      title: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
-        builder: (context, state) {
-          return Text(
-            CustomTexts.transactionHistoryScreenTitle,
-            style: Theme.of(context).textTheme.headline1,
-          );
+            );
+          else
+            return Center(
+              child: Text('Không có giao dịch'),
+            );
         },
       ),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          color: Colors.amber,
-        ),
-        centerTitle: true,
-        title: _searchField(),
-      ),
-      actions: [
-        BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
-          builder: (context, state) {
-            return IconButton(
-                onPressed: () {
-                  _showFilter(context);
-                },
-                icon: Icon(Icons.filter_alt));
-          },
-        ),
-      ],
     );
   }
 

@@ -14,7 +14,8 @@ enum TransactionHistoryProcess {
 class TransactionHistoryState {
   TransactionHistoryProcess process;
   List<CollectDealTransactionModel> transactionList;
-  String searchPhone;
+  List<CollectDealTransactionModel> filteredTransactionList;
+  String searchName;
   DateTime? fromDate, toDate;
   int fromTotal, toTotal;
 
@@ -25,6 +26,7 @@ class TransactionHistoryState {
   TransactionHistoryState({
     TransactionHistoryProcess? process,
     List<CollectDealTransactionModel>? transactionList,
+    List<CollectDealTransactionModel>? filteredTransactionList,
     String? searchPhone,
     DateTime? fromDate,
     DateTime? toDate,
@@ -32,7 +34,8 @@ class TransactionHistoryState {
     int? toTotal,
   })  : process = process ?? TransactionHistoryProcess.neutral,
         transactionList = transactionList ?? [],
-        searchPhone = searchPhone ?? CustomTexts.emptyString,
+        filteredTransactionList = filteredTransactionList ?? [],
+        searchName = searchPhone ?? CustomTexts.emptyString,
         fromDate = fromDate,
         toDate = toDate,
         fromTotal = fromTotal ?? 0,
@@ -41,6 +44,7 @@ class TransactionHistoryState {
   TransactionHistoryState copyWith({
     TransactionHistoryProcess? process,
     List<CollectDealTransactionModel>? transactionList,
+    List<CollectDealTransactionModel>? filteredTransactionList,
     String? searchPhone,
     DateTime? fromDate,
     DateTime? toDate,
@@ -50,7 +54,9 @@ class TransactionHistoryState {
     return TransactionHistoryState(
       process: process ?? this.process,
       transactionList: transactionList ?? this.transactionList,
-      searchPhone: searchPhone ?? this.searchPhone,
+      filteredTransactionList:
+          filteredTransactionList ?? this.filteredTransactionList,
+      searchPhone: searchPhone ?? this.searchName,
       fromDate: fromDate ?? this.fromDate,
       toDate: toDate ?? this.toDate,
       fromTotal: fromTotal ?? this.fromTotal,
@@ -62,7 +68,8 @@ class TransactionHistoryState {
     return TransactionHistoryState(
       process: this.process,
       transactionList: this.transactionList,
-      searchPhone: this.searchPhone,
+      filteredTransactionList: this.filteredTransactionList,
+      searchPhone: this.searchName,
       fromDate: null,
       toDate: null,
       fromTotal: null,
