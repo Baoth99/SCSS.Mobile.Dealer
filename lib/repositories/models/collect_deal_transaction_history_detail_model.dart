@@ -5,6 +5,8 @@ import 'collect_deal_transaction_history_detail_item_model.dart';
 class CDTransactionHistoryDetailModel {
   CDTransactionHistoryDetailModel({
     required this.collectorName,
+    required this.profileURL,
+    required this.gender,
     required this.transactionCode,
     required this.transactionDate,
     required this.transactionTime,
@@ -15,6 +17,8 @@ class CDTransactionHistoryDetailModel {
   });
 
   String collectorName;
+  String profileURL;
+  int gender;
   String transactionCode;
   DateTime transactionDate;
   String transactionTime;
@@ -27,6 +31,8 @@ class CDTransactionHistoryDetailModel {
       CDTransactionHistoryDetailModel(
         collectorName:
             json["collectorName"] == null ? null : json["collectorName"],
+        profileURL: json['profileURL'],
+        gender: json['profileURL'],
         transactionCode:
             json["transactionCode"] == null ? null : json["transactionCode"],
         transactionDate: DateFormat('dd-MM-yyy').parse(json["transactionDate"]),

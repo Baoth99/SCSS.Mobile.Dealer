@@ -13,7 +13,6 @@ class TransactionHistoryDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String? id = ModalRoute.of(context)?.settings.arguments as String;
-    print(id);
     if (id != null)
       return BlocProvider(
         create: (context) {
@@ -23,36 +22,6 @@ class TransactionHistoryDetailView extends StatelessWidget {
         },
         child: MultiBlocListener(
           listeners: [
-            // BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
-            //   listener: (context, state) {
-            //     //process
-            //     if (state.process == TransactionHistoryProcess.invalid) {
-            //       _showSnackBar(context, CustomTexts.generalErrorMessage);
-            //     } else if (state.process == TransactionHistoryProcess.valid) {
-            //       CustomCoolAlert.showCoolAlert(
-            //         context: context,
-            //         title: CustomTexts.createTransactionSuccessfullyText,
-            //         type: CoolAlertType.success,
-            //       );
-            //     }
-            //   },
-            // ),
-            // Show error dialog
-            BlocListener<TransactionHistoryDetailBloc,
-                    TransactionHistoryDetailState>(
-                // listenWhen: (previous, current) {},
-                listener: (context, state) {
-              // if (state is NotLoadedState) {
-              //   // showDialog(
-              //   //   barrierDismissible: false,
-              //   //   context: context,
-              //   //   builder: (context) => const CustomProgressIndicatorDialog(
-              //   //     text: CustomTexts.pleaseWaitText,
-              //   //   ),
-              //   // );
-              //   // EasyLoading.show(status: 'loading...');
-              // }
-            }),
             // Close loading dialog
             BlocListener<TransactionHistoryDetailBloc,
                 TransactionHistoryDetailState>(
@@ -102,39 +71,52 @@ class TransactionHistoryDetailView extends StatelessWidget {
               child: ListView(
                 primary: false,
                 shrinkWrap: true,
-                // direction: Axis.vertical,
                 children: [
-                  Row(children: [
-                    Icon(Icons.receipt_long),
-                    Text('Mã Đơn: ${state.model.transactionCode}'),
-                  ]),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.receipt_long,
+                        color: Colors.green,
+                      ),
+                      SizedBox(width: 10),
+                      Text('Mã Đơn: ${state.model.transactionCode}'),
+                    ],
+                  ),
                   Divider(),
                   Row(
                     children: [
                       CustomWidgets.customAvatar(),
+                      SizedBox(width: 20),
                       Text(state.model.collectorName),
                     ],
                   ),
                   Divider(),
-                  Text('Thông tin thu gom'),
-                  Row(children: [
-                    Icon(Icons.event),
-                    Column(
-                      children: [
-                        Text('Thời gian giao dịch'),
-                        Row(
-                          children: [
-                            CustomWidgets.customDateText(
-                                time: state.model.transactionDate),
-                            Text(state.model.transactionTime),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ]),
+                  CustomWidgets.customText(text: 'Thông tin thu gom'),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.event),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Thời gian giao dịch'),
+                          Row(
+                            children: [
+                              CustomWidgets.customDateText(
+                                  time: state.model.transactionDate),
+                              SizedBox(width: 10),
+                              Text(state.model.transactionTime),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       Icon(Icons.list_alt),
+                      SizedBox(width: 10),
                       Text('Thông tin đơn hàng'),
                     ],
                   ),
@@ -164,6 +146,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
       builder: (context, state) {
         if (state is LoadedState)
           return ListView.separated(
+            padding: EdgeInsets.only(top: 10),
             primary: false,
             shrinkWrap: true,
             itemCount: state.model.itemDetails.length,
@@ -206,20 +189,20 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   ),
                 ),
               ),
-              // Flexible(
-              //         flex: 3,
-              //         fit: FlexFit.loose,
-              //         child: Align(
-              //           alignment: Alignment.center,
-              //           child: Text(
-              //             item!.quantity != 0 &&
-              //                     item!.unit != null
-              //                 ? '${CustomFormats.numberFormat.format(item!.quantity)} ${item!.unit}'
-              //                 : CustomTexts.emptyString,
-              //             textAlign: TextAlign.center,
-              //           ),
-              //         ),
-              //       ),
+              if (item.quantity != 0 && item.unit != null)
+                Flexible(
+                  flex: 3,
+                  fit: FlexFit.loose,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      item.quantity != 0 && item.unit != null
+                          ? '${CustomFormats.numberFormat.format(item.quantity)} ${item.unit}'
+                          : CustomTexts.emptyString,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               Flexible(
                 flex: 4,
                 fit: FlexFit.tight,
