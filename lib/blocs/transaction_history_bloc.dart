@@ -1,5 +1,4 @@
 import 'package:dealer_app/providers/configs/injection_config.dart';
-import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
@@ -8,7 +7,6 @@ import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class TransactionHistoryBloc
     extends Bloc<TransactionHistoryEvent, TransactionHistoryState> {

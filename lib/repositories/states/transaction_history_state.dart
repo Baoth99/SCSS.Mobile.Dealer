@@ -1,6 +1,5 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
-import 'package:equatable/equatable.dart';
 
 enum TransactionHistoryProcess {
   neutral,

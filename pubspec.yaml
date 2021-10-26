@@ -50,6 +50,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.3.46
   flutter_localizations:
     sdk: flutter        
+  flutter_easyloading: ^3.0.3
 
 dev_dependencies:
   flutter_test:

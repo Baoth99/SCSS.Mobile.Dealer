@@ -16,6 +16,8 @@ class CustomTexts {
   static const String categoryDetailScreenTitle = 'Chi tiết';
   static const String createTransactionScreenTitle = 'Tạo giao dịch';
   static const String transactionHistoryScreenTitle = 'Lịch sử giao dịch';
+  static const String transactionHistoryDetailScreenTitle =
+      'Chi tiết giao dịch';
   //login_view
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';

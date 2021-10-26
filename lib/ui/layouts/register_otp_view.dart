@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/register_otp_bloc.dart';
 import 'package:dealer_app/repositories/events/register_otp_event.dart';
 import 'package:dealer_app/repositories/states/register_otp_state.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
+
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class RegisterOTPView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _logo(),
-                CustomTextWidget.customText(
+                CustomWidgets.customText(
                     text: CustomTexts.otpMessage + ' ' + state.phone),
                 _otpField(),
                 _resend(),
@@ -133,8 +133,8 @@ class RegisterOTPView extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomTextWidget.customText(text: CustomTexts.resendOTPText),
-          CustomTextWidget.customTextButton(
+          CustomWidgets.customText(text: CustomTexts.resendOTPText),
+          CustomWidgets.customTextButton(
             text: state.timer > 0
                 ? '${CustomTexts.resendOTPButton} (${state.timer.toString()})'
                 : '${CustomTexts.resendOTPButton}',
@@ -150,7 +150,7 @@ class RegisterOTPView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterOTPBloc, RegisterOTPState>(
       builder: (context, state) {
-        return CustomWidget.customElevatedButton(
+        return CustomWidgets.customElevatedButton(
           context,
           CustomTexts.next,
           () {

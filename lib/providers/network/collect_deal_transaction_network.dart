@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_history_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/info_review_response_model.dart';
@@ -111,7 +110,7 @@ class CollectDealTransactionNetWork {
     }
   }
 
-  static Future<CollectDealTransactionDetailResponseModel>
+  static Future<CollectDealTransactionHistoryDetailResponseModel>
       getCollectDealHistoryDetail({
     required String bearerToken,
     required String id,

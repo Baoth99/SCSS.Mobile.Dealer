@@ -4,7 +4,6 @@ import 'package:dealer_app/blocs/add_category_bloc.dart';
 import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +63,7 @@ class AddCategoryView extends StatelessWidget {
                   flex: 90,
                   child: ListView(
                     children: [
-                      CustomTextWidget.customText(text: 'Hình ảnh'),
+                      CustomWidgets.customText(text: 'Hình ảnh'),
                       Container(
                         padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                         height: 150,
@@ -87,7 +86,7 @@ class AddCategoryView extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CustomTextWidget.customText(text: 'Chi tiết'),
+                          CustomWidgets.customText(text: 'Chi tiết'),
                           InkWell(
                             onTap: () {
                               var newUnitController = TextEditingController();
@@ -117,8 +116,8 @@ class AddCategoryView extends StatelessWidget {
                   child: Container(
                     height: 40,
                     child: rowFlexibleBuilder(
-                      CustomWidget.customCancelButton(context, "Huỷ"),
-                      CustomWidget.customElevatedButton(
+                      CustomWidgets.customCancelButton(context, "Huỷ"),
+                      CustomWidgets.customElevatedButton(
                           context, "Thêm danh mục", () {
                         if (_formKey.currentState!.validate()) {
                           //TODO: add new scrap category

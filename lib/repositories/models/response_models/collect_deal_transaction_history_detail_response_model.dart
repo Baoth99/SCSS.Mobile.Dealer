@@ -1,13 +1,14 @@
 import 'dart:convert';
 
-import '../collect_deal_transaction_history_model.dart';
+import '../collect_deal_transaction_history_detail_model.dart';
 
-CollectDealTransactionDetailResponseModel
+CollectDealTransactionHistoryDetailResponseModel
     collectDealTransactionDetailResponseModelFromJson(String str) =>
-        CollectDealTransactionDetailResponseModel.fromJson(json.decode(str));
+        CollectDealTransactionHistoryDetailResponseModel.fromJson(
+            json.decode(str));
 
-class CollectDealTransactionDetailResponseModel {
-  CollectDealTransactionDetailResponseModel({
+class CollectDealTransactionHistoryDetailResponseModel {
+  CollectDealTransactionHistoryDetailResponseModel({
     required this.isSuccess,
     required this.statusCode,
     required this.msgCode,
@@ -21,16 +22,16 @@ class CollectDealTransactionDetailResponseModel {
   dynamic msgCode;
   dynamic msgDetail;
   dynamic total;
-  CollectDealTransactionHistoryModel resData;
+  CDTransactionHistoryDetailModel resData;
 
-  factory CollectDealTransactionDetailResponseModel.fromJson(
+  factory CollectDealTransactionHistoryDetailResponseModel.fromJson(
           Map<String, dynamic> json) =>
-      CollectDealTransactionDetailResponseModel(
+      CollectDealTransactionHistoryDetailResponseModel(
         isSuccess: json["isSuccess"] == null ? null : json["isSuccess"],
         statusCode: json["statusCode"] == null ? null : json["statusCode"],
         msgCode: json["msgCode"],
         msgDetail: json["msgDetail"],
         total: json["total"],
-        resData: CollectDealTransactionHistoryModel.fromJson(json["resData"]),
+        resData: CDTransactionHistoryDetailModel.fromJson(json["resData"]),
       );
 }
