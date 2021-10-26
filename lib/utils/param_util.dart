@@ -202,6 +202,8 @@ class CustomRoutes {
   static const String createTransaction = '/createTransaction';
   static const String transactionHistory = '/transactionHistory';
   static const String transactionFilter = '/transactionFilter';
+  static const String transactionHistoryDetailView =
+      '/transactionHistoryDetailView';
 }
 
 class CustomKeys {
