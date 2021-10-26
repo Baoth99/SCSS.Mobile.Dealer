@@ -1,5 +1,6 @@
 import 'package:dealer_app/providers/network/account_network.dart';
 import 'package:dealer_app/providers/network/collect_deal_transaction_network.dart';
+import 'package:dealer_app/repositories/models/collect_deal_transaction_history_detail_model.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
@@ -17,6 +18,9 @@ abstract class ICollectDealTransactionHandler {
     int? toTotal,
     int? page,
     int? pageSize,
+  });
+  Future<CDTransactionHistoryDetailModel> getCollectDealHistoryDetail({
+    required String id,
   });
 }
 
@@ -90,6 +94,30 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
           toTotal: toTotal?.toString(),
           page: page?.toString(),
           pageSize: pageSize?.toString(),
+        ))
+                .resData;
+        //get info review
+        return resData;
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<CDTransactionHistoryDetailModel> getCollectDealHistoryDetail({
+    required String id,
+  }) async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+
+      if (accessToken != null) {
+        CDTransactionHistoryDetailModel resData =
+            (await CollectDealTransactionNetWork.getCollectDealHistoryDetail(
+          bearerToken: accessToken,
+          id: id,
         ))
                 .resData;
         //get info review

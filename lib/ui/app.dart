@@ -9,6 +9,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
@@ -18,6 +19,7 @@ import 'layouts/register_otp_view.dart';
 import 'layouts/register_personal_info_view.dart';
 import 'layouts/register_store_info_view.dart';
 import 'layouts/register_view.dart';
+import 'layouts/transaction_history_detail_view.dart';
 import 'layouts/transaction_history_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -57,6 +59,8 @@ class DealerApp extends StatelessWidget {
           CustomRoutes.login: (_) => LoginView(),
           CustomRoutes.createTransaction: (_) => CreateTransactionView(),
           CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
+          CustomRoutes.transactionHistoryDetailView: (_) =>
+              TransactionHistoryDetailView(),
         },
         home: LoginView(),
         builder: (context, child) {
@@ -65,22 +69,24 @@ class DealerApp extends StatelessWidget {
             error = Scaffold(body: Center(child: error));
           ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
 
-          return BlocListener<AuthenticationBloc, AuthenticationState>(
-            listener: (context, state) {
-              switch (state.status) {
-                case AuthenticationStatus.authenticated:
-                  _navigator.pushNamedAndRemoveUntil(
-                      CustomRoutes.botNav, (route) => false);
-                  break;
-                case AuthenticationStatus.unauthenticated:
-                  _navigator.pushNamedAndRemoveUntil(
-                      CustomRoutes.login, (route) => false);
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: child,
+          return FlutterEasyLoading(
+            child: BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                switch (state.status) {
+                  case AuthenticationStatus.authenticated:
+                    _navigator.pushNamedAndRemoveUntil(
+                        CustomRoutes.botNav, (route) => false);
+                    break;
+                  case AuthenticationStatus.unauthenticated:
+                    _navigator.pushNamedAndRemoveUntil(
+                        CustomRoutes.login, (route) => false);
+                    break;
+                  default:
+                    break;
+                }
+              },
+              child: child,
+            ),
           );
         },
         localizationsDelegates: [
@@ -127,11 +133,11 @@ class DealerApp extends StatelessWidget {
           // fontWeight: FontWeight.w500,
         ),
         //orange subtitle
-        bodyText2: TextStyle(
-          fontSize: 15,
-          color: Color.fromARGB(204, 228, 121, 7),
-          // fontWeight: FontWeight.w500,
-        ),
+        // bodyText2: TextStyle(
+        //   fontSize: 15,
+        //   color: Color.fromARGB(204, 228, 121, 7),
+        //   // fontWeight: FontWeight.w500,
+        // ),
       ),
       primarySwatch: Colors.green,
     );

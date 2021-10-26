@@ -4,7 +4,6 @@ import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
@@ -207,7 +206,7 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextWidget.customText(text: CustomTexts.detailText),
+            CustomWidgets.customText(text: CustomTexts.detailText),
             //add item button
             Visibility(
               visible: state.scrapCategoryMap.length != 0,
@@ -340,11 +339,11 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomTexts.subTotalText,
               height: 30,
             ),
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomFormats.currencyFormat.format(state.total),
               height: 30,
             ),
@@ -360,11 +359,11 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomTexts.promotionText,
               height: 30,
             ),
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomFormats.currencyFormat.format(state.totalBonus),
               height: 30,
             ),
@@ -380,11 +379,11 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomTexts.totalText,
               height: 30,
             ),
-            CustomTextWidget.customText(
+            CustomWidgets.customText(
               text: CustomFormats.currencyFormat.format(state.grandTotal),
               height: 30,
             ),
@@ -400,9 +399,9 @@ class CreateTransactionView extends StatelessWidget {
         return Container(
           height: 40,
           child: rowFlexibleBuilder(
-            CustomWidget.customCancelButton(
+            CustomWidgets.customCancelButton(
                 context, CustomTexts.cancelButtonText),
-            CustomWidget.customElevatedButton(
+            CustomWidgets.customElevatedButton(
                 context, CustomTexts.createTransactionButtonText, () {
               if (_formKey.currentState!.validate()) {
                 context
@@ -460,7 +459,7 @@ class CreateTransactionView extends StatelessWidget {
             ),
           ),
           actions: [
-            CustomWidget.customCancelButton(
+            CustomWidgets.customCancelButton(
                 context, CustomTexts.cancelButtonText),
             _addAndUpdateItemButton(),
           ],
@@ -708,7 +707,7 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isPromotionApplied,
-          child: CustomTextWidget.customText(
+          child: CustomWidgets.customText(
             textStyle: Theme.of(context).textTheme.bodyText2,
             text:
                 '+ ${CustomFormats.numberFormat.format(state.itemBonusAmount)}',
@@ -723,7 +722,7 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isPromotionApplied,
-          child: CustomTextWidget.customText(
+          child: CustomWidgets.customText(
               textStyle: Theme.of(context).textTheme.bodyText2,
               text: state.itemPromotionId != null
                   ? CustomTexts.promotionAppliedText(
@@ -737,7 +736,7 @@ class CreateTransactionView extends StatelessWidget {
   _addAndUpdateItemButton() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return CustomWidget.customElevatedButton(
+        return CustomWidgets.customElevatedButton(
             context,
             state.key == null
                 ? CustomTexts.addScrapButtonText

@@ -1,7 +1,6 @@
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +70,7 @@ class LoginView extends StatelessWidget {
                     height: 100,
                     width: 100,
                   ),
-                  CustomTextWidget.customText(
+                  CustomWidgets.customText(
                     text: CustomTexts.loginToContinue,
                     alignment: Alignment.center,
                   ),
@@ -160,7 +159,7 @@ class LoginView extends StatelessWidget {
       builder: (context, state) {
         return SizedBox(
           height: 50,
-          child: CustomWidget.customElevatedButton(
+          child: CustomWidgets.customElevatedButton(
             context,
             CustomTexts.loginButton,
             () {
@@ -182,9 +181,9 @@ class LoginView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomTextWidget.customText(text: CustomTexts.forgetPassword),
+        CustomWidgets.customText(text: CustomTexts.forgetPassword),
         //TODO: forget password
-        CustomTextWidget.customTextButton(
+        CustomWidgets.customTextButton(
             text: CustomTexts.forgetPasswordTextButton, onPressed: () {}),
       ],
     );
@@ -196,8 +195,8 @@ class LoginView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomTextWidget.customText(text: CustomTexts.register),
-            CustomTextWidget.customTextButton(
+            CustomWidgets.customText(text: CustomTexts.register),
+            CustomWidgets.customTextButton(
                 text: CustomTexts.registerTextButton,
                 onPressed: () {
                   Navigator.of(context).pushNamed(CustomRoutes.register);

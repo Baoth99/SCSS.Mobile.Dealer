@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
+import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_history_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/info_review_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -107,6 +107,36 @@ class CollectDealTransactionNetWork {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(CustomTexts.getCollectDealHistoriesFailedException);
+    }
+  }
+
+  static Future<CollectDealTransactionHistoryDetailResponseModel>
+      getCollectDealHistoryDetail({
+    required String bearerToken,
+    required String id,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> queryParams = {
+      'id': id,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlGetCollectDealHistoryDetail, queryParams);
+
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return collectDealTransactionDetailResponseModelFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(CustomTexts.getCollectDealHistoryDetailFailedException);
     }
   }
 }

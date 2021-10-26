@@ -1,5 +1,6 @@
-import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:flutter/material.dart';
+
+import 'custom_widgets.dart';
 
 class CustomProgressIndicatorDialog extends StatelessWidget {
   const CustomProgressIndicatorDialog({
@@ -27,7 +28,7 @@ class CustomProgressIndicatorDialog extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 20),
-                  child: CustomTextWidget.customText(
+                  child: CustomWidgets.customText(
                     text: text,
                     fontWeight: FontWeight.w400,
                   ),

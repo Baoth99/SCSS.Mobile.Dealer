@@ -272,7 +272,7 @@ class RegisterPersonalInfoView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterPersonalInfoBloc, RegisterPersonalInfoState>(
       builder: (context, state) {
-        return CustomWidget.customElevatedButton(
+        return CustomWidgets.customElevatedButton(
           context,
           CustomTexts.next,
           () {

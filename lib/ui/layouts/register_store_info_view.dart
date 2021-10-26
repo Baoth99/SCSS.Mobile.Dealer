@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dealer_app/blocs/register_store_info_bloc.dart';
 import 'package:dealer_app/repositories/events/register_store_info_event.dart';
 import 'package:dealer_app/repositories/states/register_store_info_state.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
+
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/foundation.dart';
@@ -81,8 +81,7 @@ class RegisterStoreInfoView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CustomTextWidget.customText(
-                    text: CustomTexts.storeFrontImageText),
+                CustomWidgets.customText(text: CustomTexts.storeFrontImageText),
                 _scrapImage(),
                 _storeNameField(),
                 _storePhoneField(),
@@ -200,7 +199,7 @@ class RegisterStoreInfoView extends StatelessWidget {
   _submitButton() {
     return BlocBuilder<RegisterStoreInfoBloc, RegisterStoreInfoState>(
       builder: (context, state) {
-        return CustomWidget.customElevatedButton(
+        return CustomWidgets.customElevatedButton(
           context,
           CustomTexts.next,
           () {

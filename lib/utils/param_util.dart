@@ -16,6 +16,8 @@ class CustomTexts {
   static const String categoryDetailScreenTitle = 'Chi tiết';
   static const String createTransactionScreenTitle = 'Tạo giao dịch';
   static const String transactionHistoryScreenTitle = 'Lịch sử giao dịch';
+  static const String transactionHistoryDetailScreenTitle =
+      'Chi tiết giao dịch';
   //login_view
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';
@@ -52,6 +54,8 @@ class CustomTexts {
       '/api/v3/transaction/collect-deal/create';
   static const String apiUrlGetCollectDealHistories =
       '/api/v3/transaction/collect-deal/histories';
+  static const String apiUrlGetCollectDealHistoryDetail =
+      '/api/v3/transaction/collect-deal/history-detail';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -73,6 +77,8 @@ class CustomTexts {
       'Failed to Get Collect Deal Histories';
   static const String missingBearerToken =
       'Missing bearer token from secure storage';
+  static const String getCollectDealHistoryDetailFailedException =
+      'Failed to Get Collect Deal History Detail';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -198,6 +204,8 @@ class CustomRoutes {
   static const String createTransaction = '/createTransaction';
   static const String transactionHistory = '/transactionHistory';
   static const String transactionFilter = '/transactionFilter';
+  static const String transactionHistoryDetailView =
+      '/transactionHistoryDetailView';
 }
 
 class CustomKeys {

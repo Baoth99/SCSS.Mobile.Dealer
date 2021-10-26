@@ -3,13 +3,11 @@ import 'package:dealer_app/blocs/transaction_history_bloc.dart';
 import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
-import 'package:dealer_app/ui/widgets/text.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +16,6 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class TransactionHistoryView extends StatelessWidget {
   final _dateController = TextEditingController();
-  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +197,7 @@ class TransactionHistoryView extends StatelessWidget {
               spacing: 10,
               children: [
                 _datePicker(),
-                CustomTextWidget.customText(text: 'Tiền'),
+                CustomWidgets.customText(text: 'Tiền'),
                 _priceRangeSlider(),
                 _resetFilterButton(sheetContext),
                 _filterButton(sheetContext),
@@ -320,7 +317,7 @@ class TransactionHistoryView extends StatelessWidget {
   _filterButton(sheetContext) {
     return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
       builder: (context, state) {
-        return CustomWidget.customElevatedButton(
+        return CustomWidgets.customElevatedButton(
           context,
           'Lọc',
           () {
@@ -335,7 +332,7 @@ class TransactionHistoryView extends StatelessWidget {
   _resetFilterButton(sheetContext) {
     return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
       builder: (context, state) {
-        return CustomWidget.customSecondaryButton(
+        return CustomWidgets.customSecondaryButton(
           context: context,
           text: 'Thiết lập lại',
           action: () {
@@ -396,8 +393,7 @@ class TransactionHistoryView extends StatelessWidget {
 
   _groupSeparatorBuilder({required DateTime time}) {
     return Container(
-        color: Colors.white,
-        child: CustomTextWidget.customDateText(time: time));
+        color: Colors.white, child: CustomWidgets.customDateText(time: time));
   }
 
   _listTileBuilder({
@@ -405,13 +401,7 @@ class TransactionHistoryView extends StatelessWidget {
     required BuildContext context,
   }) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).accentColor,
-        backgroundImage: AssetImage('assets/images/avatar_male_399x425.png'),
-        foregroundImage: model.collectorImage != null
-            ? NetworkImage(model.collectorImage!)
-            : null,
-      ),
+      leading: CustomWidgets.customAvatar(avatarLink: model.collectorImage),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5))),
       tileColor: CustomColors.lightGray,
@@ -419,6 +409,11 @@ class TransactionHistoryView extends StatelessWidget {
       subtitle: Text(CustomFormats.currencyFormat.format(model.total)),
       trailing: Text(
           '${model.transactionDateTime.hour}:${model.transactionDateTime.minute}'),
+      onTap: () => Navigator.pushNamed(
+        context,
+        CustomRoutes.transactionHistoryDetailView,
+        arguments: model.id,
+      ),
     );
   }
 
