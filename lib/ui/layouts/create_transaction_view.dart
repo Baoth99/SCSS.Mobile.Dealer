@@ -268,23 +268,23 @@ class CreateTransactionView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        state.items[index]!.quantity != 0 &&
-                                state.items[index]!.unit != null
-                            ? Flexible(
-                                flex: 3,
-                                fit: FlexFit.loose,
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    state.items[index]!.quantity != 0 &&
-                                            state.items[index]!.unit != null
-                                        ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
-                                        : CustomTexts.emptyString,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        if (state.items[index]!.quantity != 0 &&
+                            state.items[index]!.unit != null &&
+                            state.items[index]!.isCalculatedByUnitPrice)
+                          Flexible(
+                            flex: 3,
+                            fit: FlexFit.loose,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                state.items[index]!.quantity != 0 &&
+                                        state.items[index]!.unit != null
+                                    ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
+                                    : CustomTexts.emptyString,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                         Flexible(
                           flex: 4,
                           fit: FlexFit.tight,
@@ -537,7 +537,8 @@ class CreateTransactionView extends StatelessWidget {
           child: DropdownSearch(
             enabled: state.scrapCategoryDetails.isNotEmpty &&
                 state.isItemTotalCalculatedByUnitPrice,
-            selectedItem: state.itemDealerCategoryDetailId != null
+            selectedItem: state.itemDealerCategoryDetailId != null &&
+                    state.isItemTotalCalculatedByUnitPrice
                 ? state.scrapCategoryDetails.firstWhere(
                     (element) => element.id == state.itemDealerCategoryDetailId)
                 : null,
