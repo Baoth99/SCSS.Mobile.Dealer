@@ -371,11 +371,12 @@ class CreateTransactionBloc
         add(EventReloadValues());
       }
     } else if (event is EventReloadValues) {
-      // // Activate highest bonus amount promotion, and disable the others
-      // _enablePromotionInItems();
       // Recalculate total and total bonus amount
       _recalculateTotalAndBonusAmount();
-
+      yield state.copyWith();
+    } else if (event is EventDissmissPopup) {
+      // Update category dropdown
+      _updateScrapCategoryMap();
       yield state.copyWith();
     }
   }
@@ -390,20 +391,6 @@ class CreateTransactionBloc
   _addScrapCategoryOnItemSelected({required id, required name}) {
     state.scrapCategoryMap.putIfAbsent(id, () => name);
   }
-
-  // ScrapCategoryModel? _getScrapCategoryWithActivePromotion() {
-  //   var promotionId;
-  //   state.items.forEach((key, value) {
-  //     if (value.isPromotionnApplied) promotionId = value.promotionId;
-  //   });
-  //   if (promotionId == null)
-  //     return null;
-  //   else {
-  //     var model = state.scrapCategories
-  //         .firstWhere((element) => element.promotionId == promotionId);
-  //     return model;
-  //   }
-  // }
 
   _setItemPromotion() {
     //Get sublist of selected category from dropdown
@@ -433,29 +420,9 @@ class CreateTransactionBloc
             total >= element.appliedAmount &&
             element.bonusAmount > itemBonusAmount) {
           // Found suitable promotion
-          // // If there is no active promotion
-          // if (scrapCategoryWithActivePromotion == null) {
           itemPromotionId = element.promotionId;
           itemBonusAmount = element.bonusAmount;
           isPromotionApplied = true;
-          // } else {
-          // // If this one is the active one or has bonus amount > active one
-          // if (element.promotionId ==
-          //         scrapCategoryWithActivePromotion.promotionId ||
-          //     element.bonusAmount >
-          //         scrapCategoryWithActivePromotion.bonusAmount) {
-          //   itemPromotionId = element.promotionId;
-          //   itemBonusAmount = element.bonusAmount;
-          //   isPromotionApplied = true;
-          // }
-          // // If this one is not the active one
-          // else if (element.promotionId !=
-          //     scrapCategoryWithActivePromotion.promotionId) {
-          //   itemPromotionId = element.promotionId;
-          //   itemBonusAmount = element.bonusAmount;
-          //   isPromotionApplied = false;
-          // }
-          // }
         }
       });
       //Set promotion
@@ -494,23 +461,4 @@ class CreateTransactionBloc
     state.total = total;
     state.totalBonus = totalBonus;
   }
-
-  // _enablePromotionInItems() {
-  //   var itemKey;
-  //   var bonusAmount = 0;
-  //   // Find the promotion with highest bonus amount
-  //   state.items.forEach((key, value) {
-  //     if (value.bonusAmount > bonusAmount) {
-  //       itemKey = key;
-  //       bonusAmount = value.bonusAmount;
-  //     }
-  //   });
-  //   // Activate the promotion with highest bonus amount
-  //   state.items.forEach((key, value) {
-  //     if (key != itemKey)
-  //       value.isPromotionnApplied = false;
-  //     else
-  //       value.isPromotionnApplied = true;
-  //   });
-  // }
 }
