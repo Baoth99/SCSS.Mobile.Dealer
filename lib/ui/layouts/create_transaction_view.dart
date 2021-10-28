@@ -265,8 +265,7 @@ class CreateTransactionView extends StatelessWidget {
                                     state.scrapCategories
                                         .firstWhere((element) =>
                                             element.id ==
-                                            state
-                                                .items[index]!.dealerCategoryId)
+                                            state.items[index].dealerCategoryId)
                                         .name,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: false,
@@ -274,18 +273,18 @@ class CreateTransactionView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              if (state.items[index]!.quantity != 0 &&
-                                  state.items[index]!.unit != null &&
-                                  state.items[index]!.isCalculatedByUnitPrice)
+                              if (state.items[index].quantity != 0 &&
+                                  state.items[index].unit != null &&
+                                  state.items[index].isCalculatedByUnitPrice)
                                 Flexible(
                                   flex: 3,
                                   fit: FlexFit.loose,
                                   child: Align(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      state.items[index]!.quantity != 0 &&
-                                              state.items[index]!.unit != null
-                                          ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
+                                      state.items[index].quantity != 0 &&
+                                              state.items[index].unit != null
+                                          ? '${CustomFormats.numberFormat.format(state.items[index].quantity)} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
                                       textAlign: TextAlign.center,
                                     ),
@@ -298,7 +297,7 @@ class CreateTransactionView extends StatelessWidget {
                                   alignment: Alignment.centerRight,
                                   child: Text(
                                     CustomFormats.currencyFormat
-                                        .format(state.items[index]!.total),
+                                        .format(state.items[index].total),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
@@ -307,8 +306,8 @@ class CreateTransactionView extends StatelessWidget {
                           )
                         : null,
                     subtitle: state.items[index] != null &&
-                            state.items[index]!.bonusAmount != 0 &&
-                            state.items[index]!.isPromotionnApplied
+                            state.items[index].bonusAmount != 0 &&
+                            state.items[index].isPromotionnApplied
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -321,7 +320,7 @@ class CreateTransactionView extends StatelessWidget {
                               ),
                               Text(
                                 CustomFormats.currencyFormat
-                                    .format(state.items[index]!.bonusAmount),
+                                    .format(state.items[index].bonusAmount),
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                             ],
@@ -343,8 +342,7 @@ class CreateTransactionView extends StatelessWidget {
             ],
           ),
           validator: (value) {
-            if (state.items.length == 0)
-              return 'Thêm chi tiết cho giao dịch bằng dấu +';
+            if (state.items.length == 0) return CustomTexts.noItemsErrorText;
           },
         );
       },
@@ -477,9 +475,29 @@ class CreateTransactionView extends StatelessWidget {
             ),
           ),
           actions: [
-            CustomWidgets.customCancelButton(
-                context, CustomTexts.cancelButtonText),
-            _addAndUpdateItemButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                  builder: (context, state) {
+                    return Visibility(
+                      visible: state.key != null && !state.isNewItem,
+                      child: _deleteItemButton(),
+                    );
+                  },
+                ),
+                Row(
+                  children: [
+                    CustomWidgets.customCancelButton(
+                        context, CustomTexts.cancelButtonText),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    _addAndUpdateItemButton(),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -769,6 +787,24 @@ class CreateTransactionView extends StatelessWidget {
             Navigator.of(context).pop();
           }
         });
+      },
+    );
+  }
+
+  _deleteItemButton() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return CustomWidgets.customSecondaryButton(
+          text: CustomTexts.deleteItemButtonText,
+          action: () {
+            context
+                .read<CreateTransactionBloc>()
+                .add(EventDeleteItem(key: state.key!));
+            Navigator.of(context).pop();
+          },
+          textColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(Colors.red),
+        );
       },
     );
   }

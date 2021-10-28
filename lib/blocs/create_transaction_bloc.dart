@@ -267,27 +267,25 @@ class CreateTransactionBloc
       _setItemPromotion();
     } else if (event is EventAddNewItem) {
       // Put new item
-      state.items.putIfAbsent(
-          state.items.length,
-          () => CollectDealTransactionDetailModel(
-                dealerCategoryId: state.itemDealerCategoryId,
-                dealerCategoryDetailId: state.itemDealerCategoryDetailId,
-                quantity: state.itemQuantity,
-                unit: state.itemDealerCategoryDetailId != null
-                    ? state.scrapCategoryDetails
-                        .firstWhere((element) =>
-                            element.id == state.itemDealerCategoryDetailId)
-                        .unit
-                    : null,
-                promotionId: state.itemPromotionId,
-                bonusAmount: state.itemBonusAmount,
-                total: state.isItemTotalCalculatedByUnitPrice
-                    ? state.itemTotalCalculated
-                    : state.itemTotal,
-                price: state.itemPrice,
-                isCalculatedByUnitPrice: state.isItemTotalCalculatedByUnitPrice,
-                isPromotionnApplied: state.isPromotionApplied,
-              ));
+      state.items.add(CollectDealTransactionDetailModel(
+        dealerCategoryId: state.itemDealerCategoryId,
+        dealerCategoryDetailId: state.itemDealerCategoryDetailId,
+        quantity: state.itemQuantity,
+        unit: state.itemDealerCategoryDetailId != null
+            ? state.scrapCategoryDetails
+                .firstWhere(
+                    (element) => element.id == state.itemDealerCategoryDetailId)
+                .unit
+            : null,
+        promotionId: state.itemPromotionId,
+        bonusAmount: state.itemBonusAmount,
+        total: state.isItemTotalCalculatedByUnitPrice
+            ? state.itemTotalCalculated
+            : state.itemTotal,
+        price: state.itemPrice,
+        isCalculatedByUnitPrice: state.isItemTotalCalculatedByUnitPrice,
+        isPromotionnApplied: state.isPromotionApplied,
+      ));
       // Update category dropdown
       _updateScrapCategoryMap();
       // Update the item list
@@ -302,8 +300,7 @@ class CreateTransactionBloc
       yield state.copyWith(process: Process.processing);
       try {
         // Remove quantity and price if isCalculatedByUnitPrice = false
-        var items = List<CollectDealTransactionDetailModel>.from(
-            state.items.values.toList());
+        var items = List<CollectDealTransactionDetailModel>.from(state.items);
         items.forEach((element) {
           if (!element.isCalculatedByUnitPrice) {
             element.quantity = 0;
@@ -317,7 +314,7 @@ class CreateTransactionBloc
           total: state.total,
           totalBonus: state.totalBonus,
           transactionFee: state.transactionFee,
-          items: state.items.values.toList(),
+          items: state.items,
         );
 
         bool result = await collectDealTransactionHandler
@@ -338,28 +335,25 @@ class CreateTransactionBloc
     } else if (event is EventUpdateItem) {
       if (state.key != null) {
         // update item
-        state.items.update(
-            state.key!,
-            (value) => CollectDealTransactionDetailModel(
-                  dealerCategoryId: state.itemDealerCategoryId,
-                  dealerCategoryDetailId: state.itemDealerCategoryDetailId,
-                  quantity: state.itemQuantity,
-                  unit: state.itemDealerCategoryDetailId != null
-                      ? state.scrapCategoryDetails
-                          .firstWhere((element) =>
-                              element.id == state.itemDealerCategoryDetailId)
-                          .unit
-                      : null,
-                  promotionId: state.itemPromotionId,
-                  bonusAmount: state.itemBonusAmount,
-                  total: state.isItemTotalCalculatedByUnitPrice
-                      ? state.itemTotalCalculated
-                      : state.itemTotal,
-                  price: state.itemPrice,
-                  isCalculatedByUnitPrice:
-                      state.isItemTotalCalculatedByUnitPrice,
-                  isPromotionnApplied: state.isPromotionApplied,
-                ));
+        state.items[state.key!] = CollectDealTransactionDetailModel(
+          dealerCategoryId: state.itemDealerCategoryId,
+          dealerCategoryDetailId: state.itemDealerCategoryDetailId,
+          quantity: state.itemQuantity,
+          unit: state.itemDealerCategoryDetailId != null
+              ? state.scrapCategoryDetails
+                  .firstWhere((element) =>
+                      element.id == state.itemDealerCategoryDetailId)
+                  .unit
+              : null,
+          promotionId: state.itemPromotionId,
+          bonusAmount: state.itemBonusAmount,
+          total: state.isItemTotalCalculatedByUnitPrice
+              ? state.itemTotalCalculated
+              : state.itemTotal,
+          price: state.itemPrice,
+          isCalculatedByUnitPrice: state.isItemTotalCalculatedByUnitPrice,
+          isPromotionnApplied: state.isPromotionApplied,
+        );
         // Update category dropdown
         _updateScrapCategoryMap();
         // Update the item list
@@ -378,13 +372,23 @@ class CreateTransactionBloc
       // Update category dropdown
       _updateScrapCategoryMap();
       yield state.copyWith();
+    } else if (event is EventDeleteItem) {
+      // Update items
+      List<CollectDealTransactionDetailModel> items = List.from(state.items);
+      items.removeAt(event.key);
+      yield state.copyWith(items: items);
+      // Update category dropdown
+      _updateScrapCategoryMap();
+      // Update the item list
+      yield state.copyWith(isItemsUpdated: true);
+      yield state.copyWith(isItemsUpdated: false);
     }
   }
 
   _updateScrapCategoryMap() {
-    state.items.forEach((itemKey, itemValue) {
-      state.scrapCategoryMap.removeWhere(
-          (mapKey, mapValue) => mapKey == itemValue.dealerCategoryId);
+    state.items.forEach((item) {
+      state.scrapCategoryMap
+          .removeWhere((mapKey, mapValue) => mapKey == item.dealerCategoryId);
     });
   }
 
@@ -452,10 +456,9 @@ class CreateTransactionBloc
   _recalculateTotalAndBonusAmount() {
     var total = 0;
     var totalBonus = 0;
-    state.items.forEach((key, value) {
-      total +=
-          value.isCalculatedByUnitPrice ? value.totalCalculated : value.total;
-      if (value.isPromotionnApplied) totalBonus += value.bonusAmount;
+    state.items.forEach((item) {
+      total += item.isCalculatedByUnitPrice ? item.totalCalculated : item.total;
+      if (item.isPromotionnApplied) totalBonus += item.bonusAmount;
     });
     // Set value
     state.total = total;

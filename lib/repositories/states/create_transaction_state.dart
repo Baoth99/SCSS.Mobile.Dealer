@@ -12,7 +12,7 @@ class CreateTransactionState {
   int totalBonus;
   int transactionFeePercent;
 
-  Map<int, CollectDealTransactionDetailModel> items;
+  List<CollectDealTransactionDetailModel> items;
 
   Process process;
   bool isModalBottomSheetShowed;
@@ -150,7 +150,7 @@ class CreateTransactionState {
     int? total,
     int? totalBonus,
     int? transactionFeePercent,
-    Map<int, CollectDealTransactionDetailModel>? items,
+    List<CollectDealTransactionDetailModel>? items,
     Process? process,
     bool? isModalBottomSheetShowed,
     bool? isItemsUpdated,
@@ -179,7 +179,7 @@ class CreateTransactionState {
         total = total ?? 0,
         totalBonus = totalBonus ?? 0,
         transactionFeePercent = transactionFeePercent ?? 0,
-        items = items ?? {},
+        items = items ?? [],
         process = process ?? Process.neutral,
         isModalBottomSheetShowed = isModalBottomSheetShowed ?? false,
         isItemsUpdated = isItemsUpdated ?? false,
@@ -212,7 +212,7 @@ class CreateTransactionState {
     int? total,
     int? totalBonus,
     int? transactionFeePercent,
-    Map<int, CollectDealTransactionDetailModel>? items,
+    List<CollectDealTransactionDetailModel>? items,
     Process? process,
     bool? isItemDialogShowed,
     bool? isItemsUpdated,
