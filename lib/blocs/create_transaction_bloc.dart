@@ -130,8 +130,20 @@ class CreateTransactionBloc
       _resetItemValue();
       // Update dropdown list
       _updateScrapCategoryMap();
-      if (event.key == null || event.detail == null)
-        _updateItemDealerCategoryId();
+      if (event.key == null || event.detail == null) {
+        var itemDealerCategoryId = state.scrapCategoryMap.keys.first;
+        // Get details
+        if (itemDealerCategoryId != CustomVar.unnamedScrapCategory.id) {
+          List<ScrapCategoryDetailModel>? details =
+              await dataHandler.getScrapCategoryDetailList(
+                  scrapCategoryId: itemDealerCategoryId);
+          if (details != null && details.isNotEmpty) {
+            state.scrapCategoryDetails = details;
+            state.itemDealerCategoryDetailId = details.first.id;
+            state.itemPrice = details.first.price;
+          }
+        }
+      }
       // If item is choosen instead
       else {
         // Add scrap category back to the dropdown list
@@ -167,34 +179,14 @@ class CreateTransactionBloc
       yield state.copyWith(isItemDialogShowed: true);
       yield state.copyWith(isItemDialogShowed: false);
     } else if (event is EventCalculatedByUnitPriceChanged) {
-      state.isItemTotalCalculatedByUnitPrice = event.isCalculatedByUnitPrice;
-      state.itemDealerCategoryDetailId = null;
-      // Check if false
-      if (event.isCalculatedByUnitPrice != false &&
-          state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id) {
-        try {
-          //get category details
-          yield state.copyWith(process: Process.processing);
-          var scrapCategoryDetailList =
-              await dataHandler.getScrapCategoryDetailList(
-                  scrapCategoryId: state.itemDealerCategoryId);
-          if (scrapCategoryDetailList != null)
-            yield state.copyWith(scrapCategoryDetails: scrapCategoryDetailList);
-          yield state.copyWith(process: Process.processed);
-        } catch (e) {
-          yield state.copyWith(process: Process.processed);
-          yield state.copyWith(process: Process.error);
-        } finally {
-          yield state.copyWith(process: Process.neutral);
-        }
-      } else {
-        yield state.copyWith(scrapCategoryDetails: []);
-      }
+      // If switched on
+      yield state.copyWith(
+          isItemTotalCalculatedByUnitPrice: event.isCalculatedByUnitPrice);
       //Check promotion
       _setItemPromotion();
     } else if (event is EventDealerCategoryChanged) {
       yield state.copyWith(itemDealerCategoryId: event.dealerCategoryId);
-      yield state.copyWith(itemDealerCategoryDetailId: null);
+      // If not default category
       if (event.dealerCategoryId != CustomVar.unnamedScrapCategory.id) {
         try {
           //get category details
@@ -203,7 +195,12 @@ class CreateTransactionBloc
               await dataHandler.getScrapCategoryDetailList(
                   scrapCategoryId: event.dealerCategoryId);
           if (scrapCategoryDetailList != null)
-            yield state.copyWith(scrapCategoryDetails: scrapCategoryDetailList);
+            yield state.copyWith(
+              scrapCategoryDetails: scrapCategoryDetailList,
+              itemDealerCategoryDetailId: scrapCategoryDetailList.first.id,
+              itemQuantity: 0,
+              itemPrice: scrapCategoryDetailList.first.price,
+            );
           yield state.copyWith(process: Process.processed);
         } catch (e) {
           yield state.copyWith(process: Process.processed);
@@ -211,8 +208,16 @@ class CreateTransactionBloc
         } finally {
           yield state.copyWith(process: Process.neutral);
         }
-      } else {
-        yield state.copyWith(scrapCategoryDetails: []);
+      }
+      // If default then switch off calculated option, remove unit list, remove default unit
+      else {
+        yield state.copyWith(
+          scrapCategoryDetails: [],
+          isItemTotalCalculatedByUnitPrice: false,
+          itemDealerCategoryDetailId: null,
+          itemPrice: 0,
+          itemQuantity: 0,
+        );
       }
       //Check promotion
       _setItemPromotion();
@@ -296,6 +301,16 @@ class CreateTransactionBloc
       //start progress indicator
       yield state.copyWith(process: Process.processing);
       try {
+        // Remove quantity and price if isCalculatedByUnitPrice = false
+        var items = List<CollectDealTransactionDetailModel>.from(
+            state.items.values.toList());
+        items.forEach((element) {
+          if (!element.isCalculatedByUnitPrice) {
+            element.quantity = 0;
+            element.price = 0;
+          }
+        });
+
         // Create request model
         var model = CollectDealTransactionRequestModel(
           collectorId: state.collectorId!,
@@ -370,10 +385,6 @@ class CreateTransactionBloc
       state.scrapCategoryMap.removeWhere(
           (mapKey, mapValue) => mapKey == itemValue.dealerCategoryId);
     });
-  }
-
-  _updateItemDealerCategoryId() {
-    state.itemDealerCategoryId = state.scrapCategoryMap.keys.first;
   }
 
   _addScrapCategoryOnItemSelected({required id, required name}) {
@@ -459,7 +470,7 @@ class CreateTransactionBloc
     state.key = null;
     state.itemDealerCategoryId = state.scrapCategoryMap.isNotEmpty
         ? state.scrapCategoryMap.keys.first
-        : '';
+        : CustomTexts.emptyString;
     state.itemDealerCategoryDetailId = null;
     state.itemQuantity = 0;
     state.itemPromotionId = null;
