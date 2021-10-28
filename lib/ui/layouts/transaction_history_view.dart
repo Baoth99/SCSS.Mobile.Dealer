@@ -333,7 +333,6 @@ class TransactionHistoryView extends StatelessWidget {
     return BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
       builder: (context, state) {
         return CustomWidgets.customSecondaryButton(
-          context: context,
           text: 'Thiết lập lại',
           action: () {
             context.read<TransactionHistoryBloc>().add(EventResetFilter());

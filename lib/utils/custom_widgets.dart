@@ -15,15 +15,18 @@ class CustomWidgets {
   }
 
   static OutlinedButton customSecondaryButton({
-    context,
     required String text,
-    action,
+    Function()? action,
+    MaterialStateProperty<Color?>? textColor,
+    MaterialStateProperty<Color?>? backgroundColor,
   }) {
     return OutlinedButton(
       onPressed: action ?? () {},
       child: Text(text),
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all(Colors.grey),
+        foregroundColor: textColor ?? MaterialStateProperty.all(Colors.grey),
+        backgroundColor:
+            backgroundColor ?? MaterialStateProperty.all(Colors.grey),
       ),
     );
   }

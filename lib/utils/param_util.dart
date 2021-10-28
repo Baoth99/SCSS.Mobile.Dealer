@@ -171,6 +171,9 @@ class CustomTexts {
   static const String pleaseWaitText = 'Xin vui lòng đợi';
   static const String createTransactionSuccessfullyText =
       'Tạo giao dịch thành công';
+  static const String noItemsErrorText =
+      'Thêm chi tiết cho giao dịch bằng dấu +';
+  static const String deleteItemButtonText = 'Xoá';
 }
 
 class CustomFormats {

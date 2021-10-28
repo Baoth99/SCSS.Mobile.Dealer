@@ -109,3 +109,17 @@ class EventReloadValues extends CreateTransactionEvent {
   @override
   List<Object?> get props => [];
 }
+
+class EventDissmissPopup extends CreateTransactionEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventDeleteItem extends CreateTransactionEvent {
+  final int key;
+
+  EventDeleteItem({required this.key});
+
+  @override
+  List<Object> get props => [key];
+}

@@ -216,7 +216,7 @@ class CreateTransactionView extends StatelessWidget {
                       .read<CreateTransactionBloc>()
                       .add(EventShowItemDialog());
                 },
-                child: Icon(Icons.add),
+                child: SizedBox(width: 50, child: Icon(Icons.add)),
               ),
             ),
           ],
@@ -232,101 +232,117 @@ class CreateTransactionView extends StatelessWidget {
             current.isItemsUpdated == true;
       },
       builder: (context, state) {
-        return ListView.separated(
-          primary: false,
-          shrinkWrap: true,
-          itemCount: state.items.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onTap: () {
-                context.read<CreateTransactionBloc>().add(EventShowItemDialog(
-                      key: index,
-                      detail: state.items[index],
-                    ));
-              },
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              tileColor: CustomColors.lightGray,
-              title: state.items[index] != null
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          flex: 3,
-                          fit: FlexFit.tight,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              state.scrapCategories
-                                  .firstWhere((element) =>
-                                      element.id ==
-                                      state.items[index]!.dealerCategoryId)
-                                  .name,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
-                        if (state.items[index]!.quantity != 0 &&
-                            state.items[index]!.unit != null &&
-                            state.items[index]!.isCalculatedByUnitPrice)
-                          Flexible(
-                            flex: 3,
-                            fit: FlexFit.loose,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                state.items[index]!.quantity != 0 &&
-                                        state.items[index]!.unit != null
-                                    ? '${CustomFormats.numberFormat.format(state.items[index]!.quantity)} ${state.items[index]!.unit}'
-                                    : CustomTexts.emptyString,
-                                textAlign: TextAlign.center,
+        return FormField(
+          builder: (formFieldState) => Column(
+            children: [
+              ListView.separated(
+                primary: false,
+                shrinkWrap: true,
+                itemCount: state.items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {
+                      context
+                          .read<CreateTransactionBloc>()
+                          .add(EventShowItemDialog(
+                            key: index,
+                            detail: state.items[index],
+                          ));
+                    },
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    tileColor: CustomColors.lightGray,
+                    title: state.items[index] != null
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                flex: 3,
+                                fit: FlexFit.tight,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    state.scrapCategories
+                                        .firstWhere((element) =>
+                                            element.id ==
+                                            state.items[index].dealerCategoryId)
+                                        .name,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    maxLines: 1,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        Flexible(
-                          flex: 4,
-                          fit: FlexFit.tight,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              CustomFormats.currencyFormat
-                                  .format(state.items[index]!.total),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : null,
-              subtitle: state.items[index] != null &&
-                      state.items[index]!.bonusAmount != 0 &&
-                      state.items[index]!.isPromotionnApplied
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: Text(
-                            CustomTexts.promotionText,
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ),
-                        Text(
-                          CustomFormats.currencyFormat
-                              .format(state.items[index]!.bonusAmount),
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ],
-                    )
-                  : null,
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              height: 10,
-            );
+                              if (state.items[index].quantity != 0 &&
+                                  state.items[index].unit != null &&
+                                  state.items[index].isCalculatedByUnitPrice)
+                                Flexible(
+                                  flex: 3,
+                                  fit: FlexFit.loose,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      state.items[index].quantity != 0 &&
+                                              state.items[index].unit != null
+                                          ? '${CustomFormats.numberFormat.format(state.items[index].quantity)} ${state.items[index].unit}'
+                                          : CustomTexts.emptyString,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              Flexible(
+                                flex: 4,
+                                fit: FlexFit.tight,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    CustomFormats.currencyFormat
+                                        .format(state.items[index].total),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : null,
+                    subtitle: state.items[index] != null &&
+                            state.items[index].bonusAmount != 0 &&
+                            state.items[index].isPromotionnApplied
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: Text(
+                                  CustomTexts.promotionText,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),
+                              ),
+                              Text(
+                                CustomFormats.currencyFormat
+                                    .format(state.items[index].bonusAmount),
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ),
+                            ],
+                          )
+                        : null,
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 10,
+                  );
+                },
+              ),
+              if (formFieldState.hasError && formFieldState.errorText != null)
+                Text(
+                  formFieldState.errorText!,
+                  style: TextStyle(color: Colors.red),
+                ),
+            ],
+          ),
+          validator: (value) {
+            if (state.items.length == 0) return CustomTexts.noItemsErrorText;
           },
         );
       },
@@ -459,13 +475,34 @@ class CreateTransactionView extends StatelessWidget {
             ),
           ),
           actions: [
-            CustomWidgets.customCancelButton(
-                context, CustomTexts.cancelButtonText),
-            _addAndUpdateItemButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                  builder: (context, state) {
+                    return Visibility(
+                      visible: state.key != null && !state.isNewItem,
+                      child: _deleteItemButton(),
+                    );
+                  },
+                ),
+                Row(
+                  children: [
+                    CustomWidgets.customCancelButton(
+                        context, CustomTexts.cancelButtonText),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    _addAndUpdateItemButton(),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),
-    );
+    ).then((value) =>
+        context.read<CreateTransactionBloc>().add(EventDissmissPopup()));
   }
 
   _calculatedByUnitPriceSwitch() {
@@ -750,6 +787,24 @@ class CreateTransactionView extends StatelessWidget {
             Navigator.of(context).pop();
           }
         });
+      },
+    );
+  }
+
+  _deleteItemButton() {
+    return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+      builder: (context, state) {
+        return CustomWidgets.customSecondaryButton(
+          text: CustomTexts.deleteItemButtonText,
+          action: () {
+            context
+                .read<CreateTransactionBloc>()
+                .add(EventDeleteItem(key: state.key!));
+            Navigator.of(context).pop();
+          },
+          textColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(Colors.red),
+        );
       },
     );
   }
