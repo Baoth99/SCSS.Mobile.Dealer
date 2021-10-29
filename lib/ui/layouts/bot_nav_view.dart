@@ -6,7 +6,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'category_view.dart';
+import 'category_list_view.dart';
 import 'home_view.dart';
 
 class BotNavView extends StatelessWidget {
@@ -26,7 +26,7 @@ class BotNavView extends StatelessWidget {
                     //todo: noti
                     ? Container()
                     : state is StateCategory
-                        ? CategoryView()
+                        ? CategoryListView()
                         : TransactionHistoryView(),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,

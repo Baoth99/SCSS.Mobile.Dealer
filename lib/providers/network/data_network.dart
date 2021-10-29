@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:dealer_app/repositories/models/response_models/category_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
@@ -15,15 +16,16 @@ class DataNetWork {
     Map<String, String> headers = {
       HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
     };
-    final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlGetScrapCategories);
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlGetScrapCategoriesFromData);
 
     final response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return ScrapCategoryResponseModel.fromJson(jsonDecode(response.body));
+      return ScrapCategoryResponseModel.fromJsonToCreateTransactionModel(
+          jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -83,6 +85,35 @@ class DataNetWork {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception(CustomTexts.getCollectorPhonesFailedException);
+    }
+  }
+
+  static Future<Uint8List> getImageBytes({
+    required String bearerToken,
+    required String imageUrl,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> queryParams = {
+      'imageUrl': imageUrl,
+    };
+
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlGetImage, queryParams);
+
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return response.bodyBytes;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(CustomTexts.getImageFailedException);
     }
   }
 }

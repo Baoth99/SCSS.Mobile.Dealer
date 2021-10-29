@@ -1,25 +1,23 @@
-// To parse this JSON data, do
-//
-//     final scrapCategoryModel = scrapCategoryModelFromJson(jsonString);
-
-import 'dart:convert';
-
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
-
-ScrapCategoryModel scrapCategoryModelFromJson(String str) =>
-    ScrapCategoryModel.fromJson(json.decode(str));
-
-String scrapCategoryModelToJson(ScrapCategoryModel data) =>
-    json.encode(data.toJson());
+import 'package:dealer_app/utils/param_util.dart';
+import 'package:flutter/material.dart';
 
 class ScrapCategoryModel {
-  ScrapCategoryModel({
+  ScrapCategoryModel.createTransactionModel({
     required this.id,
     required this.name,
     this.promotionId,
     this.promotionCode,
     required this.appliedAmount,
     required this.bonusAmount,
+    this.imageUrl = CustomTexts.emptyString,
+  });
+
+  ScrapCategoryModel.categoryListModel({
+    required this.id,
+    required this.name,
+    this.imageUrl = CustomTexts.emptyString,
+    this.image,
   });
 
   String id;
@@ -28,15 +26,26 @@ class ScrapCategoryModel {
   dynamic promotionCode;
   dynamic appliedAmount;
   dynamic bonusAmount;
+  String imageUrl;
+  ImageProvider? image;
 
-  factory ScrapCategoryModel.fromJson(Map<String, dynamic> json) =>
-      ScrapCategoryModel(
+  factory ScrapCategoryModel.fromJsonToCreateTransactionModel(
+          Map<String, dynamic> json) =>
+      ScrapCategoryModel.createTransactionModel(
         id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
         promotionId: json["promotionId"],
         promotionCode: json["promotionCode"],
         appliedAmount: json["appliedAmount"],
         bonusAmount: json["bonusAmount"],
+      );
+
+  factory ScrapCategoryModel.fromJsonToCategoryListModel(
+          Map<String, dynamic> json) =>
+      ScrapCategoryModel.categoryListModel(
+        id: json["id"],
+        name: json["name"],
+        imageUrl: json['imageUrl'],
       );
 
   Map<String, dynamic> toJson() => {

@@ -4,6 +4,7 @@ import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/handlers/promotion_handler.dart';
+import 'package:dealer_app/repositories/handlers/scrap_category_handler.dart';
 import 'package:dealer_app/repositories/handlers/user_handler.dart';
 import 'package:dealer_app/utils/ticker.dart';
 import 'package:get_it/get_it.dart';
@@ -21,4 +22,5 @@ void configureDependencies() async {
   getIt.registerSingleton<ICollectDealTransactionHandler>(
       CollectDealTransactionHandler());
   getIt.registerSingleton<TransactionHistoryBloc>(TransactionHistoryBloc());
+  getIt.registerSingleton<IScrapCategoryHandler>(ScrapCategoryHandler());
 }

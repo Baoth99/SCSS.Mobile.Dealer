@@ -42,7 +42,7 @@ class CustomTexts {
       '/api/v3/dealer/account/dealer-info';
   static const String apiUrlPutDeviceId = '/api/v3/dealer/account/device-id';
   static const String apiUrlGetPromotions = '/api/v3/promotion/get';
-  static const String apiUrlGetScrapCategories =
+  static const String apiUrlGetScrapCategoriesFromData =
       '/api/v3/trans/scrap-categories';
   static const String apiUrlGetScrapCategoryDetails =
       '/api/v3/trans/scrap-category-detail';
@@ -56,6 +56,9 @@ class CustomTexts {
       '/api/v3/transaction/collect-deal/histories';
   static const String apiUrlGetCollectDealHistoryDetail =
       '/api/v3/transaction/collect-deal/history-detail';
+  static const String apiUrlGetScrapCategoriesFromScrapCategory =
+      '/api/v3/scrap-category/get';
+  static const String apiUrlGetImage = '/api/v3/image/get';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -79,6 +82,7 @@ class CustomTexts {
       'Missing bearer token from secure storage';
   static const String getCollectDealHistoryDetailFailedException =
       'Failed to Get Collect Deal History Detail';
+  static const String getImageFailedException = 'Failed to Get Image';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -250,7 +254,7 @@ const Map<bool, String> isBranchRadioOptions = {
 };
 
 class CustomVar {
-  static final unnamedScrapCategory = ScrapCategoryModel(
+  static final unnamedScrapCategory = ScrapCategoryModel.createTransactionModel(
     id: '00000000-0000-0000-0000-000000000000',
     appliedAmount: null,
     name: 'Chưa phân loại',
