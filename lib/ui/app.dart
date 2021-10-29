@@ -110,7 +110,6 @@ class DealerApp extends StatelessWidget {
         iconTheme: IconThemeData(size: 25),
         actionsIconTheme: IconThemeData(size: 25),
       ),
-      scaffoldBackgroundColor: Colors.white,
       dividerTheme: DividerThemeData(
         color: Color.fromARGB(255, 20, 20, 21),
         thickness: 0.2,
