@@ -1,3 +1,4 @@
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 
 class AddCategoryState {
@@ -7,14 +8,22 @@ class AddCategoryState {
 
   bool isImageSourceActionSheetVisible;
 
+  bool get isOneUnitExist {
+    var result = false;
+    controllers.forEach((key, value) {
+      if (key.text != CustomTexts.emptyString) result = true;
+    });
+    return result;
+  }
+
   AddCategoryState({
     isImageSourceActionSheetVisible = false,
     String? pickedImageUrl,
     String? scrapName,
     Map<TextEditingController, TextEditingController>? controllers,
   })  : this.isImageSourceActionSheetVisible = isImageSourceActionSheetVisible,
-        this.pickedImageUrl = pickedImageUrl ?? '',
-        this.scrapName = scrapName ?? '',
+        this.pickedImageUrl = pickedImageUrl ?? CustomTexts.emptyString,
+        this.scrapName = scrapName ?? CustomTexts.emptyString,
         this.controllers = controllers ?? {};
 
   AddCategoryState copyWith({
@@ -33,3 +42,5 @@ class AddCategoryState {
     );
   }
 }
+
+class ScrapCategorySubmittedState extends AddCategoryState {}

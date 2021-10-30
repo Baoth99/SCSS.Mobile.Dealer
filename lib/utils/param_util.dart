@@ -178,6 +178,20 @@ class CustomTexts {
   static const String noItemsErrorText =
       'Thêm chi tiết cho giao dịch bằng dấu +';
   static const String deleteItemButtonText = 'Xoá';
+  // Add category
+  static const String eachScrapCategoryHasAtLeastOneUnit =
+      'Mỗi danh mục nên có một đơn vị';
+  static const String image = 'Hình ảnh';
+  static const String scrapCategoryName = 'Tên danh mục phế liệu';
+  static const String inputScrapCategoryName = 'Nhập tên loại phế liệu';
+  static const String detail = 'Chi tiết';
+  static const String unit = 'Đơn vị';
+  static const String unitIsExisted = 'Đơn vị đã có';
+  static const String unitPrice = 'Đơn giá';
+  static const String camera = 'Máy ảnh';
+  static const String gallery = 'Thư viện';
+  static const String cancel = 'Huỷ';
+  static const String addScrapCategory = 'Thêm danh mục';
 }
 
 class CustomFormats {

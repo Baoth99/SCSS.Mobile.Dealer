@@ -12,23 +12,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddCategoryView extends StatelessWidget {
-  final String _pickedImageUrl = '';
-  final String _scrapName = '';
   final _formKey = GlobalKey<FormState>();
 
   //controllers
   final TextEditingController _scrapNameController = TextEditingController();
-  final Map<TextEditingController, TextEditingController> _unitControllers = {};
+  final Map<TextEditingController, TextEditingController> _unitControllers = {
+    new TextEditingController(): new TextEditingController(),
+  };
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddCategoryBloc(AddCategoryState(
-        scrapName: _scrapName,
-        pickedImageUrl: _pickedImageUrl,
-        controllers: _unitControllers,
-      )),
+      create: (context) => AddCategoryBloc(),
       child: BlocListener<AddCategoryBloc, AddCategoryState>(
+        listenWhen: (p, c) => !p.isImageSourceActionSheetVisible,
         listener: (context, state) {
           if (state.isImageSourceActionSheetVisible) {
             _showImageSourceActionSheet(context);
@@ -50,7 +47,7 @@ class AddCategoryView extends StatelessWidget {
 
   _addCategoryBody() {
     return BlocBuilder<AddCategoryBloc, AddCategoryState>(
-      builder: (context, state) {
+      builder: (blocContext, state) {
         return Container(
           color: Colors.white,
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 25),
@@ -63,49 +60,11 @@ class AddCategoryView extends StatelessWidget {
                   flex: 90,
                   child: ListView(
                     children: [
-                      CustomWidgets.customText(text: 'Hình ảnh'),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                        height: 150,
-                        child: Center(
-                          child: _scrapImage(),
-                        ),
-                      ),
-                      TextFormField(
-                        controller: _scrapNameController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Tên loại phế liệu",
-                          floatingLabelBehavior: FloatingLabelBehavior.auto,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return "Nhập tên loại phế liệu";
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomWidgets.customText(text: 'Chi tiết'),
-                          InkWell(
-                            onTap: () {
-                              var newUnitController = TextEditingController();
-                              var newPriceController = TextEditingController();
-                              _unitControllers.putIfAbsent(
-                                  newUnitController, () => newPriceController);
-                              context.read<AddCategoryBloc>().add(
-                                  EventAddScrapCategoryUnit(
-                                      controllers: _unitControllers));
-                            },
-                            child: Icon(Icons.add),
-                          )
-                        ],
-                      ),
-                      state.controllers.isEmpty
-                          ? Center(
-                              child: Text(
-                                  'Nhấn (+) để thêm đơn vị cho danh mục phế liệu'))
-                          : _scrapUnit(),
+                      CustomWidgets.customText(text: CustomTexts.image),
+                      _scrapImage(),
+                      _scrapNameField(),
+                      _detailTextAndButton(blocContext),
+                      _scrapUnit(),
                     ],
                   ),
                 ),
@@ -113,20 +72,7 @@ class AddCategoryView extends StatelessWidget {
                 Flexible(
                   flex: 10,
                   fit: FlexFit.loose,
-                  child: Container(
-                    height: 40,
-                    child: rowFlexibleBuilder(
-                      CustomWidgets.customCancelButton(context, "Huỷ"),
-                      CustomWidgets.customElevatedButton(
-                          context, "Thêm danh mục", () {
-                        if (_formKey.currentState!.validate()) {
-                          //TODO: add new scrap category
-                          Navigator.of(context).pop();
-                        }
-                      }),
-                      rowFlexibleType.smallToBig,
-                    ),
-                  ),
+                  child: _buttons(blocContext),
                 ),
               ],
             ),
@@ -136,19 +82,61 @@ class AddCategoryView extends StatelessWidget {
     );
   }
 
+  TextFormField _scrapNameField() {
+    return TextFormField(
+      controller: _scrapNameController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: CustomTexts.scrapCategoryName,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty)
+          return CustomTexts.inputScrapCategoryName;
+      },
+    );
+  }
+
+  Row _detailTextAndButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        CustomWidgets.customText(text: CustomTexts.detail),
+        InkWell(
+          onTap: () {
+            _unitControllers.putIfAbsent(
+                new TextEditingController(), () => new TextEditingController());
+            context
+                .read<AddCategoryBloc>()
+                .add(EventAddScrapCategoryUnit(controllers: _unitControllers));
+          },
+          child: SizedBox(width: 50, child: Icon(Icons.add)),
+        )
+      ],
+    );
+  }
+
   _scrapImage() {
     return BlocBuilder<AddCategoryBloc, AddCategoryState>(
       builder: (context, state) {
-        return InkWell(
-          onTap: () {
-            context.read<AddCategoryBloc>().add(EventChangeScrapImageRequest());
-          },
-          child: state.pickedImageUrl != ''
-              ? Image.file(File(state.pickedImageUrl))
-              : Icon(
-                  Icons.add_a_photo,
-                  size: 100,
-                ),
+        return Container(
+          padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+          height: 150,
+          child: Center(
+            child: InkWell(
+              onTap: () {
+                context
+                    .read<AddCategoryBloc>()
+                    .add(EventChangeScrapImageRequest());
+              },
+              child: state.pickedImageUrl != CustomTexts.emptyString
+                  ? Image.file(File(state.pickedImageUrl))
+                  : Icon(
+                      Icons.add_a_photo,
+                      size: 100,
+                    ),
+            ),
+          ),
         );
       },
     );
@@ -157,51 +145,66 @@ class AddCategoryView extends StatelessWidget {
   _scrapUnit() {
     return BlocBuilder<AddCategoryBloc, AddCategoryState>(
       builder: (context, state) {
-        return ListView.builder(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: state.controllers.length,
-            itemBuilder: (context, index) {
-              return rowFlexibleBuilder(
-                SizedBox(
-                  height: 90,
-                  child: TextFormField(
-                    controller: state.controllers.keys.elementAt(index),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Đơn vị",
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    ),
-                    validator: (value) {
-                      if (value == '') return null;
-                      var text = 'Đơn vị đã có';
-                      var count = 0;
-                      _unitControllers.keys.forEach((element) {
-                        if (element.text == value?.trim()) {
-                          count++;
-                        }
-                      });
-                      if (count >= 2)
-                        return text;
-                      else
-                        return null;
-                    },
-                  ),
+        return FormField(
+          builder: (formFieldState) => Column(
+            children: [
+              if (formFieldState.hasError && formFieldState.errorText != null)
+                Text(
+                  formFieldState.errorText!,
+                  style: TextStyle(color: Colors.red),
                 ),
-                SizedBox(
-                  height: 90,
-                  child: TextFormField(
-                    controller: state.controllers.values.elementAt(index),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Đơn giá",
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    ),
-                  ),
-                ),
-                rowFlexibleType.bigToSmall,
-              );
-            });
+              ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: state.controllers.length,
+                  itemBuilder: (context, index) {
+                    return rowFlexibleBuilder(
+                      SizedBox(
+                        height: 90,
+                        child: TextFormField(
+                          controller: state.controllers.keys.elementAt(index),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: CustomTexts.unit,
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          ),
+                          validator: (value) {
+                            if (value == CustomTexts.emptyString) return null;
+                            var text = CustomTexts.unitIsExisted;
+                            var count = 0;
+                            _unitControllers.keys.forEach((element) {
+                              if (element.text == value?.trim()) {
+                                count++;
+                              }
+                            });
+                            if (count >= 2)
+                              return text;
+                            else
+                              return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 90,
+                        child: TextFormField(
+                          controller: state.controllers.values.elementAt(index),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: CustomTexts.unitPrice,
+                            floatingLabelBehavior: FloatingLabelBehavior.auto,
+                          ),
+                        ),
+                      ),
+                      rowFlexibleType.bigToSmall,
+                    );
+                  }),
+            ],
+          ),
+          validator: (value) {
+            if (!state.isOneUnitExist)
+              return CustomTexts.eachScrapCategoryHasAtLeastOneUnit;
+          },
+        );
       },
     );
   }
@@ -226,7 +229,7 @@ class AddCategoryView extends StatelessWidget {
               children: [
                 ListTile(
                   leading: Icon(Icons.camera_alt),
-                  title: Text('Máy ảnh'),
+                  title: Text(CustomTexts.camera),
                   onTap: () {
                     Navigator.pop(context);
                     selectImageSource(ImageSource.camera);
@@ -234,7 +237,7 @@ class AddCategoryView extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.image),
-                  title: Text('Thư viện'),
+                  title: Text(CustomTexts.gallery),
                   onTap: () {
                     Navigator.pop(context);
                     selectImageSource(ImageSource.gallery);
@@ -242,5 +245,21 @@ class AddCategoryView extends StatelessWidget {
                 ),
               ],
             ));
+  }
+
+  Container _buttons(BuildContext blocContext) {
+    return Container(
+      height: 40,
+      child: rowFlexibleBuilder(
+        CustomWidgets.customCancelButton(blocContext, CustomTexts.cancel),
+        CustomWidgets.customElevatedButton(
+            blocContext, CustomTexts.addScrapCategory, () {
+          if (_formKey.currentState!.validate()) {
+            blocContext.read<AddCategoryBloc>().add(EventSubmitScrapCategory());
+          }
+        }),
+        rowFlexibleType.smallToBig,
+      ),
+    );
   }
 }
