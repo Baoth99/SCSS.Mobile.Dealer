@@ -44,3 +44,38 @@ class AddCategoryState {
 }
 
 class ScrapCategorySubmittedState extends AddCategoryState {}
+
+class LoadingState extends AddCategoryState {
+  LoadingState({
+    required isImageSourceActionSheetVisible,
+    required controllers,
+    required pickedImageUrl,
+    required scrapName,
+  }) : super(
+            isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+            controllers: controllers,
+            pickedImageUrl: pickedImageUrl,
+            scrapName: scrapName);
+}
+
+class SubmittedState extends AddCategoryState {
+  final String message;
+
+  SubmittedState({required this.message});
+}
+
+class ErrorState extends AddCategoryState {
+  final String message;
+
+  ErrorState({
+    required this.message,
+    required isImageSourceActionSheetVisible,
+    required controllers,
+    required pickedImageUrl,
+    required scrapName,
+  }) : super(
+            isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+            controllers: controllers,
+            pickedImageUrl: pickedImageUrl,
+            scrapName: scrapName);
+}

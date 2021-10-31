@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_history_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/info_review_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;

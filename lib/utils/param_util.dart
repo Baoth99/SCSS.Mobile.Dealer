@@ -59,6 +59,8 @@ class CustomTexts {
   static const String apiUrlGetScrapCategoriesFromScrapCategory =
       '/api/v3/scrap-category/get';
   static const String apiUrlGetImage = '/api/v3/image/get';
+  static const String apiUrlPostImage = '/api/v3/scrap-category/upload-image';
+  static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -83,6 +85,9 @@ class CustomTexts {
   static const String getCollectDealHistoryDetailFailedException =
       'Failed to Get Collect Deal History Detail';
   static const String getImageFailedException = 'Failed to Get Image';
+  static const String postImageFailedException = 'Failed to Post Image';
+  static const String postScrapCategoryFailedException =
+      'Failed to Post Scrap Category';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -192,6 +197,10 @@ class CustomTexts {
   static const String gallery = 'Thư viện';
   static const String cancel = 'Huỷ';
   static const String addScrapCategory = 'Thêm danh mục';
+  static const String addScrapCategorySucessfull = 'Thêm danh mục thành công';
+  static const String errorHappenedTryAgain =
+      'Đã có lỗi xảy ra, vui lòng thử lại';
+  static const String processing = 'Đang xử lí...';
 }
 
 class CustomFormats {

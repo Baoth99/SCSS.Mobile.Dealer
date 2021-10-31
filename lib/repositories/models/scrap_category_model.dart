@@ -11,6 +11,8 @@ class ScrapCategoryModel {
     required this.appliedAmount,
     required this.bonusAmount,
     this.imageUrl = CustomTexts.emptyString,
+    this.unit = CustomTexts.emptyString,
+    this.price = 0,
   });
 
   ScrapCategoryModel.categoryListModel({
@@ -18,6 +20,17 @@ class ScrapCategoryModel {
     required this.name,
     this.imageUrl = CustomTexts.emptyString,
     this.image,
+    this.unit = CustomTexts.emptyString,
+    this.price = 0,
+  });
+
+  ScrapCategoryModel.createCategoryModel({
+    this.id = CustomTexts.emptyString,
+    this.name = CustomTexts.emptyString,
+    this.imageUrl = CustomTexts.emptyString,
+    this.image,
+    required this.unit,
+    required this.price,
   });
 
   String id;
@@ -28,6 +41,8 @@ class ScrapCategoryModel {
   dynamic bonusAmount;
   String imageUrl;
   ImageProvider? image;
+  String unit;
+  int price;
 
   factory ScrapCategoryModel.fromJsonToCreateTransactionModel(
           Map<String, dynamic> json) =>
@@ -48,13 +63,9 @@ class ScrapCategoryModel {
         imageUrl: json['imageUrl'],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": name == null ? null : name,
-        "promotionId": promotionId,
-        "promotionCode": promotionCode,
-        "appliedAmount": appliedAmount,
-        "bonusAmount": bonusAmount,
+  Map<String, dynamic> createCategoryModelToJson() => {
+        "unit": unit,
+        "price": price,
       };
 }
 

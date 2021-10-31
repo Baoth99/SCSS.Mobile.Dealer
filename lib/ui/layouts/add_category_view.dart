@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/add_category_bloc.dart';
 import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddCategoryView extends StatelessWidget {
@@ -24,13 +27,42 @@ class AddCategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AddCategoryBloc(),
-      child: BlocListener<AddCategoryBloc, AddCategoryState>(
-        listenWhen: (p, c) => !p.isImageSourceActionSheetVisible,
-        listener: (context, state) {
-          if (state.isImageSourceActionSheetVisible) {
-            _showImageSourceActionSheet(context);
-          }
-        },
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AddCategoryBloc, AddCategoryState>(
+              listenWhen: (p, c) => !p.isImageSourceActionSheetVisible,
+              listener: (context, state) {
+                if (state.isImageSourceActionSheetVisible) {
+                  _showImageSourceActionSheet(context);
+                }
+              }),
+          BlocListener<AddCategoryBloc, AddCategoryState>(
+              // listenWhen: (p, c) => state,
+              listener: (context, state) {
+            if (state is LoadingState) {
+              EasyLoading.show(status: CustomTexts.processing);
+            }
+            if (state is SubmittedState) {
+              EasyLoading.dismiss();
+              CustomCoolAlert.showCoolAlert(
+                  context: context,
+                  title: state.message,
+                  type: CoolAlertType.success,
+                  onTap: () {
+                    Navigator.popUntil(
+                        context, ModalRoute.withName(CustomRoutes.botNav));
+                  });
+            }
+            if (state is ErrorState) {
+              EasyLoading.dismiss();
+              CustomCoolAlert.showCoolAlert(
+                context: context,
+                title: state.message,
+                type: CoolAlertType.error,
+              );
+            }
+          }),
+        ],
         child: Scaffold(
           appBar: AppBar(
             elevation: 1,
@@ -82,17 +114,26 @@ class AddCategoryView extends StatelessWidget {
     );
   }
 
-  TextFormField _scrapNameField() {
-    return TextFormField(
-      controller: _scrapNameController,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: CustomTexts.scrapCategoryName,
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty)
-          return CustomTexts.inputScrapCategoryName;
+  Widget _scrapNameField() {
+    return BlocBuilder<AddCategoryBloc, AddCategoryState>(
+      builder: (context, state) {
+        return TextFormField(
+          controller: _scrapNameController,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: CustomTexts.scrapCategoryName,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+          ),
+          onChanged: (value) {
+            context
+                .read<AddCategoryBloc>()
+                .add(EventChangeScrapName(scrapName: value));
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty)
+              return CustomTexts.inputScrapCategoryName;
+          },
+        );
       },
     );
   }

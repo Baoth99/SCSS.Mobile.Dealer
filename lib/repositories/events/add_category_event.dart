@@ -31,3 +31,12 @@ class EventSubmitScrapCategory extends AddCategoryEvent {
   @override
   List<Object?> get props => [];
 }
+
+class EventChangeScrapName extends AddCategoryEvent {
+  final String scrapName;
+
+  EventChangeScrapName({required this.scrapName});
+
+  @override
+  List<Object?> get props => [scrapName];
+}

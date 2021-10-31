@@ -10,27 +10,20 @@ class CustomCoolAlert {
     String? text,
     Color? confirmBtnColor,
     String? confirmBtnText,
-    String? confirmBtnTapRoute,
+    Function()? onTap,
   }) {
     return CoolAlert.show(
-        barrierDismissible: false,
-        context: context,
-        type: type ?? CoolAlertType.info,
-        title: title,
-        text: text,
-        confirmBtnColor: confirmBtnColor ?? Theme.of(context).accentColor,
-        confirmBtnText: confirmBtnText ?? CustomTexts.closeText,
-        onConfirmBtnTap: () {
-          if (confirmBtnTapRoute != null) {
-            Navigator.popUntil(
-              context,
-              ModalRoute.withName(
-                confirmBtnTapRoute,
-              ),
-            );
-          } else {
+      barrierDismissible: false,
+      context: context,
+      type: type ?? CoolAlertType.info,
+      title: title,
+      text: text,
+      confirmBtnColor: confirmBtnColor ?? Theme.of(context).accentColor,
+      confirmBtnText: confirmBtnText ?? CustomTexts.closeText,
+      onConfirmBtnTap: onTap ??
+          () {
             Navigator.pop(context);
-          }
-        });
+          },
+    );
   }
 }

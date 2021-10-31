@@ -50,15 +50,4 @@ class ScrapCategoryResponseModel {
         scrapCategoryModels: List<ScrapCategoryModel>.from(json["resData"]
             .map((x) => ScrapCategoryModel.fromJsonToCategoryListModel(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "isSuccess": isSuccess,
-        "statusCode": statusCode,
-        "msgCode": msgCode,
-        "msgDetail": msgDetail,
-        "total": total,
-        "resData": scrapCategoryModels == null
-            ? null
-            : List<dynamic>.from(scrapCategoryModels.map((x) => x.toJson())),
-      };
 }
