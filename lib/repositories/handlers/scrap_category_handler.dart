@@ -8,6 +8,9 @@ abstract class IScrapCategoryHandler {
   Future<String> uploadImage({
     required String imagePath,
   });
+  Future<bool> checkScrapName({
+    required String name,
+  });
   Future<bool> createScrapCategory(
       {required CreateScrapCategoryRequestModel model});
   Future<List<ScrapCategoryModel>> getScrapCategories({
@@ -34,6 +37,27 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         // Return image path on server
         return resData;
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<bool> checkScrapName({
+    required String name,
+  }) async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var responseBody = await ScrapCategoryNetWork.getCheckScrapName(
+          bearerToken: accessToken,
+          name: name,
+        );
+
+        return responseBody['isSuccess'];
       } else
         throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {

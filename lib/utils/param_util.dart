@@ -61,6 +61,8 @@ class CustomTexts {
   static const String apiUrlGetImage = '/api/v3/image/get';
   static const String apiUrlPostImage = '/api/v3/scrap-category/upload-image';
   static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
+  static const String apiUrlGetCheckScrapCategoryName =
+      '/api/v3/scrap-category/check-name';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -201,6 +203,7 @@ class CustomTexts {
   static const String errorHappenedTryAgain =
       'Đã có lỗi xảy ra, vui lòng thử lại';
   static const String processing = 'Đang xử lí...';
+  static const String scrapNameExisted = 'Tên phế liệu đã tồn tại';
 }
 
 class CustomFormats {

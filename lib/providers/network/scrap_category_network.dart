@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
@@ -47,6 +48,49 @@ class ScrapCategoryNetWork {
     }
   }
 
+  static Future<Map<String, dynamic>> getCheckScrapName({
+    required String bearerToken,
+    required String name,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> queryParams = {
+      'name': name,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlGetCheckScrapCategoryName, queryParams);
+
+    final response = await http.get(uri, headers: headers);
+
+    return json.decode(response.body);
+  }
+
+  static Future<Map<String, dynamic>> postScrapCategory({
+    required String bearerToken,
+    required String body,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostScrapCategory);
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: body,
+    );
+
+    return json.decode(response.body);
+  }
+
   static Future<ScrapCategoryResponseModel> getScrapCategories({
     required String bearerToken,
     String? page,
@@ -75,27 +119,5 @@ class ScrapCategoryNetWork {
       // then throw an exception.
       throw Exception(CustomTexts.getScrapCategoriesFailedException);
     }
-  }
-
-  static Future<Map<String, dynamic>> postScrapCategory({
-    required String bearerToken,
-    required String body,
-  }) async {
-    //add headers
-    Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
-    };
-
-    final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostScrapCategory);
-
-    final response = await http.post(
-      uri,
-      headers: headers,
-      body: body,
-    );
-
-    return response.body as Map<String, dynamic>;
   }
 }

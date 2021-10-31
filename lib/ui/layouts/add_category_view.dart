@@ -41,25 +41,25 @@ class AddCategoryView extends StatelessWidget {
               listener: (context, state) {
             if (state is LoadingState) {
               EasyLoading.show(status: CustomTexts.processing);
-            }
-            if (state is SubmittedState) {
+            } else {
               EasyLoading.dismiss();
-              CustomCoolAlert.showCoolAlert(
+              if (state is SubmittedState) {
+                CustomCoolAlert.showCoolAlert(
+                    context: context,
+                    title: state.message,
+                    type: CoolAlertType.success,
+                    onTap: () {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(CustomRoutes.botNav));
+                    });
+              }
+              if (state is ErrorState) {
+                CustomCoolAlert.showCoolAlert(
                   context: context,
                   title: state.message,
-                  type: CoolAlertType.success,
-                  onTap: () {
-                    Navigator.popUntil(
-                        context, ModalRoute.withName(CustomRoutes.botNav));
-                  });
-            }
-            if (state is ErrorState) {
-              EasyLoading.dismiss();
-              CustomCoolAlert.showCoolAlert(
-                context: context,
-                title: state.message,
-                type: CoolAlertType.error,
-              );
+                  type: CoolAlertType.error,
+                );
+              }
             }
           }),
         ],
@@ -116,6 +116,7 @@ class AddCategoryView extends StatelessWidget {
 
   Widget _scrapNameField() {
     return BlocBuilder<AddCategoryBloc, AddCategoryState>(
+      buildWhen: (p, c) => p.isNameExisted != c.isNameExisted,
       builder: (context, state) {
         return TextFormField(
           controller: _scrapNameController,
@@ -129,9 +130,11 @@ class AddCategoryView extends StatelessWidget {
                 .read<AddCategoryBloc>()
                 .add(EventChangeScrapName(scrapName: value));
           },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) {
             if (value == null || value.isEmpty)
               return CustomTexts.inputScrapCategoryName;
+            if (state.isNameExisted) return CustomTexts.scrapNameExisted;
           },
         );
       },

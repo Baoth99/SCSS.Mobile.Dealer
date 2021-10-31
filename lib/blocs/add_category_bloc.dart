@@ -38,7 +38,10 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
         return;
     }
     if (event is EventChangeScrapName) {
-      yield state.copyWith(scrapName: event.scrapName);
+      yield state.copyWith(
+        scrapName: event.scrapName,
+        isNameExisted: false,
+      );
     }
     if (event is EventAddScrapCategoryUnit) {
       yield state.copyWith(controllers: event.controllers);
@@ -49,37 +52,55 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
         isImageSourceActionSheetVisible: state.isImageSourceActionSheetVisible,
         pickedImageUrl: state.pickedImageUrl,
         scrapName: state.scrapName,
+        isNameExisted: state.isNameExisted,
       );
       try {
-        String imagePath = CustomTexts.emptyString;
-        if (state.pickedImageUrl.isNotEmpty) {
-          // Upload image
-          imagePath = await _scrapCategoryHandler.uploadImage(
-              imagePath: state.pickedImageUrl);
-        }
-        // Create details list
-        List<ScrapCategoryModel> details = await _getScrapCategoryUnitPriceList(
-            controllers: state.controllers);
+        bool checkNameResult =
+            await _scrapCategoryHandler.checkScrapName(name: state.scrapName);
+        print(checkNameResult);
+        if (checkNameResult) {
+          String imagePath = CustomTexts.emptyString;
+          if (state.pickedImageUrl.isNotEmpty) {
+            // Upload image
+            imagePath = await _scrapCategoryHandler.uploadImage(
+                imagePath: state.pickedImageUrl);
+          }
+          // Create details list
+          List<ScrapCategoryModel> details =
+              await _getScrapCategoryUnitPriceList(
+                  controllers: state.controllers);
 
-        // Submit category
-        var result = await _scrapCategoryHandler.createScrapCategory(
-          model: CreateScrapCategoryRequestModel(
-            name: state.scrapName,
-            imageUrl: imagePath,
-            details: details,
-          ),
-        );
+          // Submit category
+          var result = await _scrapCategoryHandler.createScrapCategory(
+            model: CreateScrapCategoryRequestModel(
+              name: state.scrapName,
+              imageUrl: imagePath,
+              details: details,
+            ),
+          );
 
-        if (result) {
-          yield SubmittedState(message: CustomTexts.addScrapCategorySucessfull);
+          if (result) {
+            yield SubmittedState(
+                message: CustomTexts.addScrapCategorySucessfull);
+          } else {
+            yield ErrorState(
+              message: CustomTexts.errorHappenedTryAgain,
+              controllers: state.controllers,
+              isImageSourceActionSheetVisible:
+                  state.isImageSourceActionSheetVisible,
+              pickedImageUrl: state.pickedImageUrl,
+              scrapName: state.scrapName,
+              isNameExisted: state.isNameExisted,
+            );
+          }
         } else {
-          yield ErrorState(
-            message: CustomTexts.errorHappenedTryAgain,
+          yield AddCategoryState(
             controllers: state.controllers,
             isImageSourceActionSheetVisible:
                 state.isImageSourceActionSheetVisible,
             pickedImageUrl: state.pickedImageUrl,
             scrapName: state.scrapName,
+            isNameExisted: true,
           );
         }
       } catch (e) {
@@ -91,6 +112,7 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
               state.isImageSourceActionSheetVisible,
           pickedImageUrl: state.pickedImageUrl,
           scrapName: state.scrapName,
+          isNameExisted: state.isNameExisted,
         );
       }
     }
@@ -101,11 +123,12 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
   }) async {
     List<ScrapCategoryModel> list = [];
     for (var key in controllers.keys) {
-      list.add(ScrapCategoryModel.createCategoryModel(
-          unit: key.text,
-          price:
-              int.tryParse(controllers[key]?.text ?? CustomTexts.zeroString) ??
-                  0));
+      if (key.text != CustomTexts.emptyString)
+        list.add(ScrapCategoryModel.createCategoryModel(
+            unit: key.text,
+            price: int.tryParse(
+                    controllers[key]?.text ?? CustomTexts.zeroString) ??
+                0));
     }
     return list;
   }
