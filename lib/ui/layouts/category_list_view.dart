@@ -1,11 +1,14 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/category_list_bloc.dart';
 import 'package:dealer_app/repositories/events/category_list_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/category_list_state.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
@@ -15,9 +18,33 @@ class CategoryListView extends StatelessWidget {
     // category screen
     return BlocProvider(
       create: (context) => CategoryListBloc(),
-      child: Scaffold(
-        appBar: _appBar(context),
-        body: _body(),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CategoryListBloc, CategoryListState>(
+            listener: (context, state) {
+              if (state is NotLoadedState) {
+                EasyLoading.show(status: CustomTexts.processing);
+              } else {
+                EasyLoading.dismiss();
+                if (state is ErrorState) {
+                  CustomCoolAlert.showCoolAlert(
+                    context: context,
+                    title: state.errorMessage,
+                    type: CoolAlertType.success,
+                    onTap: () {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(CustomRoutes.botNav));
+                    },
+                  );
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: _appBar(context),
+          body: _body(),
+        ),
       ),
     );
   }
@@ -147,25 +174,29 @@ class CategoryListView extends StatelessWidget {
         height: 45.0,
         child: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: Stack(
-              children: [
-                const SizedBox(
-                  width: 45.0,
-                  height: 45.0,
-                  child: const DecoratedBox(
-                    decoration: const BoxDecoration(color: Colors.green),
-                  ),
-                ),
-                if (model.image != null)
-                  Positioned(
-                    width: 45.0,
-                    height: 45.0,
-                    child: Image(
-                      image: model.image!,
-                      fit: BoxFit.cover,
+            child: BlocBuilder<CategoryListBloc, CategoryListState>(
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    const SizedBox(
+                      width: 45.0,
+                      height: 45.0,
+                      child: const DecoratedBox(
+                        decoration: const BoxDecoration(color: Colors.green),
+                      ),
                     ),
-                  ),
-              ],
+                    if (model.image != null)
+                      Positioned(
+                        width: 45.0,
+                        height: 45.0,
+                        child: Image(
+                          image: model.image!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                  ],
+                );
+              },
             )),
       ),
       title: Text(model.name),
