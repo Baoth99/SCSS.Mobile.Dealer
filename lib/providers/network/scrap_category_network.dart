@@ -1,11 +1,96 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;
 
 class ScrapCategoryNetWork {
+  static Future<UploadImageResponseModel> postImage({
+    required String bearerToken,
+    required String imagePath,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    final uri =
+        Uri.http(EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostImage);
+
+    // Create multipart request
+    var request = http.MultipartRequest("POST", uri);
+
+    // Create multipart file
+    var multipartFile = await http.MultipartFile.fromPath('Image', imagePath);
+
+    // Add headers and files
+    request.headers.addAll(headers);
+    request.files.add(multipartFile);
+
+    // Send request
+    var streamedResponse = await request.send();
+
+    // Get response from Streamed Response
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return uploadImageResponseModelFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(CustomTexts.postImageFailedException);
+    }
+  }
+
+  static Future<Map<String, dynamic>> getCheckScrapName({
+    required String bearerToken,
+    required String name,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> queryParams = {
+      'name': name,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlGetCheckScrapCategoryName, queryParams);
+
+    final response = await http.get(uri, headers: headers);
+
+    return json.decode(response.body);
+  }
+
+  static Future<Map<String, dynamic>> postScrapCategory({
+    required String bearerToken,
+    required String body,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostScrapCategory);
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: body,
+    );
+
+    return json.decode(response.body);
+  }
+
   static Future<ScrapCategoryResponseModel> getScrapCategories({
     required String bearerToken,
     String? page,

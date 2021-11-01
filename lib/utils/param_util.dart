@@ -59,6 +59,10 @@ class CustomTexts {
   static const String apiUrlGetScrapCategoriesFromScrapCategory =
       '/api/v3/scrap-category/get';
   static const String apiUrlGetImage = '/api/v3/image/get';
+  static const String apiUrlPostImage = '/api/v3/scrap-category/upload-image';
+  static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
+  static const String apiUrlGetCheckScrapCategoryName =
+      '/api/v3/scrap-category/check-name';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -83,6 +87,9 @@ class CustomTexts {
   static const String getCollectDealHistoryDetailFailedException =
       'Failed to Get Collect Deal History Detail';
   static const String getImageFailedException = 'Failed to Get Image';
+  static const String postImageFailedException = 'Failed to Post Image';
+  static const String postScrapCategoryFailedException =
+      'Failed to Post Scrap Category';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -178,6 +185,25 @@ class CustomTexts {
   static const String noItemsErrorText =
       'Thêm chi tiết cho giao dịch bằng dấu +';
   static const String deleteItemButtonText = 'Xoá';
+  // Add category
+  static const String eachScrapCategoryHasAtLeastOneUnit =
+      'Mỗi danh mục nên có một đơn vị';
+  static const String image = 'Hình ảnh';
+  static const String scrapCategoryName = 'Tên danh mục phế liệu';
+  static const String inputScrapCategoryName = 'Nhập tên loại phế liệu';
+  static const String detail = 'Chi tiết';
+  static const String unit = 'Đơn vị';
+  static const String unitIsExisted = 'Đơn vị đã có';
+  static const String unitPrice = 'Đơn giá';
+  static const String camera = 'Máy ảnh';
+  static const String gallery = 'Thư viện';
+  static const String cancel = 'Huỷ';
+  static const String addScrapCategory = 'Thêm danh mục';
+  static const String addScrapCategorySucessfull = 'Thêm danh mục thành công';
+  static const String errorHappenedTryAgain =
+      'Đã có lỗi xảy ra, vui lòng thử lại';
+  static const String processing = 'Đang xử lí...';
+  static const String scrapNameExisted = 'Tên phế liệu đã tồn tại';
 }
 
 class CustomFormats {
