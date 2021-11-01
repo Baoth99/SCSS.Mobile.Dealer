@@ -16,27 +16,35 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   }
 
   final _initPage = 1;
-  final _pageSize = 10;
+  final _pageSize = 7;
   int _currentPage = 1;
-  List<ScrapCategoryModel> _categoryList = [];
 
   @override
   Stream<CategoryListState> mapEventToState(CategoryListEvent event) async* {
     if (event is EventInitData) {
+      yield NotLoadedState();
       try {
         _currentPage = 1;
 
-        _categoryList = await _scrapCategoryHandler.getScrapCategories(
+        List<ScrapCategoryModel> categoryList =
+            await _scrapCategoryHandler.getScrapCategories(
           page: _initPage,
           pageSize: _pageSize,
         );
-
-        _categoryList = await _addImages(list: _categoryList);
-
         yield LoadedState(
-          categoryList: _categoryList,
+          categoryList: categoryList,
           filteredCategoryList:
-              _getCategoryListFiltered(categoryList: _categoryList, name: ''),
+              _getCategoryListFiltered(categoryList: categoryList, name: ''),
+        );
+
+        // Create new list
+        List<ScrapCategoryModel> categoryListWithImage =
+            List.from(categoryList);
+        categoryListWithImage = await _addImages(list: categoryListWithImage);
+        yield LoadedState(
+          categoryList: categoryListWithImage,
+          filteredCategoryList: _getCategoryListFiltered(
+              categoryList: categoryListWithImage, name: ''),
         );
       } catch (e) {
         print(e);
@@ -55,13 +63,25 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
         );
         // If there is more transactions
         if (newList.isNotEmpty) {
+          List<ScrapCategoryModel> categoryList =
+              List.from((state as LoadedState).categoryList);
           _currentPage += 1;
-          _categoryList.addAll(newList);
+          categoryList.addAll(newList);
 
           yield (state as LoadedState).copyWith(
-            categoryList: _categoryList,
+            categoryList: categoryList,
             filteredCategoryList: _getCategoryListFiltered(
-                categoryList: _categoryList,
+                categoryList: categoryList,
+                name: (state as LoadedState).searchName),
+          );
+
+          List<ScrapCategoryModel> categoryListWithImage =
+              List.from(categoryList);
+          categoryListWithImage = await _addImages(list: categoryListWithImage);
+          yield (state as LoadedState).copyWith(
+            categoryList: categoryListWithImage,
+            filteredCategoryList: _getCategoryListFiltered(
+                categoryList: categoryListWithImage,
                 name: (state as LoadedState).searchName),
           );
         }
@@ -91,7 +111,10 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   Future<List<ScrapCategoryModel>> _addImages(
       {required List<ScrapCategoryModel> list}) async {
     for (var item in list) {
-      item.image = await _dataHandler.getImageBytes(imageUrl: item.imageUrl);
+      if (item.imageUrl != CustomTexts.emptyString)
+        item.image = await _dataHandler.getImageBytes(imageUrl: item.imageUrl);
+      else
+        item.image = null;
     }
     return list;
   }
