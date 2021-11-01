@@ -1,7 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/create_transaction_bloc.dart';
 import 'package:dealer_app/repositories/events/create_transaction_event.dart';
-import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
@@ -584,10 +584,10 @@ class CreateTransactionView extends StatelessWidget {
             showSelectedItems: true,
             label: CustomTexts.unitLabel,
             items: state.scrapCategoryDetails,
-            compareFn: (ScrapCategoryDetailModel? item,
-                    ScrapCategoryDetailModel? selectedItem) =>
+            compareFn: (ScrapCategoryUnitModel? item,
+                    ScrapCategoryUnitModel? selectedItem) =>
                 item?.id == selectedItem?.id,
-            itemAsString: (ScrapCategoryDetailModel? model) =>
+            itemAsString: (ScrapCategoryUnitModel? model) =>
                 model != null ? model.unit : CustomTexts.emptyString,
             validator: (value) {
               if (state.isItemTotalCalculatedByUnitPrice) {
@@ -595,7 +595,7 @@ class CreateTransactionView extends StatelessWidget {
                   return CustomTexts.scrapCategoryUnitBlank;
               }
             },
-            onChanged: (ScrapCategoryDetailModel? selectedValue) {
+            onChanged: (ScrapCategoryUnitModel? selectedValue) {
               if (selectedValue != null)
                 context.read<CreateTransactionBloc>().add(
                     EventDealerCategoryUnitChanged(

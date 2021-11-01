@@ -91,6 +91,8 @@ class AddCategoryView extends StatelessWidget {
                 Flexible(
                   flex: 90,
                   child: ListView(
+                    primary: false,
+                    shrinkWrap: true,
                     children: [
                       CustomWidgets.customText(text: CustomTexts.image),
                       _scrapImage(),

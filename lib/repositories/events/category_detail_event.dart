@@ -1,24 +1,47 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 
-abstract class CategoryDetailEvent {}
+abstract class CategoryDetailEvent extends Equatable {}
 
-class EventChangeScrapImageRequest extends CategoryDetailEvent {}
+class EventInitData extends CategoryDetailEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class EventChangeScrapImageRequest extends CategoryDetailEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class EventOpenImagePicker extends CategoryDetailEvent {
   final ImageSource imageSource;
 
   EventOpenImagePicker({required this.imageSource});
+
+  @override
+  List<Object?> get props => [imageSource];
 }
 
 class EventAddScrapCategoryUnit extends CategoryDetailEvent {
-  Map<TextEditingController, TextEditingController> controllers;
+  final Map<TextEditingController, TextEditingController> controllers;
 
   EventAddScrapCategoryUnit({required this.controllers});
+
+  @override
+  List<Object?> get props => [controllers];
 }
 
-class EventChangeEditStatus extends CategoryDetailEvent {
-  final bool isEdited;
+class EventSubmitScrapCategory extends CategoryDetailEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-  EventChangeEditStatus({required this.isEdited});
+class EventChangeScrapName extends CategoryDetailEvent {
+  final String scrapName;
+
+  EventChangeScrapName({required this.scrapName});
+
+  @override
+  List<Object?> get props => [scrapName];
 }

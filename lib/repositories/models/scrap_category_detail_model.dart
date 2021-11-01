@@ -1,105 +1,31 @@
-// To parse this JSON data, do
-//
-//     final scrapCategoryDetailModel = scrapCategoryDetailModelFromJson(jsonString);
-
-import 'dart:convert';
-
-ScrapCategoryDetailModel scrapCategoryDetailModelFromJson(String str) =>
-    ScrapCategoryDetailModel.fromJson(json.decode(str));
-
-String scrapCategoryDetailModelToJson(ScrapCategoryDetailModel data) =>
-    json.encode(data.toJson());
+import 'package:dealer_app/repositories/models/scrap_category_detail_item_model.dart';
 
 class ScrapCategoryDetailModel {
   ScrapCategoryDetailModel({
     required this.id,
-    required this.unit,
-    required this.price,
+    required this.name,
+    required this.imageUrl,
+    required this.details,
   });
 
   String id;
-  String unit;
-  int price;
+  String name;
+  String imageUrl;
+  List<CategoryDetailItemModel> details;
 
   factory ScrapCategoryDetailModel.fromJson(Map<String, dynamic> json) =>
       ScrapCategoryDetailModel(
         id: json["id"] == null ? null : json["id"],
-        unit: json["unit"] == null ? null : json["unit"],
-        price: json["price"] == null ? null : json["price"],
+        name: json["name"] == null ? null : json["name"],
+        imageUrl: json["imageUrl"] == null ? null : json["imageUrl"],
+        details: List<CategoryDetailItemModel>.from(
+            json["details"].map((x) => CategoryDetailItemModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "unit": unit == null ? null : unit,
-        "price": price == null ? null : price,
+        "id": id,
+        "name": name,
+        "imageUrl": imageUrl,
+        "details": List<dynamic>.from(details.map((x) => x.toJson())),
       };
-}
-
-class ScrapCategoryDetailModelTemp {
-  int id;
-  int scrapCategoryId;
-  String unit;
-  int? price;
-  int createdBy;
-  DateTime createdTime;
-  int status;
-  int updatedBy;
-  DateTime updatedTime;
-
-  ScrapCategoryDetailModelTemp({
-    required int id,
-    required int scrapCategoryId,
-    required String unit,
-    int? price,
-    required int createdBy,
-    required DateTime createdTime,
-    required int status,
-    required int updatedBy,
-    required DateTime updatedTime,
-  })  : id = id,
-        scrapCategoryId = scrapCategoryId,
-        unit = unit,
-        price = price,
-        createdBy = createdBy,
-        createdTime = createdTime,
-        status = status,
-        updatedBy = updatedBy,
-        updatedTime = updatedTime;
-
-  int get getId => this.id;
-
-  set setId(int id) => this.id = id;
-
-  get getScrapCategoryId => this.scrapCategoryId;
-
-  set setScrapCategoryId(scrapCategoryId) =>
-      this.scrapCategoryId = scrapCategoryId;
-
-  get getUnit => this.unit;
-
-  set setUnit(unit) => this.unit = unit;
-
-  get getPrice => this.price;
-
-  set setPrice(price) => this.price = price;
-
-  get getCreatedBy => this.createdBy;
-
-  set setCreatedBy(createdBy) => this.createdBy = createdBy;
-
-  get getCreatedTime => this.createdTime;
-
-  set setCreatedTime(createdTime) => this.createdTime = createdTime;
-
-  get getStatus => this.status;
-
-  set setStatus(status) => this.status = status;
-
-  get getUpdatedBy => this.updatedBy;
-
-  set setUpdatedBy(updatedBy) => this.updatedBy = updatedBy;
-
-  get getUpdatedTime => this.updatedTime;
-
-  set setUpdatedTime(updatedTime) => this.updatedTime = updatedTime;
 }

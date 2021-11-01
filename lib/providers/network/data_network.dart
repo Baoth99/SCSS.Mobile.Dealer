@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dealer_app/repositories/models/response_models/category_detail_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/category_unit_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collector_phone_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -33,7 +33,7 @@ class DataNetWork {
     }
   }
 
-  static Future<ScrapCategoryDetailResponseModel> getScrapCategoryDetails({
+  static Future<ScrapCategoryUnitResponseModel> getScrapCategoryDetails({
     required String bearerToken,
     required String scrapCategoryId,
   }) async {
@@ -54,8 +54,7 @@ class DataNetWork {
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return ScrapCategoryDetailResponseModel.fromJson(
-          jsonDecode(response.body));
+      return ScrapCategoryUnitResponseModel.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

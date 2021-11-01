@@ -167,7 +167,7 @@ class CategoryListView extends StatelessWidget {
       ),
       onTap: () => Navigator.of(context).pushNamed(
         CustomRoutes.categoryDetail,
-        arguments: model,
+        arguments: model.id,
       ),
       leading: SizedBox(
         width: 45.0,

@@ -1,5 +1,6 @@
 import 'package:dealer_app/providers/network/scrap_category_network.dart';
 import 'package:dealer_app/repositories/models/request_models/create_category_request_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/secure_storage.dart';
@@ -16,6 +17,9 @@ abstract class IScrapCategoryHandler {
   Future<List<ScrapCategoryModel>> getScrapCategories({
     int? page,
     int? pageSize,
+  });
+  Future<ScrapCategoryDetailModel> getScrapCategoryDetail({
+    required String id,
   });
 }
 
@@ -103,6 +107,30 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         //get scrap categories
         return scrapCategories;
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<ScrapCategoryDetailModel> getScrapCategoryDetail({
+    required String id,
+  }) async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var scrapCategoryDetailModel =
+            (await ScrapCategoryNetWork.getScrapCategoryDetail(
+          bearerToken: accessToken,
+          id: id,
+        ))
+                .resData;
+
+        //get scrap categories
+        return scrapCategoryDetailModel;
       } else
         throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {

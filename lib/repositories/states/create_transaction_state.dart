@@ -1,6 +1,6 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
 import 'package:dealer_app/repositories/models/collector_phone_model.dart';
-import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 
@@ -31,7 +31,7 @@ class CreateTransactionState {
   int itemQuantity;
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
-  List<ScrapCategoryDetailModel> scrapCategoryDetails;
+  List<ScrapCategoryUnitModel> scrapCategoryDetails;
   bool isPromotionApplied;
 
   //data
@@ -167,7 +167,7 @@ class CreateTransactionState {
     int? itemTotal,
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
-    List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    List<ScrapCategoryUnitModel>? scrapCategoryDetails,
     bool? isPromotionApplied,
     //Data
     List<ScrapCategoryModel>? scrapCategories,
@@ -229,7 +229,7 @@ class CreateTransactionState {
     int? itemTotal,
     int? itemPrice,
     bool? isItemTotalCalculatedByUnitPrice,
-    List<ScrapCategoryDetailModel>? scrapCategoryDetails,
+    List<ScrapCategoryUnitModel>? scrapCategoryDetails,
     bool? isPromotionApplied,
     //Data
     List<ScrapCategoryModel>? scrapCategories,

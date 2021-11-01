@@ -63,6 +63,8 @@ class CustomTexts {
   static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
   static const String apiUrlGetCheckScrapCategoryName =
       '/api/v3/scrap-category/check-name';
+  static const String apiUrlGetScrapCategorDetailFromScrapCategory =
+      '/api/v3/scrap-category/get-detail';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';

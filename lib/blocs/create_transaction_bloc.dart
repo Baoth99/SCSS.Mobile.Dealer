@@ -8,7 +8,7 @@ import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/promotion_model.dart';
 import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
-import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -134,7 +134,7 @@ class CreateTransactionBloc
         var itemDealerCategoryId = state.scrapCategoryMap.keys.first;
         // Get details
         if (itemDealerCategoryId != CustomVar.unnamedScrapCategory.id) {
-          List<ScrapCategoryDetailModel>? details =
+          List<ScrapCategoryUnitModel>? details =
               await dataHandler.getScrapCategoryDetailList(
                   scrapCategoryId: itemDealerCategoryId);
           if (details != null && details.isNotEmpty) {
@@ -154,7 +154,7 @@ class CreateTransactionBloc
           name: scrapCategory.name,
         );
         // Get details
-        List<ScrapCategoryDetailModel>? details;
+        List<ScrapCategoryUnitModel>? details;
         if (event.detail!.dealerCategoryId !=
             CustomVar.unnamedScrapCategory.id) {
           details = await dataHandler.getScrapCategoryDetailList(
