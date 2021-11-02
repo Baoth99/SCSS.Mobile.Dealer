@@ -117,3 +117,28 @@ class ErrorState extends CategoryDetailState {
           isNameExisted: isNameExisted,
         );
 }
+
+class DeleteState extends CategoryDetailState {
+  final String message;
+
+  DeleteState({
+    required this.message,
+    required isImageSourceActionSheetVisible,
+    required units,
+    required pickedImageUrl,
+    required initScrapName,
+    required initScrapImage,
+    required initScrapImageUrl,
+    required scrapName,
+    required isNameExisted,
+  }) : super(
+          isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+          units: units,
+          pickedImageUrl: pickedImageUrl,
+          initScrapName: initScrapName,
+          initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
+          scrapName: scrapName,
+          isNameExisted: isNameExisted,
+        );
+}

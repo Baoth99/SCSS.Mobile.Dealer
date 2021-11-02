@@ -60,6 +60,18 @@ class CategoryDetailView extends StatelessWidget {
                     type: CoolAlertType.error,
                   );
                 }
+                if (state is DeleteState) {
+                  CustomCoolAlert.showWarningAlert(
+                      context: context,
+                      title: state.message,
+                      type: CoolAlertType.confirm,
+                      cancelBtnText: CustomTexts.cancel,
+                      onConfirmTap: () {
+                        context
+                            .read<CategoryDetailBloc>()
+                            .add(EventDeleteScrapCategory());
+                      });
+                }
               }
             }),
             // Listen to initScrapName
@@ -329,7 +341,18 @@ class CategoryDetailView extends StatelessWidget {
     return Container(
       height: 40,
       child: rowFlexibleBuilder(
-        CustomWidgets.customCancelButton(blocContext, CustomTexts.cancel),
+        CustomWidgets.customSecondaryButton(
+          text: CustomTexts.delete,
+          action: () {
+            if (_formKey.currentState!.validate()) {
+              blocContext
+                  .read<CategoryDetailBloc>()
+                  .add(EventTapDeleteButton());
+            }
+          },
+          backgroundColor: MaterialStateProperty.all(Colors.red[400]),
+          textColor: MaterialStateProperty.all(Colors.white),
+        ),
         CustomWidgets.customElevatedButton(
             blocContext, CustomTexts.saveUpdateButtonText, () {
           if (_formKey.currentState!.validate()) {

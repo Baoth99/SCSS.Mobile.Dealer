@@ -167,4 +167,24 @@ class ScrapCategoryNetWork {
       throw Exception(CustomTexts.getScrapCategoryDetailsFailedException);
     }
   }
+
+  static Future<Map<String, dynamic>> deleteScrapCategory({
+    required String bearerToken,
+    required String id,
+  }) async {
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> params = {
+      'id': id,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlDeleteScrapCategory, params);
+
+    final response = await http.delete(uri, headers: headers);
+
+    return json.decode(response.body);
+  }
 }

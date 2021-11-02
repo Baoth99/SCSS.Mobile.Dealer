@@ -24,6 +24,7 @@ abstract class IScrapCategoryHandler {
   Future<ScrapCategoryDetailModel> getScrapCategoryDetail({
     required String id,
   });
+  Future<bool> deleteScrapCategory({required String id});
 }
 
 class ScrapCategoryHandler implements IScrapCategoryHandler {
@@ -153,6 +154,24 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         //get scrap categories
         return scrapCategoryDetailModel;
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<bool> deleteScrapCategory({required String id}) async {
+    try {
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var responseBody = await ScrapCategoryNetWork.deleteScrapCategory(
+          bearerToken: accessToken,
+          id: id,
+        );
+
+        return responseBody['isSuccess'];
       } else
         throw Exception(CustomTexts.missingBearerToken);
     } catch (e) {

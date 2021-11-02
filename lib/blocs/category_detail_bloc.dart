@@ -182,6 +182,67 @@ class CategoryDetailBloc
         );
       }
     }
+    if (event is EventDeleteScrapCategory) {
+      yield LoadingState(
+        units: state.units,
+        isImageSourceActionSheetVisible: state.isImageSourceActionSheetVisible,
+        pickedImageUrl: state.pickedImageUrl,
+        initScrapName: state.initScrapName,
+        initScrapImage: state.initScrapImage,
+        initScrapImageUrl: state.initScrapImageUrl,
+        scrapName: state.scrapName,
+        isNameExisted: state.isNameExisted,
+      );
+      try {
+        // Submit category
+        var result = await _scrapCategoryHandler.deleteScrapCategory(id: id);
+
+        if (result) {
+          yield SubmittedState(
+              message: CustomTexts.deleteScrapCategorySucessfull);
+        } else {
+          yield ErrorState(
+            message: CustomTexts.errorHappenedTryAgain,
+            units: state.units,
+            isImageSourceActionSheetVisible:
+                state.isImageSourceActionSheetVisible,
+            pickedImageUrl: state.pickedImageUrl,
+            initScrapName: state.initScrapName,
+            initScrapImage: state.initScrapImage,
+            initScrapImageUrl: state.initScrapImageUrl,
+            scrapName: state.scrapName,
+            isNameExisted: state.isNameExisted,
+          );
+        }
+      } catch (e) {
+        print(e);
+        yield ErrorState(
+          message: CustomTexts.errorHappenedTryAgain,
+          units: state.units,
+          isImageSourceActionSheetVisible:
+              state.isImageSourceActionSheetVisible,
+          pickedImageUrl: state.pickedImageUrl,
+          initScrapName: state.initScrapName,
+          initScrapImage: state.initScrapImage,
+          initScrapImageUrl: state.initScrapImageUrl,
+          scrapName: state.scrapName,
+          isNameExisted: state.isNameExisted,
+        );
+      }
+    }
+    if (event is EventTapDeleteButton) {
+      yield DeleteState(
+        message: CustomTexts.deleteScrapCategory(name: state.scrapName),
+        units: state.units,
+        isImageSourceActionSheetVisible: state.isImageSourceActionSheetVisible,
+        pickedImageUrl: state.pickedImageUrl,
+        initScrapName: state.initScrapName,
+        initScrapImage: state.initScrapImage,
+        initScrapImageUrl: state.initScrapImageUrl,
+        scrapName: state.scrapName,
+        isNameExisted: state.isNameExisted,
+      );
+    }
   }
 
   Future<Map<TextEditingController, TextEditingController>> _createControllers(

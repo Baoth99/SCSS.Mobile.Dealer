@@ -66,6 +66,8 @@ class CustomTexts {
   static const String apiUrlGetScrapCategorDetailFromScrapCategory =
       '/api/v3/scrap-category/get-detail';
   static const String apiUrlPutScrapCategory = '/api/v3/scrap-category/update';
+  static const String apiUrlDeleteScrapCategory =
+      '/api/v3/scrap-category/remove';
   //api throws
   static const String loginFailedException = 'Login failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
@@ -208,6 +210,11 @@ class CustomTexts {
   static const String processing = 'Đang xử lí...';
   static const String scrapNameExisted = 'Tên phế liệu đã tồn tại';
   static const String updateScrapCategorySucessfull = 'Lưu danh mục thành công';
+  static const String deleteScrapCategorySucessfull = 'Xoá danh mục thành công';
+  static const String ok = 'Đồng ý';
+  static const String delete = 'Xoá';
+  static String deleteScrapCategory({required String name}) =>
+      'Xoá danh mục $name ?';
 }
 
 class CustomFormats {
