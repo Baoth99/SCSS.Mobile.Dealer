@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dealer_app/repositories/models/request_models/update_category_request_model.dart';
+import 'package:dealer_app/repositories/models/response_models/category_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -91,6 +93,22 @@ class ScrapCategoryNetWork {
     return json.decode(response.body);
   }
 
+  static Future<Map<String, dynamic>> putScrapCategory({
+    required String bearerToken,
+    required String body,
+  }) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $bearerToken',
+    };
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPutScrapCategory);
+
+    final response = await http.put(uri, headers: headers, body: body);
+
+    return json.decode(response.body);
+  }
+
   static Future<ScrapCategoryResponseModel> getScrapCategories({
     required String bearerToken,
     String? page,
@@ -119,5 +137,54 @@ class ScrapCategoryNetWork {
       // then throw an exception.
       throw Exception(CustomTexts.getScrapCategoriesFailedException);
     }
+  }
+
+  static Future<ScrapCategoryDetailResponseModel> getScrapCategoryDetail({
+    required String bearerToken,
+    required String id,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> queryParams = {
+      'id': id,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlGetScrapCategorDetailFromScrapCategory, queryParams);
+
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return scrapCategoryDetailResponseModelFromJson(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(CustomTexts.getScrapCategoryDetailsFailedException);
+    }
+  }
+
+  static Future<Map<String, dynamic>> deleteScrapCategory({
+    required String bearerToken,
+    required String id,
+  }) async {
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+    Map<String, dynamic> params = {
+      'id': id,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomTexts.apiUrlDeleteScrapCategory, params);
+
+    final response = await http.delete(uri, headers: headers);
+
+    return json.decode(response.body);
   }
 }

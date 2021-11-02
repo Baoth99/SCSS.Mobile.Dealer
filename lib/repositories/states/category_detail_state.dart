@@ -1,45 +1,144 @@
+import 'package:dealer_app/repositories/models/scrap_category_detail_item_model.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 
 class CategoryDetailState {
+  String initScrapName;
+  ImageProvider? initScrapImage;
+  String initScrapImageUrl;
   String scrapName;
   String pickedImageUrl;
-  Map<TextEditingController, TextEditingController> controllers;
-  String imageUrl;
+  List<CategoryDetailItemModel> units;
 
   bool isImageSourceActionSheetVisible;
-  bool isEdited;
+  bool isNameExisted;
+
+  bool get isOneUnitExist {
+    var result = false;
+    units.forEach((value) {
+      if (value.unit.isNotEmpty) result = true;
+    });
+    return result;
+  }
 
   CategoryDetailState({
-    String? pickedImageUrl,
-    String? scrapName,
-    Map<TextEditingController, TextEditingController>? controllers,
     isImageSourceActionSheetVisible = false,
-    bool? isEdited,
-    String? imageUrl,
+    String? pickedImageUrl,
+    String? initScrapName,
+    ImageProvider? initScrapImage,
+    String? initScrapImageUrl,
+    String? scrapName,
+    List<CategoryDetailItemModel>? units,
+    this.isNameExisted = false,
   })  : this.isImageSourceActionSheetVisible = isImageSourceActionSheetVisible,
-        this.pickedImageUrl = pickedImageUrl ?? '',
-        this.scrapName = scrapName ?? '',
-        this.controllers = controllers ?? {},
-        this.isEdited = isEdited ?? false,
-        this.imageUrl = imageUrl ?? '';
+        this.pickedImageUrl = pickedImageUrl ?? CustomTexts.emptyString,
+        this.initScrapName = initScrapName ?? CustomTexts.emptyString,
+        this.initScrapImage = initScrapImage,
+        this.initScrapImageUrl = initScrapImageUrl ?? CustomTexts.emptyString,
+        this.scrapName = scrapName ?? CustomTexts.emptyString,
+        this.units = units ?? [];
 
   CategoryDetailState copyWith({
     bool? isImageSourceActionSheetVisible,
     String? pickedImageUrl,
+    String? initScrapName,
+    ImageProvider? initScrapImage,
+    String? initScrapImageUrl,
     String? scrapName,
-    Map<TextEditingController, TextEditingController>? controllers,
-    bool? isEdited,
-    String? imageUrl,
+    List<CategoryDetailItemModel>? units,
+    bool? isNameExisted,
   }) {
     //return state
     return CategoryDetailState(
       isImageSourceActionSheetVisible: isImageSourceActionSheetVisible ??
           this.isImageSourceActionSheetVisible,
       pickedImageUrl: pickedImageUrl ?? this.pickedImageUrl,
+      initScrapName: initScrapName ?? this.initScrapName,
+      initScrapImage: initScrapImage ?? this.initScrapImage,
+      initScrapImageUrl: initScrapImageUrl ?? this.initScrapImageUrl,
       scrapName: scrapName ?? this.scrapName,
-      controllers: controllers ?? this.controllers,
-      isEdited: isEdited ?? this.isEdited,
-      imageUrl: imageUrl ?? this.imageUrl,
+      units: units ?? this.units,
+      isNameExisted: isNameExisted ?? this.isNameExisted,
     );
   }
+}
+
+class ScrapCategorySubmittedState extends CategoryDetailState {}
+
+class LoadingState extends CategoryDetailState {
+  LoadingState({
+    required isImageSourceActionSheetVisible,
+    required units,
+    required pickedImageUrl,
+    required initScrapName,
+    required initScrapImage,
+    required initScrapImageUrl,
+    required scrapName,
+    required isNameExisted,
+  }) : super(
+          isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+          units: units,
+          initScrapName: initScrapName,
+          initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
+          pickedImageUrl: pickedImageUrl,
+          scrapName: scrapName,
+          isNameExisted: isNameExisted,
+        );
+}
+
+class SubmittedState extends CategoryDetailState {
+  final String message;
+
+  SubmittedState({required this.message});
+}
+
+class ErrorState extends CategoryDetailState {
+  final String message;
+
+  ErrorState({
+    required this.message,
+    required isImageSourceActionSheetVisible,
+    required units,
+    required pickedImageUrl,
+    required initScrapName,
+    required initScrapImage,
+    required initScrapImageUrl,
+    required scrapName,
+    required isNameExisted,
+  }) : super(
+          isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+          units: units,
+          pickedImageUrl: pickedImageUrl,
+          initScrapName: initScrapName,
+          initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
+          scrapName: scrapName,
+          isNameExisted: isNameExisted,
+        );
+}
+
+class DeleteState extends CategoryDetailState {
+  final String message;
+
+  DeleteState({
+    required this.message,
+    required isImageSourceActionSheetVisible,
+    required units,
+    required pickedImageUrl,
+    required initScrapName,
+    required initScrapImage,
+    required initScrapImageUrl,
+    required scrapName,
+    required isNameExisted,
+  }) : super(
+          isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+          units: units,
+          pickedImageUrl: pickedImageUrl,
+          initScrapName: initScrapName,
+          initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
+          scrapName: scrapName,
+          isNameExisted: isNameExisted,
+        );
 }

@@ -26,4 +26,36 @@ class CustomCoolAlert {
           },
     );
   }
+
+  static Future<dynamic> showWarningAlert({
+    required BuildContext context,
+    CoolAlertType? type,
+    String? title,
+    String? text,
+    Color? confirmBtnColor,
+    String? confirmBtnText,
+    String? cancelBtnText,
+    Function()? onConfirmTap,
+    Function()? onCancelTap,
+  }) {
+    return CoolAlert.show(
+      barrierDismissible: false,
+      context: context,
+      type: type ?? CoolAlertType.info,
+      title: title,
+      text: text,
+      confirmBtnColor: confirmBtnColor ?? Theme.of(context).accentColor,
+      confirmBtnText: confirmBtnText ?? CustomTexts.ok,
+      onConfirmBtnTap: onConfirmTap ??
+          () {
+            Navigator.pop(context);
+          },
+      showCancelBtn: true,
+      cancelBtnText: cancelBtnText ?? CustomTexts.cancelButtonText,
+      onCancelBtnTap: onCancelTap ??
+          () {
+            Navigator.pop(context);
+          },
+    );
+  }
 }

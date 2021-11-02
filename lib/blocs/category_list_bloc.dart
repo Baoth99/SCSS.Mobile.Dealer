@@ -16,7 +16,7 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
   }
 
   final _initPage = 1;
-  final _pageSize = 7;
+  final _pageSize = 15;
   int _currentPage = 1;
 
   @override
@@ -38,8 +38,15 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
         );
 
         // Create new list
-        List<ScrapCategoryModel> categoryListWithImage =
-            List.from(categoryList);
+        List<ScrapCategoryModel> categoryListWithImage = [];
+        for (var item in categoryList) {
+          categoryListWithImage.add(new ScrapCategoryModel.categoryListModel(
+            id: item.id,
+            name: item.name,
+            image: item.image,
+            imageUrl: item.imageUrl,
+          ));
+        }
         categoryListWithImage = await _addImages(list: categoryListWithImage);
         yield LoadedState(
           categoryList: categoryListWithImage,
@@ -75,8 +82,15 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
                 name: (state as LoadedState).searchName),
           );
 
-          List<ScrapCategoryModel> categoryListWithImage =
-              List.from(categoryList);
+          List<ScrapCategoryModel> categoryListWithImage = [];
+          for (var item in categoryList) {
+            categoryListWithImage.add(new ScrapCategoryModel.categoryListModel(
+              id: item.id,
+              name: item.name,
+              image: item.image,
+              imageUrl: item.imageUrl,
+            ));
+          }
           categoryListWithImage = await _addImages(list: categoryListWithImage);
           yield (state as LoadedState).copyWith(
             categoryList: categoryListWithImage,
@@ -127,10 +141,11 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
     // Check transactionList
     if (categoryList.isEmpty) return List.empty();
     // return filtered List
-    var list = categoryList
+    List<ScrapCategoryModel> list = categoryList
         .where((element) =>
             element.name.toLowerCase().contains(name.toLowerCase()))
         .toList();
+
     return list;
   }
 }

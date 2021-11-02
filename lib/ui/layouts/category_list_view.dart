@@ -51,22 +51,31 @@ class CategoryListView extends StatelessWidget {
 
   AppBar _appBar(BuildContext context) {
     return AppBar(
+      elevation: 0,
       title: Text(
         CustomTexts.categoryScreenTitle,
         style: Theme.of(context).textTheme.headline1,
       ),
       actions: [
-        InkWell(
-          onTap: () =>
-              Navigator.of(context).pushNamed(CustomRoutes.addCategory),
-          child: Container(
-            width: 60,
-            child: Center(
-              child: Icon(
-                Icons.add,
+        BlocBuilder<CategoryListBloc, CategoryListState>(
+          buildWhen: (p, c) => false,
+          builder: (blocContext, state) {
+            return InkWell(
+              onTap: () => Navigator.of(context)
+                  .pushNamed(CustomRoutes.addCategory)
+                  .then((value) {
+                blocContext.read<CategoryListBloc>().add(EventInitData());
+              }),
+              child: Container(
+                width: 60,
+                child: Center(
+                  child: Icon(
+                    Icons.add,
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
@@ -76,13 +85,11 @@ class CategoryListView extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          Flexible(
-            fit: FlexFit.loose,
-            flex: 1,
+          SizedBox(
+            height: 70,
             child: _searchField(),
           ),
           Flexible(
-            flex: 9,
             child: _list(),
           ),
         ],
@@ -119,37 +126,47 @@ class CategoryListView extends StatelessWidget {
 
   _list() {
     return BlocBuilder<CategoryListBloc, CategoryListState>(
-      builder: (context, state) {
-        if (state is LoadedState)
-          return LazyLoadScrollView(
-              scrollDirection: Axis.vertical,
-              onEndOfPage: () {
-                _loadMoreTransactions(context);
-              },
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  context.read<CategoryListBloc>().add(EventInitData());
+      builder: (blocContext, state) {
+        if (state is LoadedState) {
+          if (state.filteredCategoryList.isNotEmpty) {
+            return LazyLoadScrollView(
+                scrollDirection: Axis.vertical,
+                onEndOfPage: () {
+                  print('load more');
+                  _loadMoreTransactions(blocContext);
                 },
-                child: GroupedListView<ScrapCategoryModel, String>(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
-                  physics: AlwaysScrollableScrollPhysics(),
-                  elements: state.filteredCategoryList,
-                  order: GroupedListOrder.ASC,
-                  groupBy: (ScrapCategoryModel element) =>
-                      element.name.toUpperCase(),
-                  groupSeparatorBuilder: (String element) =>
-                      _groupSeparatorBuilder(name: element),
-                  itemBuilder: (context, element) =>
-                      _listTileBuilder(model: element, context: context),
-                  separator: SizedBox(height: 10),
-                ),
-              ));
-        else if (state is NotLoadedState) {
-          return Center(
-            child: Text('Không có danh mục'),
-          );
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    print('init');
+                    blocContext.read<CategoryListBloc>().add(EventInitData());
+                  },
+                  child: GroupedListView<ScrapCategoryModel, String>(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
+                    physics: AlwaysScrollableScrollPhysics(),
+                    elements: state.filteredCategoryList,
+                    order: GroupedListOrder.ASC,
+                    groupBy: (ScrapCategoryModel element) =>
+                        element.name.characters.first.toUpperCase(),
+                    groupSeparatorBuilder: (String element) =>
+                        _groupSeparatorBuilder(name: element),
+                    itemBuilder: (context, element) =>
+                        _listTileBuilder(model: element, context: context),
+                    separator: SizedBox(height: 10),
+                  ),
+                ));
+          } else {
+            return Center(
+              child: Text('Không có danh mục'),
+            );
+          }
         } else {
-          return CustomWidgets.customErrorWidget();
+          if (state is NotLoadedState) {
+            return Center(
+              child: Text('Không có danh mục'),
+            );
+          } else {
+            return CustomWidgets.customErrorWidget();
+          }
         }
       },
     );
@@ -160,47 +177,53 @@ class CategoryListView extends StatelessWidget {
   }
 
   _listTileBuilder({required ScrapCategoryModel model, required context}) {
-    return ListTile(
-      tileColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      onTap: () => Navigator.of(context).pushNamed(
-        CustomRoutes.categoryDetail,
-        arguments: model,
-      ),
-      leading: SizedBox(
-        width: 45.0,
-        height: 45.0,
-        child: ClipRRect(
+    return BlocBuilder<CategoryListBloc, CategoryListState>(
+        builder: (blocContext, state) {
+      return ListTile(
+        tileColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        leading: SizedBox(
+          width: 45.0,
+          height: 45.0,
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(5.0),
-            child: BlocBuilder<CategoryListBloc, CategoryListState>(
-              builder: (context, state) {
-                return Stack(
-                  children: [
-                    const SizedBox(
-                      width: 45.0,
-                      height: 45.0,
-                      child: const DecoratedBox(
-                        decoration: const BoxDecoration(color: Colors.green),
-                      ),
+            child: Stack(
+              children: [
+                const SizedBox(
+                  width: 45.0,
+                  height: 45.0,
+                  child: const DecoratedBox(
+                    decoration: const BoxDecoration(color: Colors.green),
+                  ),
+                ),
+                if (model.image != null)
+                  Positioned(
+                    width: 45.0,
+                    height: 45.0,
+                    child: Image(
+                      image: model.image!,
+                      fit: BoxFit.cover,
                     ),
-                    if (model.image != null)
-                      Positioned(
-                        width: 45.0,
-                        height: 45.0,
-                        child: Image(
-                          image: model.image!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            )),
-      ),
-      title: Text(model.name),
-    );
+                  ),
+              ],
+            ),
+          ),
+        ),
+        title: Text(model.name),
+        onTap: () => Navigator.of(context)
+            .pushNamed(
+          CustomRoutes.categoryDetail,
+          arguments: model.id,
+        )
+            .then(
+          (value) {
+            blocContext.read<CategoryListBloc>().add(EventInitData());
+          },
+        ),
+      );
+    });
   }
 
   Future _loadMoreTransactions(BuildContext context) async {
