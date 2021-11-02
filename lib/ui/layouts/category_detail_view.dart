@@ -6,6 +6,7 @@ import 'package:dealer_app/repositories/events/category_detail_event.dart';
 import 'package:dealer_app/repositories/states/category_detail_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class CategoryDetailView extends StatelessWidget {
 
   //controllers
   final TextEditingController _scrapNameController = TextEditingController();
-  final Map<TextEditingController, TextEditingController> _unitControllers = {};
+  // final Map<TextEditingController, TextEditingController> _unitControllers = {};
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +68,14 @@ class CategoryDetailView extends StatelessWidget {
                 listener: (context, state) {
                   _scrapNameController.text = state.initScrapName;
                 }),
-            // Listen to controllers
-            BlocListener<CategoryDetailBloc, CategoryDetailState>(
-                listenWhen: (p, c) =>
-                    p.controllers.length != c.controllers.length &&
-                    p.controllers.length == 0,
-                listener: (context, state) {
-                  _unitControllers.addAll(state.controllers);
-                }),
+            // // Listen to controllers
+            // BlocListener<CategoryDetailBloc, CategoryDetailState>(
+            //     listenWhen: (p, c) =>
+            //         p.controllers.length != c.controllers.length &&
+            //         p.controllers.length == 0,
+            //     listener: (context, state) {
+            //       _unitControllers.addAll(state.controllers);
+            //     }),
           ],
           child: Scaffold(
             appBar: AppBar(
@@ -168,11 +169,7 @@ class CategoryDetailView extends StatelessWidget {
         CustomWidgets.customText(text: CustomTexts.detail),
         InkWell(
           onTap: () {
-            _unitControllers.putIfAbsent(
-                new TextEditingController(), () => new TextEditingController());
-            context
-                .read<CategoryDetailBloc>()
-                .add(EventAddScrapCategoryUnit(controllers: _unitControllers));
+            context.read<CategoryDetailBloc>().add(EventAddScrapCategoryUnit());
           },
           child: SizedBox(width: 50, child: Icon(Icons.add)),
         )
@@ -215,24 +212,33 @@ class CategoryDetailView extends StatelessWidget {
               ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  itemCount: state.controllers.length,
+                  itemCount: state.units.length,
                   itemBuilder: (context, index) {
                     return rowFlexibleBuilder(
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.keys.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: CustomTexts.unit,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                           ),
+                          initialValue: state.units[index].unit,
+                          onChanged: (value) {
+                            context
+                                .read<CategoryDetailBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: value,
+                                  price: state.units[index].price.toString(),
+                                ));
+                          },
                           validator: (value) {
                             if (value == CustomTexts.emptyString) return null;
                             var text = CustomTexts.unitIsExisted;
                             var count = 0;
-                            _unitControllers.keys.forEach((element) {
-                              if (element.text == value?.trim()) {
+                            state.units.forEach((element) {
+                              if (element.unit == value?.trim()) {
                                 count++;
                               }
                             });
@@ -246,12 +252,25 @@ class CategoryDetailView extends StatelessWidget {
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.values.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: CustomTexts.unitPrice,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            suffix: Text(CustomTexts.vndSymbolText),
                           ),
+                          inputFormatters: [CurrencyTextFormatter()],
+                          initialValue: CustomFormats.numberFormat
+                              .format(state.units[index].price),
+                          onChanged: (value) {
+                            context
+                                .read<CategoryDetailBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: state.units[index].unit,
+                                  price:
+                                      value.replaceAll(RegExp(r'[^0-9]'), ''),
+                                ));
+                          },
                         ),
                       ),
                       rowFlexibleType.bigToSmall,

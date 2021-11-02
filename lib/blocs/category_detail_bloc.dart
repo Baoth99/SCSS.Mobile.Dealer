@@ -2,10 +2,9 @@ import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/repositories/events/category_detail_event.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/handlers/scrap_category_handler.dart';
-import 'package:dealer_app/repositories/models/request_models/create_category_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/update_category_request_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_item_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
-import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/category_detail_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +28,11 @@ class CategoryDetailBloc
     if (event is EventInitData) {
       yield LoadingState(
         isImageSourceActionSheetVisible: false,
-        controllers: null,
+        units: null,
         pickedImageUrl: null,
         initScrapName: null,
         initScrapImage: null,
+        initScrapImageUrl: null,
         scrapName: null,
         isNameExisted: false,
       );
@@ -50,19 +50,21 @@ class CategoryDetailBloc
           isNameExisted: false,
           initScrapName: model.name,
           initScrapImage: initImage,
+          initScrapImageUrl: model.imageUrl,
           scrapName: model.name,
           pickedImageUrl: null,
-          controllers: await _createControllers(model.details),
+          units: model.details,
         );
       } catch (e) {
         yield ErrorState(
           message: CustomTexts.errorHappenedTryAgain,
-          controllers: state.controllers,
+          units: state.units,
           isImageSourceActionSheetVisible:
               state.isImageSourceActionSheetVisible,
           pickedImageUrl: state.pickedImageUrl,
           initScrapName: state.initScrapName,
           initScrapImage: state.initScrapImage,
+          initScrapImageUrl: state.initScrapImageUrl,
           scrapName: state.scrapName,
           isNameExisted: state.isNameExisted,
         );
@@ -86,66 +88,80 @@ class CategoryDetailBloc
       );
     }
     if (event is EventAddScrapCategoryUnit) {
-      yield state.copyWith(controllers: event.controllers);
+      List<CategoryDetailItemModel> units = List.from(state.units);
+      units.add(CategoryDetailItemModel.updateCategoryModel(
+          unit: CustomTexts.emptyString));
+
+      yield state.copyWith(units: units);
+    }
+    if (event is EventChangeUnitAndPrice) {
+      List<CategoryDetailItemModel> units = List.from(state.units);
+      units[event.index].unit = event.unit;
+      units[event.index].price = int.parse(event.price);
+
+      yield state.copyWith(units: units);
     }
     if (event is EventSubmitScrapCategory) {
       yield LoadingState(
-        controllers: state.controllers,
+        units: state.units,
         isImageSourceActionSheetVisible: state.isImageSourceActionSheetVisible,
         pickedImageUrl: state.pickedImageUrl,
         initScrapName: state.initScrapName,
         initScrapImage: state.initScrapImage,
+        initScrapImageUrl: state.initScrapImageUrl,
         scrapName: state.scrapName,
         isNameExisted: state.isNameExisted,
       );
       try {
-        bool checkNameResult =
-            await _scrapCategoryHandler.checkScrapName(name: state.scrapName);
+        // Check if name hasn't changed
+        bool checkNameResult = state.scrapName == state.initScrapName;
+        if (!checkNameResult)
+          checkNameResult =
+              await _scrapCategoryHandler.checkScrapName(name: state.scrapName);
         print(checkNameResult);
         if (checkNameResult) {
-          String imagePath = CustomTexts.emptyString;
+          String imagePath = state.initScrapImageUrl;
           if (state.pickedImageUrl.isNotEmpty) {
             // Upload image
             imagePath = await _scrapCategoryHandler.uploadImage(
                 imagePath: state.pickedImageUrl);
           }
-          // Create details list
-          List<ScrapCategoryModel> details =
-              await _getScrapCategoryUnitPriceList(
-                  controllers: state.controllers);
 
           // Submit category
-          var result = await _scrapCategoryHandler.createScrapCategory(
-            model: CreateScrapCategoryRequestModel(
+          var result = await _scrapCategoryHandler.updateScrapCategory(
+            model: UpdateScrapCategoryRequestModel(
+              id: id,
               name: state.scrapName,
               imageUrl: imagePath,
-              details: details,
+              details: await _getListFiltered(units: state.units),
             ),
           );
 
           if (result) {
             yield SubmittedState(
-                message: CustomTexts.addScrapCategorySucessfull);
+                message: CustomTexts.updateScrapCategorySucessfull);
           } else {
             yield ErrorState(
               message: CustomTexts.errorHappenedTryAgain,
-              controllers: state.controllers,
+              units: state.units,
               isImageSourceActionSheetVisible:
                   state.isImageSourceActionSheetVisible,
               pickedImageUrl: state.pickedImageUrl,
               initScrapName: state.initScrapName,
               initScrapImage: state.initScrapImage,
+              initScrapImageUrl: state.initScrapImageUrl,
               scrapName: state.scrapName,
               isNameExisted: state.isNameExisted,
             );
           }
         } else {
           yield CategoryDetailState(
-            controllers: state.controllers,
+            units: state.units,
             isImageSourceActionSheetVisible:
                 state.isImageSourceActionSheetVisible,
             pickedImageUrl: state.pickedImageUrl,
             initScrapName: state.initScrapName,
+            initScrapImageUrl: state.initScrapImageUrl,
             scrapName: state.scrapName,
             isNameExisted: true,
           );
@@ -154,12 +170,13 @@ class CategoryDetailBloc
         print(e);
         yield ErrorState(
           message: CustomTexts.errorHappenedTryAgain,
-          controllers: state.controllers,
+          units: state.units,
           isImageSourceActionSheetVisible:
               state.isImageSourceActionSheetVisible,
           pickedImageUrl: state.pickedImageUrl,
           initScrapName: state.initScrapName,
           initScrapImage: state.initScrapImage,
+          initScrapImageUrl: state.initScrapImageUrl,
           scrapName: state.scrapName,
           isNameExisted: state.isNameExisted,
         );
@@ -169,27 +186,27 @@ class CategoryDetailBloc
 
   Future<Map<TextEditingController, TextEditingController>> _createControllers(
       List<CategoryDetailItemModel> details) async {
-    Map<TextEditingController, TextEditingController> controllers = {};
+    Map<TextEditingController, TextEditingController> units = {};
     for (var item in details) {
-      controllers.putIfAbsent(
+      units.putIfAbsent(
         TextEditingController(text: item.unit),
         () => TextEditingController(text: item.price.toString()),
       );
     }
-    return controllers;
+    return units;
   }
 
-  Future<List<ScrapCategoryModel>> _getScrapCategoryUnitPriceList({
-    required Map<TextEditingController, TextEditingController> controllers,
+  Future<List<CategoryDetailItemModel>> _getListFiltered({
+    required List<CategoryDetailItemModel> units,
   }) async {
-    List<ScrapCategoryModel> list = [];
-    for (var key in controllers.keys) {
-      if (key.text != CustomTexts.emptyString)
-        list.add(ScrapCategoryModel.createCategoryModel(
-            unit: key.text,
-            price: int.tryParse(
-                    controllers[key]?.text ?? CustomTexts.zeroString) ??
-                0));
+    List<CategoryDetailItemModel> list = List.from(units);
+    // Remove empty new unit
+    list.removeWhere(
+        (element) => element.unit.isEmpty && element.id == CustomVar.zeroId);
+    // Change status of empty old unit
+    for (var item in list) {
+      if (item.id != CustomVar.zeroId && item.unit.isEmpty)
+        item.status = Status.DEACTIVE.number;
     }
     return list;
   }

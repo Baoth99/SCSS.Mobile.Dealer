@@ -1,20 +1,22 @@
+import 'package:dealer_app/repositories/models/scrap_category_detail_item_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
 
 class CategoryDetailState {
   String initScrapName;
   ImageProvider? initScrapImage;
+  String initScrapImageUrl;
   String scrapName;
   String pickedImageUrl;
-  Map<TextEditingController, TextEditingController> controllers;
+  List<CategoryDetailItemModel> units;
 
   bool isImageSourceActionSheetVisible;
   bool isNameExisted;
 
   bool get isOneUnitExist {
     var result = false;
-    controllers.forEach((key, value) {
-      if (key.text != CustomTexts.emptyString) result = true;
+    units.forEach((value) {
+      if (value.unit.isNotEmpty) result = true;
     });
     return result;
   }
@@ -24,23 +26,26 @@ class CategoryDetailState {
     String? pickedImageUrl,
     String? initScrapName,
     ImageProvider? initScrapImage,
+    String? initScrapImageUrl,
     String? scrapName,
-    Map<TextEditingController, TextEditingController>? controllers,
+    List<CategoryDetailItemModel>? units,
     this.isNameExisted = false,
   })  : this.isImageSourceActionSheetVisible = isImageSourceActionSheetVisible,
         this.pickedImageUrl = pickedImageUrl ?? CustomTexts.emptyString,
         this.initScrapName = initScrapName ?? CustomTexts.emptyString,
         this.initScrapImage = initScrapImage,
+        this.initScrapImageUrl = initScrapImageUrl ?? CustomTexts.emptyString,
         this.scrapName = scrapName ?? CustomTexts.emptyString,
-        this.controllers = controllers ?? {};
+        this.units = units ?? [];
 
   CategoryDetailState copyWith({
     bool? isImageSourceActionSheetVisible,
     String? pickedImageUrl,
     String? initScrapName,
     ImageProvider? initScrapImage,
+    String? initScrapImageUrl,
     String? scrapName,
-    Map<TextEditingController, TextEditingController>? controllers,
+    List<CategoryDetailItemModel>? units,
     bool? isNameExisted,
   }) {
     //return state
@@ -50,8 +55,9 @@ class CategoryDetailState {
       pickedImageUrl: pickedImageUrl ?? this.pickedImageUrl,
       initScrapName: initScrapName ?? this.initScrapName,
       initScrapImage: initScrapImage ?? this.initScrapImage,
+      initScrapImageUrl: initScrapImageUrl ?? this.initScrapImageUrl,
       scrapName: scrapName ?? this.scrapName,
-      controllers: controllers ?? this.controllers,
+      units: units ?? this.units,
       isNameExisted: isNameExisted ?? this.isNameExisted,
     );
   }
@@ -62,17 +68,19 @@ class ScrapCategorySubmittedState extends CategoryDetailState {}
 class LoadingState extends CategoryDetailState {
   LoadingState({
     required isImageSourceActionSheetVisible,
-    required controllers,
+    required units,
     required pickedImageUrl,
     required initScrapName,
     required initScrapImage,
+    required initScrapImageUrl,
     required scrapName,
     required isNameExisted,
   }) : super(
           isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
-          controllers: controllers,
+          units: units,
           initScrapName: initScrapName,
           initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
           pickedImageUrl: pickedImageUrl,
           scrapName: scrapName,
           isNameExisted: isNameExisted,
@@ -91,18 +99,20 @@ class ErrorState extends CategoryDetailState {
   ErrorState({
     required this.message,
     required isImageSourceActionSheetVisible,
-    required controllers,
+    required units,
     required pickedImageUrl,
     required initScrapName,
     required initScrapImage,
+    required initScrapImageUrl,
     required scrapName,
     required isNameExisted,
   }) : super(
           isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
-          controllers: controllers,
+          units: units,
           pickedImageUrl: pickedImageUrl,
           initScrapName: initScrapName,
           initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
           scrapName: scrapName,
           isNameExisted: isNameExisted,
         );

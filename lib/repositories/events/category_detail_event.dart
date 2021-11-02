@@ -24,12 +24,8 @@ class EventOpenImagePicker extends CategoryDetailEvent {
 }
 
 class EventAddScrapCategoryUnit extends CategoryDetailEvent {
-  final Map<TextEditingController, TextEditingController> controllers;
-
-  EventAddScrapCategoryUnit({required this.controllers});
-
   @override
-  List<Object?> get props => [controllers];
+  List<Object?> get props => [];
 }
 
 class EventSubmitScrapCategory extends CategoryDetailEvent {
@@ -44,4 +40,19 @@ class EventChangeScrapName extends CategoryDetailEvent {
 
   @override
   List<Object?> get props => [scrapName];
+}
+
+class EventChangeUnitAndPrice extends CategoryDetailEvent {
+  final int index;
+  final String unit;
+  final String price;
+
+  EventChangeUnitAndPrice({
+    required this.index,
+    required this.unit,
+    required this.price,
+  });
+
+  @override
+  List<Object?> get props => [index, unit, price];
 }

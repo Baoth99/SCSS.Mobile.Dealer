@@ -1,5 +1,6 @@
 import 'package:dealer_app/providers/network/scrap_category_network.dart';
 import 'package:dealer_app/repositories/models/request_models/create_category_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/update_category_request_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -18,6 +19,8 @@ abstract class IScrapCategoryHandler {
     int? page,
     int? pageSize,
   });
+  Future<bool> updateScrapCategory(
+      {required UpdateScrapCategoryRequestModel model});
   Future<ScrapCategoryDetailModel> getScrapCategoryDetail({
     required String id,
   });
@@ -79,6 +82,25 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
         var responseBody = await ScrapCategoryNetWork.postScrapCategory(
           bearerToken: accessToken,
           body: createScrapCategoryRequestModelToJson(model),
+        );
+
+        return responseBody['isSuccess'];
+      } else
+        throw Exception(CustomTexts.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<bool> updateScrapCategory(
+      {required UpdateScrapCategoryRequestModel model}) async {
+    try {
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var responseBody = await ScrapCategoryNetWork.putScrapCategory(
+          bearerToken: accessToken,
+          body: updateScrapCategoryRequestModelToJson(model),
         );
 
         return responseBody['isSuccess'];

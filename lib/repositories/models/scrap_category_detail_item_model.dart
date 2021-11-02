@@ -1,3 +1,5 @@
+import 'package:dealer_app/utils/param_util.dart';
+
 class CategoryDetailItemModel {
   CategoryDetailItemModel({
     required this.id,
@@ -5,6 +7,13 @@ class CategoryDetailItemModel {
     required this.price,
     required this.status,
   });
+
+  CategoryDetailItemModel.updateCategoryModel({
+    this.id = CustomVar.zeroId,
+    required this.unit,
+    this.price = 0,
+    status,
+  }) : status = status ?? Status.ACTIVE.number;
 
   String id;
   String unit;
@@ -25,4 +34,20 @@ class CategoryDetailItemModel {
         "price": price,
         "status": status,
       };
+}
+
+enum Status {
+  ACTIVE,
+  DEACTIVE,
+}
+
+extension StatusExtension on Status {
+  int get number {
+    switch (this) {
+      case Status.ACTIVE:
+        return 1;
+      case Status.DEACTIVE:
+        return 2;
+    }
+  }
 }

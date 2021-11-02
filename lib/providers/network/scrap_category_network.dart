@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dealer_app/repositories/models/request_models/update_category_request_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
@@ -88,6 +89,22 @@ class ScrapCategoryNetWork {
       headers: headers,
       body: body,
     );
+
+    return json.decode(response.body);
+  }
+
+  static Future<Map<String, dynamic>> putScrapCategory({
+    required String bearerToken,
+    required String body,
+  }) async {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $bearerToken',
+    };
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPutScrapCategory);
+
+    final response = await http.put(uri, headers: headers, body: body);
 
     return json.decode(response.body);
   }
