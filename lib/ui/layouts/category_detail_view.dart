@@ -93,7 +93,7 @@ class CategoryDetailView extends StatelessWidget {
             appBar: AppBar(
               elevation: 1,
               title: Text(
-                CustomTexts.addCategoryScreenTitle,
+                CustomTexts.detail,
                 style: Theme.of(context).textTheme.headline2,
               ),
             ),

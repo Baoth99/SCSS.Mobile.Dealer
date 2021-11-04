@@ -65,7 +65,6 @@ class AddCategoryView extends StatelessWidget {
         ],
         child: Scaffold(
           appBar: AppBar(
-            elevation: 1,
             title: Text(
               CustomTexts.addCategoryScreenTitle,
               style: Theme.of(context).textTheme.headline2,
