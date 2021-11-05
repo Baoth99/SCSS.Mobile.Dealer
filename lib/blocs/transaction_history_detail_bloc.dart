@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionHistoryDetailBloc
     extends Bloc<TransactionHistoryDetailEvent, TransactionHistoryDetailState> {
-  final collectDealTransactionHandler =
+  final _collectDealTransactionHandler =
       getIt.get<ICollectDealTransactionHandler>();
-  final dataHandler = getIt.get<IDataHandler>();
+  final _dataHandler = getIt.get<IDataHandler>();
 
   TransactionHistoryDetailBloc({required this.id}) : super(NotLoadedState()) {
     add(EventInitData());
@@ -25,75 +25,21 @@ class TransactionHistoryDetailBloc
       var grandTotal;
       try {
         CDTransactionHistoryDetailModel model =
-            await collectDealTransactionHandler.getCollectDealHistoryDetail(
+            await _collectDealTransactionHandler.getCollectDealHistoryDetail(
                 id: id);
         grandTotal = model.total + model.totalBonus;
-        yield LoadedState(model: model, grandTotal: grandTotal);
+
+        var image;
+        if (model.profileURL.isNotEmpty) {
+          image = await _dataHandler.getImageBytes(imageUrl: model.profileURL);
+        }
+
+        yield LoadedState(model: model, grandTotal: grandTotal, image: image);
       } catch (e) {
         print(e);
         //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       }
     }
-    // if (event is EventLoadMoreTransactions) {
-    //   yield state.copyWith(process: TransactionDetailProcess.processing);
-    //   try {
-    //     // Clone list
-    //     var list =
-    //         List<CollectDealTransactionModel>.from(state.transactionList);
-    //     // Get new transactions
-    //     List<CollectDealTransactionModel> newList =
-    //         await collectDealTransactionHandler.getCollectDealHistories(
-    //       page: _currentPage + 1,
-    //       pageSize: _pageSize,
-    //       fromDate: state.fromDate,
-    //       toDate: state.toDate,
-    //       fromTotal: state.fromTotal,
-    //       toTotal: state.toTotal,
-    //     );
-    //     // If there is more transactions
-    //     if (newList.isNotEmpty) {
-    //       _currentPage += 1;
-    //       list.addAll(newList);
-    //       yield state.copyWith(
-    //           transactionList: list,
-    //           filteredTransactionList: _getTransactionListPhoneFiltered(
-    //             transactionList: list,
-    //             name: state.searchName,
-    //           ));
-    //     }
-    //     yield state.copyWith(process: TransactionDetailProcess.processed);
-    //   } catch (e) {
-    //     yield state.copyWith(process: TransactionDetailProcess.processed);
-    //     //  if (e.toString().contains(CustomAPIError.missingBearerToken))
-    //     // print(e);
-    //   } finally {
-    //     yield state.copyWith(process: TransactionDetailProcess.neutral);
-    //   }
-    // }
-    // if (event is EventChangeTotalRange) {
-    //   yield state.copyWith(
-    //     fromTotal: event.startValue.toInt(),
-    //     toTotal: event.endValue.toInt(),
-    //   );
-    // }
-    // if (event is EventChangeDate) {
-    //   yield state.copyWith(
-    //     fromDate: event.fromDate,
-    //     toDate: event.toDate,
-    //   );
-    // }
-    // if (event is EventResetFilter) {
-    //   yield state.resetFilter();
-    //   add(EventInitData());
-    // }
-    // if (event is EventChangeSearchName) {
-    //   yield state.copyWith(
-    //       searchPhone: event.searchName,
-    //       filteredTransactionList: _getTransactionListPhoneFiltered(
-    //         transactionList: state.transactionList,
-    //         name: event.searchName,
-    //       ));
-    // }
   }
 }

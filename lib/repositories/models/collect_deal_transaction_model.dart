@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+
 CollectDealTransactionModel collectDealTransactionModelFromJson(String str) =>
     CollectDealTransactionModel.fromJson(json.decode(str));
 
@@ -17,6 +19,7 @@ class CollectDealTransactionModel {
     required this.collectorName,
     required this.transactionDateTime,
     required this.total,
+    this.image,
   });
 
   String id;
@@ -24,6 +27,8 @@ class CollectDealTransactionModel {
   String collectorName;
   DateTime transactionDateTime;
   int total;
+
+  ImageProvider? image;
 
   factory CollectDealTransactionModel.fromJson(Map<String, dynamic> json) =>
       CollectDealTransactionModel(

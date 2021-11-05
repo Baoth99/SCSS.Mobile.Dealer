@@ -59,11 +59,11 @@ class CustomWidgets {
     );
   }
 
-  static CircleAvatar customAvatar({String? avatarLink}) {
+  static CircleAvatar customAvatar({ImageProvider? avatar}) {
     return CircleAvatar(
       backgroundColor: Colors.green,
       backgroundImage: AssetImage('assets/images/avatar_male_399x425.png'),
-      foregroundImage: avatarLink != null ? NetworkImage(avatarLink) : null,
+      foregroundImage: avatar != null ? avatar : null,
     );
   }
 

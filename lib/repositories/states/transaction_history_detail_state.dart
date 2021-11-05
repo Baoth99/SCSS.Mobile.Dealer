@@ -1,5 +1,6 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_history_detail_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 enum TransactionHistoryDetailProcess {
   neutral,
@@ -20,9 +21,18 @@ class NotLoadedState extends TransactionHistoryDetailState {
 class LoadedState extends TransactionHistoryDetailState {
   final CDTransactionHistoryDetailModel model;
   final int grandTotal;
+  final ImageProvider? image;
 
-  LoadedState({required this.model, required this.grandTotal});
+  LoadedState({
+    required this.model,
+    required this.grandTotal,
+    required this.image,
+  });
 
   @override
-  List<Object> get props => [model, grandTotal];
+  List<Object?> get props => [
+        model,
+        grandTotal,
+        image,
+      ];
 }

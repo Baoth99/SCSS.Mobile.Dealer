@@ -32,7 +32,7 @@ class CDTransactionHistoryDetailModel {
         collectorName:
             json["collectorName"] == null ? null : json["collectorName"],
         profileURL: json['profileURL'],
-        gender: json['profileURL'],
+        gender: json['gender'],
         transactionCode:
             json["transactionCode"] == null ? null : json["transactionCode"],
         transactionDate: DateFormat('dd-MM-yyy').parse(json["transactionDate"]),
