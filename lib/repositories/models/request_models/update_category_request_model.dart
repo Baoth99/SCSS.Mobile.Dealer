@@ -2,9 +2,9 @@
 //
 //     final updateScrapCategoryRequestModel = updateScrapCategoryRequestModelFromJson(jsonString);
 
-import 'package:dealer_app/utils/param_util.dart';
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:dealer_app/utils/param_util.dart';
 
 import '../scrap_category_detail_item_model.dart';
 
