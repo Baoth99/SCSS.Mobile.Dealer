@@ -18,7 +18,7 @@ class CollectDealTransactionNetWork {
       HttpHeaders.contentTypeHeader: 'application/json',
       HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
     };
-    Map<String, String> queryParams = {
+    Map<String, dynamic> queryParams = {
       'collectorId': collectorId,
     };
 

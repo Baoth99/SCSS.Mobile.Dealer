@@ -85,7 +85,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   Divider(),
                   Row(
                     children: [
-                      CustomWidgets.customAvatar(),
+                      CustomWidgets.customAvatar(avatar: state.image),
                       SizedBox(width: 20),
                       Text(state.model.collectorName),
                     ],

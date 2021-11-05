@@ -10,9 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransactionHistoryBloc
     extends Bloc<TransactionHistoryEvent, TransactionHistoryState> {
-  final collectDealTransactionHandler =
+  final _collectDealTransactionHandler =
       getIt.get<ICollectDealTransactionHandler>();
-  final dataHandler = getIt.get<IDataHandler>();
+  final _dataHandler = getIt.get<IDataHandler>();
 
   TransactionHistoryBloc() : super(TransactionHistoryState()) {
     add(EventInitData());
@@ -31,10 +31,10 @@ class TransactionHistoryBloc
       try {
         _currentPage = 1;
 
-        _collectorList = await dataHandler.getCollectorPhoneList();
+        _collectorList = await _dataHandler.getCollectorPhoneList();
 
         List<CollectDealTransactionModel> transactionList =
-            await collectDealTransactionHandler.getCollectDealHistories(
+            await _collectDealTransactionHandler.getCollectDealHistories(
           page: _initPage,
           pageSize: _pageSize,
           fromDate: state.fromDate,
@@ -49,6 +49,26 @@ class TransactionHistoryBloc
               name: state.searchName,
             ));
         yield state.copyWith(process: TransactionHistoryProcess.processed);
+
+        List<CollectDealTransactionModel> transactionListWithImage = [];
+        for (var item in transactionList) {
+          transactionListWithImage.add(new CollectDealTransactionModel(
+            collectorName: item.collectorName,
+            id: item.id,
+            total: item.total,
+            transactionDateTime: item.transactionDateTime,
+            collectorImage: item.collectorImage,
+          ));
+        }
+        transactionListWithImage =
+            await _addImages(list: transactionListWithImage);
+
+        yield state.copyWith(
+            transactionList: transactionListWithImage,
+            filteredTransactionList: _getTransactionListPhoneFiltered(
+              transactionList: transactionListWithImage,
+              name: state.searchName,
+            ));
       } catch (e) {
         print(e);
         yield state.copyWith(process: TransactionHistoryProcess.error);
@@ -66,7 +86,7 @@ class TransactionHistoryBloc
             List<CollectDealTransactionModel>.from(state.transactionList);
         // Get new transactions
         List<CollectDealTransactionModel> newList =
-            await collectDealTransactionHandler.getCollectDealHistories(
+            await _collectDealTransactionHandler.getCollectDealHistories(
           page: _currentPage + 1,
           pageSize: _pageSize,
           fromDate: state.fromDate,
@@ -86,6 +106,26 @@ class TransactionHistoryBloc
               ));
         }
         yield state.copyWith(process: TransactionHistoryProcess.processed);
+
+        List<CollectDealTransactionModel> transactionListWithImage = [];
+        for (var item in list) {
+          transactionListWithImage.add(new CollectDealTransactionModel(
+            collectorName: item.collectorName,
+            id: item.id,
+            total: item.total,
+            transactionDateTime: item.transactionDateTime,
+            collectorImage: item.collectorImage,
+          ));
+        }
+        transactionListWithImage =
+            await _addImages(list: transactionListWithImage);
+
+        yield state.copyWith(
+            transactionList: transactionListWithImage,
+            filteredTransactionList: _getTransactionListPhoneFiltered(
+              transactionList: transactionListWithImage,
+              name: state.searchName,
+            ));
       } catch (e) {
         yield state.copyWith(process: TransactionHistoryProcess.processed);
         //  if (e.toString().contains(CustomAPIError.missingBearerToken))
@@ -131,6 +171,19 @@ class TransactionHistoryBloc
         .where((element) =>
             element.collectorName.toLowerCase().contains(name.toLowerCase()))
         .toList();
+    return list;
+  }
+
+  Future<List<CollectDealTransactionModel>> _addImages(
+      {required List<CollectDealTransactionModel> list}) async {
+    for (var item in list) {
+      if (item.collectorImage != CustomTexts.emptyString &&
+          item.collectorImage != null)
+        item.image =
+            await _dataHandler.getImageBytes(imageUrl: item.collectorImage!);
+      else
+        item.image = null;
+    }
     return list;
   }
 }

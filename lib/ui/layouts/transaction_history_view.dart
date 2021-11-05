@@ -346,10 +346,6 @@ class TransactionHistoryView extends StatelessWidget {
   _transactionList() {
     return Flexible(
       child: BlocBuilder<TransactionHistoryBloc, TransactionHistoryState>(
-        buildWhen: (previous, current) {
-          return previous.filteredTransactionList.length !=
-              current.filteredTransactionList.length;
-        },
         builder: (context, state) {
           if (state.transactionList.isNotEmpty)
             return LazyLoadScrollView(
@@ -400,7 +396,7 @@ class TransactionHistoryView extends StatelessWidget {
     required BuildContext context,
   }) {
     return ListTile(
-      leading: CustomWidgets.customAvatar(avatarLink: model.collectorImage),
+      leading: CustomWidgets.customAvatar(avatar: model.image),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5))),
       tileColor: CustomColors.lightGray,
