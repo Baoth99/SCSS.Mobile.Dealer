@@ -39,7 +39,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
         //get info review
         return infoReview;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -60,7 +60,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
         //get info review
         return result;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -99,7 +99,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
         //get info review
         return resData;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -123,7 +123,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
         //get info review
         return resData;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }

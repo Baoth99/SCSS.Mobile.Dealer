@@ -43,11 +43,11 @@ class CollectorPhoneResponseModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "isSuccess": isSuccess == null ? null : isSuccess,
-        "statusCode": statusCode == null ? null : statusCode,
+        "isSuccess": isSuccess,
+        "statusCode": statusCode,
         "msgCode": msgCode,
         "msgDetail": msgDetail,
-        "total": total == null ? null : total,
+        "total": total,
         "resData": collectorPhoneModels == null
             ? null
             : List<dynamic>.from(collectorPhoneModels!.map((x) => x.toJson())),

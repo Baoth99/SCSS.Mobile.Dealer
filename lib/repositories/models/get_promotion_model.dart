@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class GetPromotionModel {
   GetPromotionModel({
     required this.id,
@@ -22,6 +24,8 @@ class GetPromotionModel {
   String appliedFromTime;
   String appliedToTime;
   int status;
+
+  ImageProvider? image;
 
   factory GetPromotionModel.fromJson(Map<String, dynamic> json) =>
       GetPromotionModel(

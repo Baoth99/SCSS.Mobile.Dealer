@@ -5,8 +5,8 @@ import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/handlers/promotion_handler.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
 import 'package:dealer_app/repositories/models/collector_phone_model.dart';
+import 'package:dealer_app/repositories/models/get_promotion_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
-import 'package:dealer_app/repositories/models/promotion_model.dart';
 import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
@@ -26,7 +26,7 @@ class CreateTransactionBloc
     add(EventInitValues());
   }
 
-  late List<PromotionModel> promotions;
+  late List<GetPromotionModel> promotions;
 
   @override
   Stream<CreateTransactionState> mapEventToState(

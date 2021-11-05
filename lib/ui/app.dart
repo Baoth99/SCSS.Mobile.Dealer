@@ -13,6 +13,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
+import 'layouts/promotion_list_view.dart';
 import 'layouts/register_branch_option_view.dart';
 import 'layouts/register_complete_view.dart';
 import 'layouts/register_otp_view.dart';
@@ -61,6 +62,7 @@ class DealerApp extends StatelessWidget {
           CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
           CustomRoutes.transactionHistoryDetailView: (_) =>
               TransactionHistoryDetailView(),
+          CustomRoutes.promotionListView: (_) => PromotionListView(),
         },
         home: LoginView(),
         builder: (context, child) {
@@ -103,12 +105,17 @@ class DealerApp extends StatelessWidget {
 
   _themeData() {
     return ThemeData(
+      primarySwatch: Colors.green,
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,
         iconTheme: IconThemeData(size: 25),
         actionsIconTheme: IconThemeData(size: 25),
+      ),
+      tabBarTheme: TabBarTheme(
+        labelColor: Colors.green,
+        unselectedLabelColor: Colors.black,
       ),
       dividerTheme: DividerThemeData(
         color: Color.fromARGB(255, 20, 20, 21),
@@ -129,16 +136,15 @@ class DealerApp extends StatelessWidget {
         bodyText1: TextStyle(
           fontSize: 15,
           color: Color.fromARGB(255, 20, 20, 21),
+          fontWeight: FontWeight.w500,
+        ),
+        // orange subtitle
+        bodyText2: TextStyle(
+          fontSize: 15,
+          color: Color.fromARGB(204, 228, 121, 7),
           // fontWeight: FontWeight.w500,
         ),
-        //orange subtitle
-        // bodyText2: TextStyle(
-        //   fontSize: 15,
-        //   color: Color.fromARGB(204, 228, 121, 7),
-        //   // fontWeight: FontWeight.w500,
-        // ),
       ),
-      primarySwatch: Colors.green,
     );
   }
 }

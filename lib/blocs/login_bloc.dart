@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(process: Process.processed);
       } on Exception catch (e) {
         //wrong password or phone number
-        if (e.toString().contains(CustomTexts.fetchTokenFailedException)) {
+        if (e.toString().contains(CustomAPIError.fetchTokenFailedException)) {
           //close progress indicator
           yield state.copyWith(process: Process.processed);
           yield state.copyWith(process: Process.invalid);

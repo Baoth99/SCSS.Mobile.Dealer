@@ -17,7 +17,7 @@ class DataNetWork {
       HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
     };
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetScrapCategoriesFromData);
+        CustomApiUrl.apiUrlGetScrapCategoriesFromData);
 
     final response = await http.get(uri, headers: headers);
 
@@ -29,7 +29,7 @@ class DataNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getScrapCategoriesFailedException);
+      throw Exception(CustomAPIError.getScrapCategoriesFailedException);
     }
   }
 
@@ -47,7 +47,7 @@ class DataNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetScrapCategoryDetails, queryParams);
+        CustomApiUrl.apiUrlGetScrapCategoryDetails, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -58,7 +58,7 @@ class DataNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getScrapCategoryDetailsFailedException);
+      throw Exception(CustomAPIError.getScrapCategoryDetailsFailedException);
     }
   }
 
@@ -72,7 +72,7 @@ class DataNetWork {
     };
 
     final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlGetCollectorPhones);
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlGetCollectorPhones);
 
     final response = await http.get(uri, headers: headers);
 
@@ -83,7 +83,7 @@ class DataNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getCollectorPhonesFailedException);
+      throw Exception(CustomAPIError.getCollectorPhonesFailedException);
     }
   }
 
@@ -101,7 +101,7 @@ class DataNetWork {
     };
 
     final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlGetImage, queryParams);
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlGetImage, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -112,7 +112,7 @@ class DataNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getImageFailedException);
+      throw Exception(CustomAPIError.getImageFailedException);
     }
   }
 }

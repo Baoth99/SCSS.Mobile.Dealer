@@ -7,14 +7,44 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;
 
 class PromotionNetwork {
+  static Future<bool> postPromotion({
+    required String bearerToken,
+    required String body,
+  }) async {
+    //add headers
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlPostPromotion);
+
+    final response = await http.post(
+      uri,
+      headers: headers,
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      if (response.body.contains('400')) return false;
+      // If the server did return a 200 OK response,
+      return true;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception(CustomAPIError.postCollectDealTransactionFailedException);
+    }
+  }
+
   static Future<GetPromotionResponseModel> getPromotion(
       {required String bearerToken}) async {
     //add headers
     Map<String, String> headers = {
       'Authorization': 'Bearer $bearerToken',
     };
-    final uri =
-        Uri.http(EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlGetPromotions);
+    final uri = Uri.http(
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlGetPromotions);
 
     final response = await http.get(uri, headers: headers);
 
@@ -25,7 +55,7 @@ class PromotionNetwork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getPromotionsFailedException);
+      throw Exception(CustomAPIError.getPromotionsFailedException);
     }
   }
 
@@ -43,7 +73,7 @@ class PromotionNetwork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetScrapCategorDetailFromScrapCategory, queryParams);
+        CustomApiUrl.apiUrlGetPromotionDetail, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -54,7 +84,7 @@ class PromotionNetwork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getScrapCategoryDetailsFailedException);
+      throw Exception(CustomAPIError.getPromotionDetailFailedException);
     }
   }
 }

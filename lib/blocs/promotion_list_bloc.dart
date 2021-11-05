@@ -1,149 +1,143 @@
 import 'package:dealer_app/providers/configs/injection_config.dart';
-import 'package:dealer_app/repositories/events/category_list_event.dart';
+import 'package:dealer_app/repositories/events/promotion_list_event.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
-import 'package:dealer_app/repositories/handlers/scrap_category_handler.dart';
-import 'package:dealer_app/repositories/models/scrap_category_model.dart';
-import 'package:dealer_app/repositories/states/category_list_state.dart';
+import 'package:dealer_app/repositories/handlers/promotion_handler.dart';
+import 'package:dealer_app/repositories/models/get_promotion_model.dart';
+import 'package:dealer_app/repositories/states/promotion_list_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PromotionListBloc extends Bloc<CategoryListEvent, CategoryListState> {
-  final _scrapCategoryHandler = getIt.get<IScrapCategoryHandler>();
+class PromotionListBloc extends Bloc<PromotionListEvent, PromotionListState> {
+  final _promotionHandler = getIt.get<IPromotionHandler>();
   final _dataHandler = getIt.get<IDataHandler>();
 
   PromotionListBloc() : super(NotLoadedState()) {
     add(EventInitData());
   }
 
-  final _initPage = 1;
-  final _pageSize = 15;
-  int _currentPage = 1;
-
   @override
-  Stream<CategoryListState> mapEventToState(CategoryListEvent event) async* {
+  Stream<PromotionListState> mapEventToState(PromotionListEvent event) async* {
     if (event is EventInitData) {
       yield NotLoadedState();
       try {
-        _currentPage = 1;
-
-        List<ScrapCategoryModel> categoryList =
-            await _scrapCategoryHandler.getScrapCategories(
-          page: _initPage,
-          pageSize: _pageSize,
-        );
+        List<GetPromotionModel> promotionList =
+            await _promotionHandler.getPromotions();
         yield LoadedState(
-          categoryList: categoryList,
-          filteredCategoryList:
-              _getCategoryListFiltered(categoryList: categoryList, name: ''),
+          promotionList: promotionList,
+          filteredPromotionList:
+              _getPromotionListFiltered(promotionList: promotionList, name: ''),
         );
 
         // Create new list
-        List<ScrapCategoryModel> categoryListWithImage = [];
-        for (var item in categoryList) {
-          categoryListWithImage.add(new ScrapCategoryModel.categoryListModel(
+        List<GetPromotionModel> promotionListWithImage = [];
+        for (var item in promotionList) {
+          promotionListWithImage.add(GetPromotionModel(
             id: item.id,
-            name: item.name,
-            image: item.image,
-            imageUrl: item.imageUrl,
+            code: item.code,
+            promotionName: item.promotionName,
+            appliedScrapCategory: item.appliedScrapCategory,
+            appliedScrapCategoryImageUrl: item.appliedScrapCategoryImageUrl,
+            appliedAmount: item.appliedAmount,
+            bonusAmount: item.bonusAmount,
+            appliedFromTime: item.appliedFromTime,
+            appliedToTime: item.appliedToTime,
+            status: item.status,
           ));
         }
-        categoryListWithImage = await _addImages(list: categoryListWithImage);
+        promotionListWithImage = await _addImages(list: promotionListWithImage);
         yield LoadedState(
-          categoryList: categoryListWithImage,
-          filteredCategoryList: _getCategoryListFiltered(
-              categoryList: categoryListWithImage, name: ''),
+          promotionList: promotionListWithImage,
+          filteredPromotionList: _getPromotionListFiltered(
+              promotionList: promotionListWithImage, name: ''),
         );
       } catch (e) {
         print(e);
         yield ErrorState(errorMessage: 'Đã có lỗi xảy ra, vui lòng thử lại');
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       }
     }
-    if (event is EventLoadMoreCategories) {
-      try {
-        // Get new transactions
-        List<ScrapCategoryModel> newList =
-            await _scrapCategoryHandler.getScrapCategories(
-          page: _currentPage + 1,
-          pageSize: _pageSize,
-        );
-        // If there is more transactions
-        if (newList.isNotEmpty) {
-          List<ScrapCategoryModel> categoryList =
-              List.from((state as LoadedState).categoryList);
-          _currentPage += 1;
-          categoryList.addAll(newList);
+    // if (event is EventLoadMoreCategories) {
+    //   try {
+    //     // Get new transactions
+    //     List<GetPromotionModel> newList =
+    //         await _promotionHandler.getPromotions();
+    //     // If there is more transactions
+    //     if (newList.isNotEmpty) {
+    //       List<GetPromotionModel> promotionList =
+    //           List.from((state as LoadedState).promotionList);
+    //       promotionList.addAll(newList);
 
-          yield (state as LoadedState).copyWith(
-            categoryList: categoryList,
-            filteredCategoryList: _getCategoryListFiltered(
-                categoryList: categoryList,
-                name: (state as LoadedState).searchName),
-          );
+    //       yield (state as LoadedState).copyWith(
+    //         promotionList: promotionList,
+    //         filteredPromotionList: _getPromotionListFiltered(
+    //             promotionList: promotionList,
+    //             name: (state as LoadedState).searchName),
+    //       );
 
-          List<ScrapCategoryModel> categoryListWithImage = [];
-          for (var item in categoryList) {
-            categoryListWithImage.add(new ScrapCategoryModel.categoryListModel(
-              id: item.id,
-              name: item.name,
-              image: item.image,
-              imageUrl: item.imageUrl,
-            ));
-          }
-          categoryListWithImage = await _addImages(list: categoryListWithImage);
-          yield (state as LoadedState).copyWith(
-            categoryList: categoryListWithImage,
-            filteredCategoryList: _getCategoryListFiltered(
-                categoryList: categoryListWithImage,
-                name: (state as LoadedState).searchName),
-          );
-        }
-      } catch (e) {
-        yield ErrorState(errorMessage: 'Đã có lỗi xảy ra, vui lòng thử lại');
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
-        // print(e);
-      }
-    }
+    //       List<GetPromotionModel> promotionListWithImage = [];
+    //       for (var item in promotionList) {
+    //         promotionListWithImage.add(GetPromotionModel(
+    //           id: item.id,
+    //           code: item.code,
+    //           promotionName: item.promotionName,
+    //           appliedScrapCategory: item.appliedScrapCategory,
+    //           appliedScrapCategoryImageUrl: item.appliedScrapCategoryImageUrl,
+    //           appliedAmount: item.appliedAmount,
+    //           bonusAmount: item.bonusAmount,
+    //           appliedFromTime: item.appliedFromTime,
+    //           appliedToTime: item.appliedToTime,
+    //           status: item.status,
+    //         ));
+    //       }
+    //       promotionListWithImage =
+    //           await _addImages(list: promotionListWithImage);
+    //       yield (state as LoadedState).copyWith(
+    //         promotionList: promotionListWithImage,
+    //         filteredPromotionList: _getPromotionListFiltered(
+    //             promotionList: promotionListWithImage,
+    //             name: (state as LoadedState).searchName),
+    //       );
+    //     }
+    //   } catch (e) {
+    //     yield ErrorState(errorMessage: 'Đã có lỗi xảy ra, vui lòng thử lại');
+    //     //  if (e.toString().contains(CustomAPIError.missingBearerToken))
+    //     // print(e);
+    //   }
+    // }
     if (event is EventChangeSearchName) {
       yield (state as LoadedState).copyWith(
         searchName: event.searchName,
-        filteredCategoryList: _sortedList(
-          _getCategoryListFiltered(
-              categoryList: (state as LoadedState).categoryList,
-              name: event.searchName),
-        ),
+        filteredPromotionList: _getPromotionListFiltered(
+            promotionList: (state as LoadedState).promotionList,
+            name: event.searchName),
       );
     }
   }
 
-  List<ScrapCategoryModel> _sortedList(List<ScrapCategoryModel> list) {
-    list.sort((a, b) => a.name.compareTo(b.name));
-    return list;
-  }
-
-  Future<List<ScrapCategoryModel>> _addImages(
-      {required List<ScrapCategoryModel> list}) async {
+  Future<List<GetPromotionModel>> _addImages(
+      {required List<GetPromotionModel> list}) async {
     for (var item in list) {
-      if (item.imageUrl != CustomTexts.emptyString)
-        item.image = await _dataHandler.getImageBytes(imageUrl: item.imageUrl);
+      if (item.appliedScrapCategoryImageUrl != CustomTexts.emptyString)
+        item.image = await _dataHandler.getImageBytes(
+            imageUrl: item.appliedScrapCategoryImageUrl);
       else
         item.image = null;
     }
     return list;
   }
 
-  List<ScrapCategoryModel> _getCategoryListFiltered({
-    required List<ScrapCategoryModel> categoryList,
+  List<GetPromotionModel> _getPromotionListFiltered({
+    required List<GetPromotionModel> promotionList,
     required String name,
   }) {
-    if (name == CustomTexts.emptyString) return categoryList;
+    if (name == CustomTexts.emptyString) return promotionList;
     // Check transactionList
-    if (categoryList.isEmpty) return List.empty();
+    if (promotionList.isEmpty) return List.empty();
     // return filtered List
-    List<ScrapCategoryModel> list = categoryList
+    List<GetPromotionModel> list = promotionList
         .where((element) =>
-            element.name.toLowerCase().contains(name.toLowerCase()))
+            element.promotionName.toLowerCase().contains(name.toLowerCase()))
         .toList();
 
     return list;

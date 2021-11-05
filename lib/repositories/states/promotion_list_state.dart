@@ -1,5 +1,26 @@
-import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:dealer_app/repositories/models/get_promotion_model.dart';
 import 'package:equatable/equatable.dart';
+
+enum PromotionStatus {
+  FUTURE,
+  CURRENT,
+  PAST,
+}
+
+extension PromotionStatusExtension on PromotionStatus {
+  int get statusInt {
+    switch (this) {
+      case PromotionStatus.FUTURE:
+        return 1;
+      case PromotionStatus.CURRENT:
+        return 2;
+      case PromotionStatus.PAST:
+        return 3;
+      default:
+        return 0;
+    }
+  }
+}
 
 abstract class PromotionListState extends Equatable {}
 
@@ -9,30 +30,31 @@ class NotLoadedState extends PromotionListState {
 }
 
 class LoadedState extends PromotionListState {
-  final List<ScrapCategoryModel> categoryList;
-  final List<ScrapCategoryModel> filteredCategoryList;
+  final List<GetPromotionModel> promotionList;
+  final List<GetPromotionModel> filteredPromotionList;
   final String searchName;
 
   LoadedState({
-    required this.categoryList,
-    required this.filteredCategoryList,
+    required this.promotionList,
+    required this.filteredPromotionList,
     this.searchName = '',
   });
 
   LoadedState copyWith({
-    List<ScrapCategoryModel>? categoryList,
-    List<ScrapCategoryModel>? filteredCategoryList,
+    List<GetPromotionModel>? promotionList,
+    List<GetPromotionModel>? filteredPromotionList,
     String? searchName,
   }) {
     return LoadedState(
-      categoryList: categoryList ?? this.categoryList,
-      filteredCategoryList: filteredCategoryList ?? this.filteredCategoryList,
+      promotionList: promotionList ?? this.promotionList,
+      filteredPromotionList:
+          filteredPromotionList ?? this.filteredPromotionList,
       searchName: searchName ?? this.searchName,
     );
   }
 
   @override
-  List<Object> get props => [categoryList, filteredCategoryList, searchName];
+  List<Object> get props => [promotionList, filteredPromotionList, searchName];
 }
 
 class ErrorState extends PromotionListState {

@@ -1,26 +1,24 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:dealer_app/blocs/category_list_bloc.dart';
-import 'package:dealer_app/repositories/events/category_list_event.dart';
-import 'package:dealer_app/repositories/models/scrap_category_model.dart';
-import 'package:dealer_app/repositories/states/category_list_state.dart';
+import 'package:dealer_app/blocs/promotion_list_bloc.dart';
+import 'package:dealer_app/repositories/events/promotion_list_event.dart';
+import 'package:dealer_app/repositories/models/get_promotion_model.dart';
+import 'package:dealer_app/repositories/states/promotion_list_state.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:grouped_list/grouped_list.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
-class CategoryListView extends StatelessWidget {
+class PromotionListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // category screen
     return BlocProvider(
-      create: (context) => CategoryListBloc(),
+      create: (context) => PromotionListBloc(),
       child: MultiBlocListener(
         listeners: [
-          BlocListener<CategoryListBloc, CategoryListState>(
+          BlocListener<PromotionListBloc, PromotionListState>(
             listener: (context, state) {
               if (state is NotLoadedState) {
                 EasyLoading.show(status: CustomTexts.processing);
@@ -41,9 +39,20 @@ class CategoryListView extends StatelessWidget {
             },
           ),
         ],
-        child: Scaffold(
-          appBar: _appBar(context),
-          body: _body(),
+        child: DefaultTabController(
+          length: 3,
+          child: Scaffold(
+            appBar: _appBar(context),
+            body: _body(
+              child: TabBarView(
+                children: [
+                  _list(status: PromotionStatus.FUTURE),
+                  _list(status: PromotionStatus.CURRENT),
+                  _list(status: PromotionStatus.PAST),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -53,19 +62,26 @@ class CategoryListView extends StatelessWidget {
     return AppBar(
       elevation: 0,
       title: Text(
-        CustomTexts.categoryScreenTitle,
+        CustomTexts.promotion,
         style: Theme.of(context).textTheme.headline1,
       ),
+      bottom: TabBar(
+        tabs: [
+          Tab(text: CustomTexts.upcoming),
+          Tab(text: CustomTexts.ongoing),
+          Tab(text: CustomTexts.finished),
+        ],
+      ),
       actions: [
-        BlocBuilder<CategoryListBloc, CategoryListState>(
+        BlocBuilder<PromotionListBloc, PromotionListState>(
           buildWhen: (p, c) => false,
           builder: (blocContext, state) {
             return InkWell(
-              onTap: () => Navigator.of(context)
-                  .pushNamed(CustomRoutes.addCategory)
-                  .then((value) {
-                blocContext.read<CategoryListBloc>().add(EventInitData());
-              }),
+              // onTap: () => Navigator.of(context)
+              //     .pushNamed(CustomRoutes.addPromotion)
+              //     .then((value) {
+              //   blocContext.read<PromotionListBloc>().add(EventInitData());
+              // }),
               child: Container(
                 width: 60,
                 child: Center(
@@ -81,7 +97,7 @@ class CategoryListView extends StatelessWidget {
     );
   }
 
-  Widget _body() {
+  Widget _body({required Widget child}) {
     return Container(
       child: Column(
         children: [
@@ -90,7 +106,7 @@ class CategoryListView extends StatelessWidget {
             child: _searchField(),
           ),
           Flexible(
-            child: _list(),
+            child: child,
           ),
         ],
       ),
@@ -98,7 +114,7 @@ class CategoryListView extends StatelessWidget {
   }
 
   _searchField() {
-    return BlocBuilder<CategoryListBloc, CategoryListState>(
+    return BlocBuilder<PromotionListBloc, PromotionListState>(
       buildWhen: (p, c) => false,
       builder: (context, state) {
         return Container(
@@ -115,7 +131,7 @@ class CategoryListView extends StatelessWidget {
             ),
             onChanged: (value) {
               context
-                  .read<CategoryListBloc>()
+                  .read<PromotionListBloc>()
                   .add(EventChangeSearchName(searchName: value));
             },
           ),
@@ -124,35 +140,27 @@ class CategoryListView extends StatelessWidget {
     );
   }
 
-  _list() {
-    return BlocBuilder<CategoryListBloc, CategoryListState>(
+  _list({required PromotionStatus status}) {
+    return BlocBuilder<PromotionListBloc, PromotionListState>(
       builder: (blocContext, state) {
         if (state is LoadedState) {
-          if (state.filteredCategoryList.isNotEmpty) {
-            return LazyLoadScrollView(
-                scrollDirection: Axis.vertical,
-                onEndOfPage: () {
-                  print('load more');
-                  _loadMoreTransactions(blocContext);
+          if (state.filteredPromotionList.isNotEmpty) {
+            return RefreshIndicator(
+                onRefresh: () async {
+                  print('init');
+                  blocContext.read<PromotionListBloc>().add(EventInitData());
                 },
-                child: RefreshIndicator(
-                  onRefresh: () async {
-                    print('init');
-                    blocContext.read<CategoryListBloc>().add(EventInitData());
-                  },
-                  child: GroupedListView<ScrapCategoryModel, String>(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
-                    physics: AlwaysScrollableScrollPhysics(),
-                    elements: state.filteredCategoryList,
-                    order: GroupedListOrder.ASC,
-                    groupBy: (ScrapCategoryModel element) =>
-                        element.name.characters.first.toUpperCase(),
-                    groupSeparatorBuilder: (String element) =>
-                        _groupSeparatorBuilder(name: element),
-                    itemBuilder: (context, element) =>
-                        _listTileBuilder(model: element, context: context),
-                    separator: SizedBox(height: 10),
+                child: ListView.separated(
+                  itemCount: state.filteredPromotionList
+                      .where((element) => element.status == status.statusInt)
+                      .length,
+                  itemBuilder: (context, index) => _listTileBuilder(
+                    model: state.filteredPromotionList
+                        .where((element) => element.status == status.statusInt)
+                        .elementAt(index),
+                    context: context,
                   ),
+                  separatorBuilder: (context, index) => SizedBox(height: 5),
                 ));
           } else {
             return Center(
@@ -172,12 +180,8 @@ class CategoryListView extends StatelessWidget {
     );
   }
 
-  _groupSeparatorBuilder({required String name}) {
-    return Container(child: Text(name.characters.first.toUpperCase()));
-  }
-
-  _listTileBuilder({required ScrapCategoryModel model, required context}) {
-    return BlocBuilder<CategoryListBloc, CategoryListState>(
+  _listTileBuilder({required GetPromotionModel model, required context}) {
+    return BlocBuilder<PromotionListBloc, PromotionListState>(
         builder: (blocContext, state) {
       return ListTile(
         tileColor: Colors.white,
@@ -211,7 +215,7 @@ class CategoryListView extends StatelessWidget {
             ),
           ),
         ),
-        title: Text(model.name),
+        title: Text(model.promotionName),
         onTap: () => Navigator.of(context)
             .pushNamed(
           CustomRoutes.categoryDetail,
@@ -219,14 +223,14 @@ class CategoryListView extends StatelessWidget {
         )
             .then(
           (value) {
-            blocContext.read<CategoryListBloc>().add(EventInitData());
+            blocContext.read<PromotionListBloc>().add(EventInitData());
           },
         ),
       );
     });
   }
 
-  Future _loadMoreTransactions(BuildContext context) async {
-    context.read<CategoryListBloc>().add(EventLoadMoreCategories());
-  }
+  // Future _loadMoreTransactions(BuildContext context) async {
+  //   context.read<PromotionListBloc>().add(EventLoadMoreCategories());
+  // }
 }

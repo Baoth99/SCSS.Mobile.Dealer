@@ -29,9 +29,9 @@ class ScrapCategoryUnitModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "unit": unit == null ? null : unit,
-        "price": price == null ? null : price,
+        "id": id,
+        "unit": unit,
+        "price": price,
       };
 }
 

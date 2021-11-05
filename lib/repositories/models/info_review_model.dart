@@ -36,10 +36,9 @@ class InfoReviewModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "collectorId": collectorId == null ? null : collectorId,
-        "collectorName": collectorName == null ? null : collectorName,
-        "collectorPhone": collectorPhone == null ? null : collectorPhone,
-        "transactionFeePercent":
-            transactionFeePercent == null ? null : transactionFeePercent,
+        "collectorId": collectorId,
+        "collectorName": collectorName,
+        "collectorPhone": collectorPhone,
+        "transactionFeePercent": transactionFeePercent,
       };
 }

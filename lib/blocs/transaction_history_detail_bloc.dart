@@ -31,7 +31,7 @@ class TransactionHistoryDetailBloc
         yield LoadedState(model: model, grandTotal: grandTotal);
       } catch (e) {
         print(e);
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       }
     }
@@ -65,7 +65,7 @@ class TransactionHistoryDetailBloc
     //     yield state.copyWith(process: TransactionDetailProcess.processed);
     //   } catch (e) {
     //     yield state.copyWith(process: TransactionDetailProcess.processed);
-    //     //  if (e.toString().contains(CustomTexts.missingBearerToken))
+    //     //  if (e.toString().contains(CustomAPIError.missingBearerToken))
     //     // print(e);
     //   } finally {
     //     yield state.copyWith(process: TransactionDetailProcess.neutral);

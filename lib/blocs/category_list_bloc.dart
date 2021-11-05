@@ -56,7 +56,7 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
       } catch (e) {
         print(e);
         yield ErrorState(errorMessage: 'Đã có lỗi xảy ra, vui lòng thử lại');
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       }
     }
@@ -101,7 +101,7 @@ class CategoryListBloc extends Bloc<CategoryListEvent, CategoryListState> {
         }
       } catch (e) {
         yield ErrorState(errorMessage: 'Đã có lỗi xảy ra, vui lòng thử lại');
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       }
     }
