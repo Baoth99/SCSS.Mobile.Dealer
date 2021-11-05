@@ -32,7 +32,7 @@ class LoginNetwork {
       'scope': scope
     };
     final response = await http.post(
-        Uri.parse(EnvID4AppSettingValue.apiUrl + CustomTexts.apiUrlTokenLink),
+        Uri.parse(EnvID4AppSettingValue.apiUrl + CustomApiUrl.apiUrlTokenLink),
         body: body);
 
     if (response.statusCode == 200) {
@@ -40,9 +40,9 @@ class LoginNetwork {
       // then parse the JSON.
       return AccessTokenHolderModel.fromJson(jsonDecode(response.body));
     } else if (response.statusCode == 400) {
-      throw Exception(CustomTexts.fetchTokenFailedException);
+      throw Exception(CustomAPIError.fetchTokenFailedException);
     } else {
-      throw Exception(CustomTexts.loginFailedException);
+      throw Exception(CustomAPIError.loginFailedException);
     }
   }
 }

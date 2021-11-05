@@ -33,7 +33,7 @@ class DataHandler implements IDataHandler {
         //get scrap categories
         return scrapCategories;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -58,7 +58,7 @@ class DataHandler implements IDataHandler {
         //get scrap category details
         return scrapCategoryDetails;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -77,7 +77,7 @@ class DataHandler implements IDataHandler {
         //get collector phones
         return collectorPhones;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -96,7 +96,7 @@ class DataHandler implements IDataHandler {
         ));
         return image;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }

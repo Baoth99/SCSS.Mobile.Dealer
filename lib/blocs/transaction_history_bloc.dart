@@ -52,7 +52,7 @@ class TransactionHistoryBloc
       } catch (e) {
         print(e);
         yield state.copyWith(process: TransactionHistoryProcess.error);
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       } finally {
         yield state.copyWith(process: TransactionHistoryProcess.neutral);
@@ -88,7 +88,7 @@ class TransactionHistoryBloc
         yield state.copyWith(process: TransactionHistoryProcess.processed);
       } catch (e) {
         yield state.copyWith(process: TransactionHistoryProcess.processed);
-        //  if (e.toString().contains(CustomTexts.missingBearerToken))
+        //  if (e.toString().contains(CustomAPIError.missingBearerToken))
         // print(e);
       } finally {
         yield state.copyWith(process: TransactionHistoryProcess.neutral);

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dealer_app/repositories/models/request_models/update_category_request_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/category_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
@@ -21,7 +20,7 @@ class ScrapCategoryNetWork {
     };
 
     final uri =
-        Uri.http(EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostImage);
+        Uri.http(EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlPostImage);
 
     // Create multipart request
     var request = http.MultipartRequest("POST", uri);
@@ -46,7 +45,7 @@ class ScrapCategoryNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.postImageFailedException);
+      throw Exception(CustomAPIError.postImageFailedException);
     }
   }
 
@@ -64,7 +63,7 @@ class ScrapCategoryNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetCheckScrapCategoryName, queryParams);
+        CustomApiUrl.apiUrlGetCheckScrapCategoryName, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -82,7 +81,7 @@ class ScrapCategoryNetWork {
     };
 
     final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPostScrapCategory);
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlPostScrapCategory);
 
     final response = await http.post(
       uri,
@@ -102,7 +101,7 @@ class ScrapCategoryNetWork {
       'Authorization': 'Bearer $bearerToken',
     };
     final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPutScrapCategory);
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlPutScrapCategory);
 
     final response = await http.put(uri, headers: headers, body: body);
 
@@ -124,7 +123,7 @@ class ScrapCategoryNetWork {
     if (pageSize != null) queryParams.putIfAbsent('PageSize', () => pageSize);
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetScrapCategoriesFromScrapCategory, queryParams);
+        CustomApiUrl.apiUrlGetScrapCategoriesFromScrapCategory, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -135,7 +134,7 @@ class ScrapCategoryNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getScrapCategoriesFailedException);
+      throw Exception(CustomAPIError.getScrapCategoriesFailedException);
     }
   }
 
@@ -153,7 +152,7 @@ class ScrapCategoryNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetScrapCategorDetailFromScrapCategory, queryParams);
+        CustomApiUrl.apiUrlGetScrapCategorDetailFromScrapCategory, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -164,7 +163,7 @@ class ScrapCategoryNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getScrapCategoryDetailsFailedException);
+      throw Exception(CustomAPIError.getScrapCategoryDetailsFailedException);
     }
   }
 
@@ -181,7 +180,7 @@ class ScrapCategoryNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlDeleteScrapCategory, params);
+        CustomApiUrl.apiUrlDeleteScrapCategory, params);
 
     final response = await http.delete(uri, headers: headers);
 

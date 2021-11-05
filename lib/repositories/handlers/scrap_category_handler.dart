@@ -46,7 +46,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
         // Return image path on server
         return resData;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -67,7 +67,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         return responseBody['isSuccess'];
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -87,7 +87,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         return responseBody['isSuccess'];
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -106,7 +106,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         return responseBody['isSuccess'];
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -131,7 +131,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
         //get scrap categories
         return scrapCategories;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -155,7 +155,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
         //get scrap categories
         return scrapCategoryDetailModel;
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }
@@ -173,7 +173,7 @@ class ScrapCategoryHandler implements IScrapCategoryHandler {
 
         return responseBody['isSuccess'];
       } else
-        throw Exception(CustomTexts.missingBearerToken);
+        throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {
       throw (e);
     }

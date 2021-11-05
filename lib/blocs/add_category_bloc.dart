@@ -1,7 +1,5 @@
 import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/repositories/events/add_category_event.dart';
-import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
-import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/handlers/scrap_category_handler.dart';
 import 'package:dealer_app/repositories/models/request_models/create_category_request_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';

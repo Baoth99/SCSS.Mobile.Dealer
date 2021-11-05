@@ -1,5 +1,6 @@
 import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,8 +13,11 @@ class HomeView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: Center(
-            child: Text(context.select((AuthenticationBloc bloc) =>
-                bloc.state.user?.name ?? 'no dealer name')),
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, CustomRoutes.promotionListView);
+                },
+                child: Text('promotion')),
           ),
         );
       },

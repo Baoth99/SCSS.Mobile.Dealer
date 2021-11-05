@@ -1,4 +1,3 @@
-import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 

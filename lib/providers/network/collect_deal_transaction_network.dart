@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_history_detail_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/collect_deal_transaction_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/info_review_response_model.dart';
-import 'package:dealer_app/repositories/models/response_models/upload_image_response_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +23,7 @@ class CollectDealTransactionNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetInfoReview, queryParams);
+        CustomApiUrl.apiUrlGetInfoReview, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -35,7 +34,7 @@ class CollectDealTransactionNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getInfoReviewFailedException);
+      throw Exception(CustomAPIError.getInfoReviewFailedException);
     }
   }
 
@@ -50,7 +49,7 @@ class CollectDealTransactionNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlPostCollectDealTransaction);
+        CustomApiUrl.apiUrlPostCollectDealTransaction);
 
     final response = await http.post(
       uri,
@@ -65,7 +64,7 @@ class CollectDealTransactionNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.postCollectDealTransactionFailedException);
+      throw Exception(CustomAPIError.postCollectDealTransactionFailedException);
     }
   }
 
@@ -96,7 +95,7 @@ class CollectDealTransactionNetWork {
     if (pageSize != null) queryParams.putIfAbsent('PageSize', () => pageSize);
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetCollectDealHistories, queryParams);
+        CustomApiUrl.apiUrlGetCollectDealHistories, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -107,7 +106,7 @@ class CollectDealTransactionNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getCollectDealHistoriesFailedException);
+      throw Exception(CustomAPIError.getCollectDealHistoriesFailedException);
     }
   }
 
@@ -126,7 +125,7 @@ class CollectDealTransactionNetWork {
     };
 
     final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
-        CustomTexts.apiUrlGetCollectDealHistoryDetail, queryParams);
+        CustomApiUrl.apiUrlGetCollectDealHistoryDetail, queryParams);
 
     final response = await http.get(uri, headers: headers);
 
@@ -137,7 +136,8 @@ class CollectDealTransactionNetWork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.getCollectDealHistoryDetailFailedException);
+      throw Exception(
+          CustomAPIError.getCollectDealHistoryDetailFailedException);
     }
   }
 }

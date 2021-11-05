@@ -18,6 +18,7 @@ class CustomTexts {
   static const String transactionHistoryScreenTitle = 'Lịch sử giao dịch';
   static const String transactionHistoryDetailScreenTitle =
       'Chi tiết giao dịch';
+  static const String promotion = 'Khuyến mãi';
   //login_view
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';
@@ -35,66 +36,6 @@ class CustomTexts {
   static const String forgetPasswordTextButton = 'Lấy lại mật khẩu';
   static const String register = 'Bạn chưa có tài khoản?';
   static const String registerTextButton = 'Đăng ký';
-  //api id4
-  static const String apiUrlTokenLink = 'connect/token';
-  //app api
-  static const String apiUrlDealerInfoLink =
-      '/api/v3/dealer/account/dealer-info';
-  static const String apiUrlPutDeviceId = '/api/v3/dealer/account/device-id';
-  static const String apiUrlGetPromotions = '/api/v3/promotion/get';
-  static const String apiUrlGetScrapCategoriesFromData =
-      '/api/v3/trans/scrap-categories';
-  static const String apiUrlGetScrapCategoryDetails =
-      '/api/v3/trans/scrap-category-detail';
-  static const String apiUrlGetCollectorPhones =
-      '/api/v3/auto-complete/collector-phone';
-  static const String apiUrlGetInfoReview =
-      '/api/v3/transaction/collect-deal/info-review';
-  static const String apiUrlPostCollectDealTransaction =
-      '/api/v3/transaction/collect-deal/create';
-  static const String apiUrlGetCollectDealHistories =
-      '/api/v3/transaction/collect-deal/histories';
-  static const String apiUrlGetCollectDealHistoryDetail =
-      '/api/v3/transaction/collect-deal/history-detail';
-  static const String apiUrlGetScrapCategoriesFromScrapCategory =
-      '/api/v3/scrap-category/get';
-  static const String apiUrlGetImage = '/api/v3/image/get';
-  static const String apiUrlPostImage = '/api/v3/scrap-category/upload-image';
-  static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
-  static const String apiUrlGetCheckScrapCategoryName =
-      '/api/v3/scrap-category/check-name';
-  static const String apiUrlGetScrapCategorDetailFromScrapCategory =
-      '/api/v3/scrap-category/get-detail';
-  static const String apiUrlPutScrapCategory = '/api/v3/scrap-category/update';
-  static const String apiUrlDeleteScrapCategory =
-      '/api/v3/scrap-category/remove';
-  //api throws
-  static const String loginFailedException = 'Login failed';
-  static const String fetchTokenFailedException = 'Failed to fetch token';
-  static const String fetchDealerInfoFailedException =
-      'Failed to fetch user info';
-  static const String putDeviceIdFailedException = 'Failed to put device Id';
-  static const String getPromotionsFailedException = 'Failed to get promotions';
-  static const String getScrapCategoriesFailedException =
-      'Failed to get scrap categories';
-  static const String getScrapCategoryDetailsFailedException =
-      'Failed to get scrap category details';
-  static const String getCollectorPhonesFailedException =
-      'Failed to get collector phones';
-  static const String getInfoReviewFailedException =
-      'Failed to get info review';
-  static const String postCollectDealTransactionFailedException =
-      'Failed to put collect deal transaction';
-  static const String getCollectDealHistoriesFailedException =
-      'Failed to Get Collect Deal Histories';
-  static const String missingBearerToken =
-      'Missing bearer token from secure storage';
-  static const String getCollectDealHistoryDetailFailedException =
-      'Failed to Get Collect Deal History Detail';
-  static const String getImageFailedException = 'Failed to Get Image';
-  static const String postImageFailedException = 'Failed to Post Image';
-  static const String postScrapCategoryFailedException =
-      'Failed to Post Scrap Category';
   //register
   static const String registerWelcomeText =
       'Xin chào, số điện thoại của bạn là?';
@@ -215,6 +156,78 @@ class CustomTexts {
   static const String delete = 'Xoá';
   static String deleteScrapCategory({required String name}) =>
       'Xoá danh mục $name ?';
+  static const String upcoming = 'Sắp diễn ra';
+  static const String ongoing = 'Đang diễn ra';
+  static const String finished = 'Đã kết thúc';
+}
+
+class CustomApiUrl {
+  //api id4
+  static const String apiUrlTokenLink = 'connect/token';
+  //app api
+  static const String apiUrlDealerInfoLink =
+      '/api/v3/dealer/account/dealer-info';
+  static const String apiUrlPutDeviceId = '/api/v3/dealer/account/device-id';
+  static const String apiUrlGetPromotions = '/api/v3/promotion/get';
+  static const String apiUrlGetScrapCategoriesFromData =
+      '/api/v3/trans/scrap-categories';
+  static const String apiUrlGetScrapCategoryDetails =
+      '/api/v3/trans/scrap-category-detail';
+  static const String apiUrlGetCollectorPhones =
+      '/api/v3/auto-complete/collector-phone';
+  static const String apiUrlGetInfoReview =
+      '/api/v3/transaction/collect-deal/info-review';
+  static const String apiUrlPostCollectDealTransaction =
+      '/api/v3/transaction/collect-deal/create';
+  static const String apiUrlGetCollectDealHistories =
+      '/api/v3/transaction/collect-deal/histories';
+  static const String apiUrlGetCollectDealHistoryDetail =
+      '/api/v3/transaction/collect-deal/history-detail';
+  static const String apiUrlGetScrapCategoriesFromScrapCategory =
+      '/api/v3/scrap-category/get';
+  static const String apiUrlGetImage = '/api/v3/image/get';
+  static const String apiUrlPostImage = '/api/v3/scrap-category/upload-image';
+  static const String apiUrlPostScrapCategory = '/api/v3/scrap-category/create';
+  static const String apiUrlGetCheckScrapCategoryName =
+      '/api/v3/scrap-category/check-name';
+  static const String apiUrlGetScrapCategorDetailFromScrapCategory =
+      '/api/v3/scrap-category/get-detail';
+  static const String apiUrlPutScrapCategory = '/api/v3/scrap-category/update';
+  static const String apiUrlDeleteScrapCategory =
+      '/api/v3/scrap-category/remove';
+  static const String apiUrlPostPromotion = '/api/v3/promotion/create';
+  static const String apiUrlGetPromotionDetail = '/api/v3/promotion/get-detail';
+}
+
+class CustomAPIError {
+  static const String loginFailedException = 'Login failed';
+  static const String fetchTokenFailedException = 'Failed to fetch token';
+  static const String fetchDealerInfoFailedException =
+      'Failed to fetch user info';
+  static const String putDeviceIdFailedException = 'Failed to put device Id';
+  static const String getPromotionsFailedException = 'Failed to get promotions';
+  static const String getScrapCategoriesFailedException =
+      'Failed to get scrap categories';
+  static const String getScrapCategoryDetailsFailedException =
+      'Failed to get scrap category details';
+  static const String getCollectorPhonesFailedException =
+      'Failed to get collector phones';
+  static const String getInfoReviewFailedException =
+      'Failed to get info review';
+  static const String postCollectDealTransactionFailedException =
+      'Failed to put collect deal transaction';
+  static const String getCollectDealHistoriesFailedException =
+      'Failed to Get Collect Deal Histories';
+  static const String missingBearerToken =
+      'Missing bearer token from secure storage';
+  static const String getCollectDealHistoryDetailFailedException =
+      'Failed to Get Collect Deal History Detail';
+  static const String getImageFailedException = 'Failed to Get Image';
+  static const String postImageFailedException = 'Failed to Post Image';
+  static const String postScrapCategoryFailedException =
+      'Failed to Post Scrap Category';
+  static const String getPromotionDetailFailedException =
+      'Failed to get promotion detail';
 }
 
 class CustomFormats {
@@ -250,6 +263,7 @@ class CustomRoutes {
   static const String transactionFilter = '/transactionFilter';
   static const String transactionHistoryDetailView =
       '/transactionHistoryDetailView';
+  static const String promotionListView = '/promotionListView';
 }
 
 class CustomKeys {

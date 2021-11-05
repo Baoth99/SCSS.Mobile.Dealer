@@ -13,7 +13,7 @@ class AccountNetwork {
       'Authorization': 'Bearer $bearerToken',
     };
     final uri = Uri.http(
-        EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlDealerInfoLink);
+        EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlDealerInfoLink);
 
     final response = await http.get(uri, headers: headers);
 
@@ -24,7 +24,7 @@ class AccountNetwork {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception(CustomTexts.fetchDealerInfoFailedException);
+      throw Exception(CustomAPIError.fetchDealerInfoFailedException);
     }
   }
 
@@ -38,14 +38,14 @@ class AccountNetwork {
       'deviceId': deivceId,
     });
     final uri =
-        Uri.http(EnvAppApiSettingValue.apiUrl, CustomTexts.apiUrlPutDeviceId);
+        Uri.http(EnvAppApiSettingValue.apiUrl, CustomApiUrl.apiUrlPutDeviceId);
 
     final response = await http.put(uri, headers: headers, body: body);
 
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception(CustomTexts.putDeviceIdFailedException);
+      throw Exception(CustomAPIError.putDeviceIdFailedException);
     }
   }
 }
