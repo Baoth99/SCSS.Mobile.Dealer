@@ -159,6 +159,8 @@ class CustomTexts {
   static const String upcoming = 'Sắp diễn ra';
   static const String ongoing = 'Đang diễn ra';
   static const String finished = 'Đã kết thúc';
+  static const String noPromotion = 'Không có khuyến mãi';
+  static const String searchPromotionName = 'Tìm tên khuyến mãi';
 }
 
 class CustomApiUrl {

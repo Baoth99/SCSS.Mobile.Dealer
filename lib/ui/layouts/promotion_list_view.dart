@@ -13,7 +13,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class PromotionListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // category screen
     return BlocProvider(
       create: (context) => PromotionListBloc(),
       child: MultiBlocListener(
@@ -124,7 +123,7 @@ class PromotionListView extends StatelessWidget {
             decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-              labelText: 'Tìm danh mục...',
+              labelText: CustomTexts.searchPromotionName,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               prefixIcon:
                   Icon(Icons.search, color: Theme.of(context).accentColor),
@@ -151,10 +150,11 @@ class PromotionListView extends StatelessWidget {
                   blocContext.read<PromotionListBloc>().add(EventInitData());
                 },
                 child: ListView.separated(
+                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                   itemCount: state.filteredPromotionList
                       .where((element) => element.status == status.statusInt)
                       .length,
-                  itemBuilder: (context, index) => _listTileBuilder(
+                  itemBuilder: (context, index) => _cardBuilder(
                     model: state.filteredPromotionList
                         .where((element) => element.status == status.statusInt)
                         .elementAt(index),
@@ -164,13 +164,13 @@ class PromotionListView extends StatelessWidget {
                 ));
           } else {
             return Center(
-              child: Text('Không có danh mục'),
+              child: Text(CustomTexts.noPromotion),
             );
           }
         } else {
           if (state is NotLoadedState) {
             return Center(
-              child: Text('Không có danh mục'),
+              child: Text(CustomTexts.noPromotion),
             );
           } else {
             return CustomWidgets.customErrorWidget();
@@ -180,57 +180,63 @@ class PromotionListView extends StatelessWidget {
     );
   }
 
-  _listTileBuilder({required GetPromotionModel model, required context}) {
+  _cardBuilder({required GetPromotionModel model, required context}) {
     return BlocBuilder<PromotionListBloc, PromotionListState>(
         builder: (blocContext, state) {
-      return ListTile(
-        tileColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        leading: SizedBox(
-          width: 45.0,
-          height: 45.0,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5.0),
-            child: Stack(
-              children: [
-                const SizedBox(
-                  width: 45.0,
-                  height: 45.0,
-                  child: const DecoratedBox(
-                    decoration: const BoxDecoration(color: Colors.green),
-                  ),
+      return Card(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(model.promotionName),
+                    SizedBox(height: 5),
+                    Text(
+                        '${CustomFormats.currencyFormat.format(model.bonusAmount)} thưởng'),
+                    Text(
+                        '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
+                    Text('${model.appliedFromTime} - ${model.appliedToTime}'),
+                  ],
                 ),
-                if (model.image != null)
-                  Positioned(
-                    width: 45.0,
-                    height: 45.0,
-                    child: Image(
-                      image: model.image!,
-                      fit: BoxFit.cover,
+              ),
+              SizedBox(
+                width: 80,
+                height: 80,
+                child: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Stack(
+                      children: [
+                        const SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: const DecoratedBox(
+                            decoration:
+                                const BoxDecoration(color: Colors.green),
+                          ),
+                        ),
+                        if (model.image != null)
+                          Positioned(
+                            width: 80,
+                            height: 80,
+                            child: Image(
+                              image: model.image!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
-        ),
-        title: Text(model.promotionName),
-        onTap: () => Navigator.of(context)
-            .pushNamed(
-          CustomRoutes.categoryDetail,
-          arguments: model.id,
-        )
-            .then(
-          (value) {
-            blocContext.read<PromotionListBloc>().add(EventInitData());
-          },
         ),
       );
     });
   }
-
-  // Future _loadMoreTransactions(BuildContext context) async {
-  //   context.read<PromotionListBloc>().add(EventLoadMoreCategories());
-  // }
 }
