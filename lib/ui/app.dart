@@ -3,6 +3,7 @@ import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/user_handler.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/ui/layouts/category_detail_view.dart';
+import 'package:dealer_app/ui/layouts/category_list_view.dart';
 import 'package:dealer_app/ui/layouts/create_transaction_view.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -65,6 +66,7 @@ class DealerApp extends StatelessWidget {
               TransactionHistoryDetailView(),
           CustomRoutes.promotionListView: (_) => PromotionListView(),
           CustomRoutes.promotionDetailView: (_) => PromotionDetailView(),
+          CustomRoutes.categoryList: (_) => CategoryListView(),
         },
         home: LoginView(),
         builder: (context, child) {
