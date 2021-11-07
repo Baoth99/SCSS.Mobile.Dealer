@@ -3,13 +3,6 @@ import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class BotNavUtils {
-  static const int stateHomeIndex = 0;
-  static const int stateNotificationIndex = 1;
-  static const int stateCategoryIndex = 3;
-  static const int stateHistoryIndex = 4;
-}
-
 class CustomTexts {
   static const String categoryScreenTitle = 'Danh mục';
   static const String addCategoryScreenTitle = 'Thêm danh mục';

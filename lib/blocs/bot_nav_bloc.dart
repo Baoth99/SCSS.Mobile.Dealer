@@ -7,19 +7,6 @@ class BotNavBloc extends Bloc<BotNavEvent, BotNavState> {
 
   @override
   Stream<BotNavState> mapEventToState(BotNavEvent event) async* {
-    switch (event) {
-      case BotNavEvent.eventTapHome:
-        yield StateHome();
-        break;
-      case BotNavEvent.eventTapNotification:
-        yield StateNotification();
-        break;
-      case BotNavEvent.eventTapCategory:
-        yield StateCategory();
-        break;
-      case BotNavEvent.eventTapHistory:
-        yield StateHistory();
-        break;
-    }
+    if (event is EventTap) yield BotNavState(event.index);
   }
 }
