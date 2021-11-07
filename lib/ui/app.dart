@@ -10,9 +10,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
+import 'layouts/promotion_detail_view.dart';
 import 'layouts/promotion_list_view.dart';
 import 'layouts/register_branch_option_view.dart';
 import 'layouts/register_complete_view.dart';
@@ -22,7 +24,6 @@ import 'layouts/register_store_info_view.dart';
 import 'layouts/register_view.dart';
 import 'layouts/transaction_history_detail_view.dart';
 import 'layouts/transaction_history_view.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class DealerApp extends StatelessWidget {
   final AuthenticationHandler authenticationHandler;
@@ -63,6 +64,7 @@ class DealerApp extends StatelessWidget {
           CustomRoutes.transactionHistoryDetailView: (_) =>
               TransactionHistoryDetailView(),
           CustomRoutes.promotionListView: (_) => PromotionListView(),
+          CustomRoutes.promotionDetailView: (_) => PromotionDetailView(),
         },
         home: LoginView(),
         builder: (context, child) {

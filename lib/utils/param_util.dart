@@ -161,6 +161,7 @@ class CustomTexts {
   static const String finished = 'Đã kết thúc';
   static const String noPromotion = 'Không có khuyến mãi';
   static const String searchPromotionName = 'Tìm tên khuyến mãi';
+  static const String promotionDetail = 'Chi tiết khuyến mãi';
 }
 
 class CustomApiUrl {
@@ -266,6 +267,7 @@ class CustomRoutes {
   static const String transactionHistoryDetailView =
       '/transactionHistoryDetailView';
   static const String promotionListView = '/promotionListView';
+  static const String promotionDetailView = '/promotionDetailView';
 }
 
 class CustomKeys {
