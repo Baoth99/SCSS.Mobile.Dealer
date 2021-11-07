@@ -155,6 +155,26 @@ class CustomTexts {
   static const String noPromotion = 'Không có khuyến mãi';
   static const String searchPromotionName = 'Tìm tên khuyến mãi';
   static const String promotionDetail = 'Chi tiết khuyến mãi';
+  static const String appliedScrapCategory = 'Danh mục phế liệu được áp dụng';
+  static const String promotionNameBlank = 'Tên khuyến mãi không được để trống';
+  static const String scrapCategoryBlank = 'Danh mục không được để trống';
+  static const String appliedAmountBlank =
+      'Mức giá áp dụng khuyến mãi không được để trống';
+  static const String bonusAmountBlank =
+      'Số tiền khuyến mãi không được để trống';
+  static const String appliedAmountNegative =
+      'Mức giá áp dụng khuyến mãi phải lớn hơn 0đ';
+  static const String bonusAmountNegative =
+      'Số tiền khuyến mãi phải là số dương';
+  static const String promotionDuration = 'Thời gian áp dụng khuyến mãi';
+  static const String promotionName = 'Tên khuyến mãi';
+  static const String appliedAmount = 'Mức giá áp dụng khuyến mãi';
+  static const String bonusAmount = 'Số tiền khuyến mãi';
+  static const String addPromotion = 'Thêm khuyến mãi';
+  static const String promotionStartDateBlank =
+      'Ngày bắt đầu khuyến mãi không được để trống';
+  static const String promotionEndDateBlank =
+      'Ngày kết thúc khuyến mãi không được để trống';
 }
 
 class CustomApiUrl {
@@ -262,6 +282,7 @@ class CustomRoutes {
       '/transactionHistoryDetailView';
   static const String promotionListView = '/promotionListView';
   static const String promotionDetailView = '/promotionDetailView';
+  static const String addPromotion = '/addPromotion';
 }
 
 class CustomKeys {

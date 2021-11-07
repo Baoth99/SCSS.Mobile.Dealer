@@ -11,11 +11,11 @@ extension PromotionStatusExtension on PromotionStatus {
   int get statusInt {
     switch (this) {
       case PromotionStatus.FUTURE:
-        return 1;
+        return 4;
       case PromotionStatus.CURRENT:
-        return 2;
+        return 1;
       case PromotionStatus.PAST:
-        return 3;
+        return 2;
       default:
         return 0;
     }

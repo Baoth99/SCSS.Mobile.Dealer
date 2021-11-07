@@ -76,11 +76,11 @@ class PromotionListView extends StatelessWidget {
           buildWhen: (p, c) => false,
           builder: (blocContext, state) {
             return InkWell(
-              // onTap: () => Navigator.of(context)
-              //     .pushNamed(CustomRoutes.addPromotion)
-              //     .then((value) {
-              //   blocContext.read<PromotionListBloc>().add(EventInitData());
-              // }),
+              onTap: () => Navigator.of(context)
+                  .pushNamed(CustomRoutes.addPromotion)
+                  .then((value) {
+                blocContext.read<PromotionListBloc>().add(EventInitData());
+              }),
               child: Container(
                 width: 60,
                 child: Center(
