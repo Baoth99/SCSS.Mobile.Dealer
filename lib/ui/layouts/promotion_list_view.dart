@@ -183,57 +183,66 @@ class PromotionListView extends StatelessWidget {
   _cardBuilder({required GetPromotionModel model, required context}) {
     return BlocBuilder<PromotionListBloc, PromotionListState>(
         builder: (blocContext, state) {
-      return Card(
-        child: Container(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(model.promotionName),
-                    SizedBox(height: 5),
-                    Text(
-                        '${CustomFormats.currencyFormat.format(model.bonusAmount)} thưởng'),
-                    Text(
-                        '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
-                    Text('${model.appliedFromTime} - ${model.appliedToTime}'),
-                  ],
+      return InkWell(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            CustomRoutes.promotionDetailView,
+            arguments: model.id,
+          );
+        },
+        child: Card(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(model.promotionName),
+                      SizedBox(height: 5),
+                      Text(
+                          '${CustomFormats.currencyFormat.format(model.bonusAmount)} thưởng'),
+                      Text(
+                          '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
+                      Text('${model.appliedFromTime} - ${model.appliedToTime}'),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: 80,
-                height: 80,
-                child: Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Stack(
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: const DecoratedBox(
-                            decoration:
-                                const BoxDecoration(color: Colors.green),
-                          ),
-                        ),
-                        if (model.image != null)
-                          Positioned(
+                SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5.0),
+                      child: Stack(
+                        children: [
+                          const SizedBox(
                             width: 80,
                             height: 80,
-                            child: Image(
-                              image: model.image!,
-                              fit: BoxFit.cover,
+                            child: const DecoratedBox(
+                              decoration:
+                                  const BoxDecoration(color: Colors.green),
                             ),
                           ),
-                      ],
+                          if (model.image != null)
+                            Positioned(
+                              width: 80,
+                              height: 80,
+                              child: Image(
+                                image: model.image!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
