@@ -9,41 +9,56 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'category_list_view.dart';
 import 'home_view.dart';
 
+enum BotNavItem {
+  STATISTIC,
+  NOTIFICATION,
+  HOME,
+  ACTIVITY,
+  PROFILE,
+}
+
+extension BotNavItemExtension on BotNavItem {
+  int get index {
+    switch (this) {
+      case BotNavItem.STATISTIC:
+        return 0;
+      case BotNavItem.NOTIFICATION:
+        return 1;
+      case BotNavItem.HOME:
+        return 2;
+      case BotNavItem.ACTIVITY:
+        return 3;
+      case BotNavItem.PROFILE:
+        return 4;
+      default:
+        return 2;
+    }
+  }
+}
+
 class BotNavView extends StatelessWidget {
   const BotNavView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BotNavBloc(StateHome()),
-      child: BlocBuilder<BotNavBloc, BotNavState>(
-        builder: (_, state) {
-          return Scaffold(
-            body: state is StateHome
-                //todo: homepage
-                ? HomeView()
-                : state is StateNotification
-                    //todo: noti
-                    ? Container()
-                    : state is StateCategory
-                        ? CategoryListView()
-                        : TransactionHistoryView(),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: _floatingActionButton(context),
-            bottomNavigationBar: _botnav(),
-          );
-        },
+      create: (context) => BotNavBloc(BotNavState(BotNavItem.HOME.index)),
+      child: Scaffold(
+        body: _body(),
+        bottomNavigationBar: _botnav(),
       ),
     );
   }
 }
 
-_floatingActionButton(context) {
-  return FloatingActionButton(
-    child: Icon(Icons.add),
-    onPressed: () {
-      Navigator.pushNamed(context, CustomRoutes.createTransaction);
+_body() {
+  return BlocBuilder<BotNavBloc, BotNavState>(
+    builder: (context, state) {
+      if (state.index == BotNavItem.HOME.index) return HomeView();
+      if (state.index == BotNavItem.ACTIVITY.index)
+        return TransactionHistoryView();
+      else
+        return Container();
     },
   );
 }
@@ -51,78 +66,76 @@ _floatingActionButton(context) {
 _botnav() {
   return BlocBuilder<BotNavBloc, BotNavState>(
     builder: (context, state) {
-      return Theme(
-        data: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(color: Colors.grey.shade100, width: 2))),
-          child: BottomNavigationBar(
-            currentIndex: state is StateHome
-                ? StateHome().itemIndex
-                : state is StateNotification
-                    ? StateNotification().itemIndex
-                    : state is StateCategory
-                        ? StateCategory().itemIndex
-                        : StateHistory().itemIndex,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey,
-            selectedFontSize: 15,
-            unselectedFontSize: 13,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            onTap: (value) {
-              switch (value) {
-                case BotNavUtils.stateHomeIndex:
-                  BlocProvider.of<BotNavBloc>(context)
-                      .add(BotNavEvent.eventTapHome);
-                  break;
-                case BotNavUtils.stateNotificationIndex:
-                  BlocProvider.of<BotNavBloc>(context)
-                      .add(BotNavEvent.eventTapNotification);
-                  break;
-                case BotNavUtils.stateCategoryIndex:
-                  BlocProvider.of<BotNavBloc>(context)
-                      .add(BotNavEvent.eventTapCategory);
-                  break;
-                case BotNavUtils.stateHistoryIndex:
-                  BlocProvider.of<BotNavBloc>(context)
-                      .add(BotNavEvent.eventTapHistory);
-                  break;
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
+      return BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Color(0xFF61C53D),
+          unselectedFontSize: 10,
+          selectedFontSize: 15,
+          currentIndex: state.index,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              label: 'Thống kê',
+              icon: Icon(Icons.analytics),
+              activeIcon: Icon(Icons.analytics_outlined),
+            ),
+            BottomNavigationBarItem(
+              label: 'Thông báo',
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(Icons.notifications),
+                  // sno.unreadCount > 0
+                  //     ? Positioned(
+                  //         // draw a red marble
+                  //         top: -25.0.h,
+                  //         right: -20.0.w,
+                  //         child: Container(
+                  //           width: 60.w,
+                  //           height: 60.h,
+                  //           decoration: const BoxDecoration(
+                  //             shape: BoxShape.circle,
+                  //             color: Colors.red,
+                  //           ),
+                  //           child: Center(
+                  //             child: CustomText(
+                  //               color: Colors.white,
+                  //               text: sno.unreadCount <= 99
+                  //                   ? '${sno.unreadCount}'
+                  //                   : '99+',
+                  //               fontSize: 30.sp,
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const SizedBox.shrink(),
+                ],
               ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.notifications_outlined),
-                activeIcon: Icon(Icons.notifications),
-              ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Container(width: 1),
-              ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.category_outlined),
-                activeIcon: Icon(Icons.category),
-              ),
-              BottomNavigationBarItem(
-                label: '',
-                icon: Icon(Icons.watch_later_outlined),
-                activeIcon: Icon(Icons.watch_later),
-              ),
-            ],
-          ),
+              activeIcon: Icon(Icons.notifications_outlined),
+            ),
+            BottomNavigationBarItem(
+              label: 'Trang chủ',
+              icon: Icon(Icons.home),
+              activeIcon: Icon(Icons.home_outlined),
+            ),
+            BottomNavigationBarItem(
+              label: 'Hoạt động',
+              icon: Icon(Icons.history),
+              activeIcon: Icon(Icons.history_outlined),
+            ),
+            BottomNavigationBarItem(
+              label: 'Tài khoản',
+              icon: Icon(Icons.person),
+              activeIcon: Icon(Icons.person_outline),
+            ),
+          ],
+          onTap: (value) {
+            BlocProvider.of<BotNavBloc>(context).add(EventTap(value));
+          },
         ),
       );
     },
