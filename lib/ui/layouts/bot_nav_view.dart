@@ -130,14 +130,14 @@ _botnav() {
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Color(0xFF61C53D),
-          unselectedFontSize: 10,
-          selectedFontSize: 15,
+          unselectedFontSize: 23.sp,
+          selectedFontSize: 26.sp,
           currentIndex: state.index,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               label: 'Thống kê',
-              icon: Icon(Icons.analytics),
-              activeIcon: Icon(Icons.analytics_outlined),
+              icon: Icon(Icons.analytics_outlined),
+              activeIcon: Icon(Icons.analytics),
             ),
             BottomNavigationBarItem(
               icon: getWidgetNoti(Icons.notifications_outlined),
@@ -146,18 +146,18 @@ _botnav() {
             ),
             BottomNavigationBarItem(
               label: 'Trang chủ',
-              icon: Icon(Icons.home),
-              activeIcon: Icon(Icons.home_outlined),
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
             ),
             BottomNavigationBarItem(
               label: 'Hoạt động',
-              icon: Icon(Icons.history),
-              activeIcon: Icon(Icons.history_outlined),
+              icon: Icon(Icons.history_outlined),
+              activeIcon: Icon(Icons.history),
             ),
             BottomNavigationBarItem(
               label: 'Tài khoản',
-              icon: Icon(Icons.person),
-              activeIcon: Icon(Icons.person_outline),
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
             ),
           ],
           onTap: (value) {
