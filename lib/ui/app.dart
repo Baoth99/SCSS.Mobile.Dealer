@@ -1,4 +1,6 @@
 import 'package:dealer_app/blocs/authentication_bloc.dart';
+import 'package:dealer_app/blocs/notification_bloc.dart';
+import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/user_handler.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
@@ -13,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'layouts/add_category_view.dart';
 import 'layouts/bot_nav_view.dart';
@@ -31,9 +34,9 @@ class DealerApp extends StatelessWidget {
   final AuthenticationHandler authenticationHandler;
   final UserHandler userHandler;
 
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  static final navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState!;
+  NavigatorState get _navigator => navigatorKey.currentState!;
 
   DealerApp({
     Key? key,
@@ -44,67 +47,80 @@ class DealerApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthenticationBloc(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: _themeData(),
-        navigatorKey: _navigatorKey,
-        routes: {
-          CustomRoutes.addCategory: (_) => AddCategoryView(),
-          CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
-          CustomRoutes.botNav: (_) => BotNavView(),
-          CustomRoutes.register: (_) => RegisterView(),
-          CustomRoutes.registerOTP: (_) => RegisterOTPView(),
-          CustomRoutes.registerPersonalInfo: (_) => RegisterPersonalInfoView(),
-          CustomRoutes.registerBranchOption: (_) => RegisterBranchOptionView(),
-          CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
-          CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
-          CustomRoutes.login: (_) => LoginView(),
-          CustomRoutes.createTransaction: (_) => CreateTransactionView(),
-          CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
-          CustomRoutes.transactionHistoryDetailView: (_) =>
-              TransactionHistoryDetailView(),
-          CustomRoutes.promotionListView: (_) => PromotionListView(),
-          CustomRoutes.promotionDetailView: (_) => PromotionDetailView(),
-          CustomRoutes.categoryList: (_) => CategoryListView(),
-          CustomRoutes.addPromotion: (_) => AddPromotionView(),
-        },
-        home: LoginView(),
-        builder: (context, child) {
-          Widget error = Text('...rendering error...');
-          if (child is Scaffold || child is Navigator)
-            error = Scaffold(body: Center(child: error));
-          ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
+    return ScreenUtilInit(
+      designSize: const Size(
+          DeviceConstants.logicalWidth, DeviceConstants.logicalHeight),
+      builder: () => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthenticationBloc(),
+          ),
+          BlocProvider(
+            create: (context) => NotificationBloc(),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: _themeData(),
+          navigatorKey: navigatorKey,
+          routes: {
+            CustomRoutes.addCategory: (_) => AddCategoryView(),
+            CustomRoutes.categoryDetail: (_) => CategoryDetailView(),
+            CustomRoutes.botNav: (_) => BotNavView(),
+            CustomRoutes.register: (_) => RegisterView(),
+            CustomRoutes.registerOTP: (_) => RegisterOTPView(),
+            CustomRoutes.registerPersonalInfo: (_) =>
+                RegisterPersonalInfoView(),
+            CustomRoutes.registerBranchOption: (_) =>
+                RegisterBranchOptionView(),
+            CustomRoutes.registerStoreInfo: (_) => RegisterStoreInfoView(),
+            CustomRoutes.registerComplete: (_) => RegisterCompleteView(),
+            CustomRoutes.login: (_) => LoginView(),
+            CustomRoutes.createTransaction: (_) => CreateTransactionView(),
+            CustomRoutes.transactionHistory: (_) => TransactionHistoryView(),
+            CustomRoutes.transactionHistoryDetailView: (_) =>
+                TransactionHistoryDetailView(),
+            CustomRoutes.promotionListView: (_) => PromotionListView(),
+            CustomRoutes.promotionDetailView: (_) => PromotionDetailView(),
+            CustomRoutes.categoryList: (_) => CategoryListView(),
+            CustomRoutes.addPromotion: (_) => AddPromotionView(),
+          },
+          home: LoginView(),
+          builder: (context, child) {
+            Widget error = Text('...rendering error...');
+            if (child is Scaffold || child is Navigator)
+              error = Scaffold(body: Center(child: error));
+            ErrorWidget.builder = (FlutterErrorDetails errorDetails) => error;
 
-          return FlutterEasyLoading(
-            child: BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) {
-                switch (state.status) {
-                  case AuthenticationStatus.authenticated:
-                    _navigator.pushNamedAndRemoveUntil(
-                        CustomRoutes.botNav, (route) => false);
-                    break;
-                  case AuthenticationStatus.unauthenticated:
-                    _navigator.pushNamedAndRemoveUntil(
-                        CustomRoutes.login, (route) => false);
-                    break;
-                  default:
-                    break;
-                }
-              },
-              child: child,
-            ),
-          );
-        },
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          const Locale('vi'),
-        ],
-        locale: const Locale('vi'),
+            return FlutterEasyLoading(
+              child: BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+                  switch (state.status) {
+                    case AuthenticationStatus.authenticated:
+                      _navigator.pushNamedAndRemoveUntil(
+                          CustomRoutes.botNav, (route) => false);
+                      break;
+                    case AuthenticationStatus.unauthenticated:
+                      _navigator.pushNamedAndRemoveUntil(
+                          CustomRoutes.login, (route) => false);
+                      break;
+                    default:
+                      break;
+                  }
+                },
+                child: child,
+              ),
+            );
+          },
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('vi'),
+          ],
+          locale: const Locale('vi'),
+        ),
       ),
     );
   }

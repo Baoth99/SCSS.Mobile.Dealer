@@ -1,12 +1,16 @@
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
+import 'package:dealer_app/blocs/notification_bloc.dart';
 import 'package:dealer_app/repositories/events/bot_nav_event.dart';
+import 'package:dealer_app/repositories/events/notification_event.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
+import 'package:dealer_app/repositories/states/notification_state.dart';
+import 'package:dealer_app/ui/layouts/notification_view.dart';
 import 'package:dealer_app/ui/layouts/transaction_history_view.dart';
-import 'package:dealer_app/utils/param_util.dart';
+import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'category_list_view.dart';
 import 'home_view.dart';
 
 enum BotNavItem {
@@ -36,8 +40,21 @@ extension BotNavItemExtension on BotNavItem {
   }
 }
 
-class BotNavView extends StatelessWidget {
+class BotNavView extends StatefulWidget {
   const BotNavView({Key? key}) : super(key: key);
+
+  @override
+  _BotNavViewState createState() => _BotNavViewState();
+}
+
+class _BotNavViewState extends State<BotNavView> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Get number of  unread notifcation count
+    context.read<NotificationBloc>().add(NotificationUncountGet());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +74,48 @@ _body() {
       if (state.index == BotNavItem.HOME.index) return HomeView();
       if (state.index == BotNavItem.ACTIVITY.index)
         return TransactionHistoryView();
+      if (state.index == BotNavItem.NOTIFICATION.index)
+        return NotificationView();
       else
         return Container();
+    },
+  );
+}
+
+Widget getWidgetNoti(IconData icon) {
+  return BlocBuilder<NotificationBloc, NotificationState>(
+    builder: (context, state) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Icon(icon),
+          state.unreadCount > 0
+              ? Positioned(
+                  // draw a red marble
+                  top: -25.0.h,
+                  right: -20.0.w,
+                  child: Container(
+                    width: 60.w,
+                    height: 60.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red,
+                    ),
+                    child: Center(
+                      child: CustomText(
+                        color: Colors.white,
+                        text: state.unreadCount <= 99
+                            ? '${state.unreadCount}'
+                            : '99+',
+                        fontSize: 30.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ],
+      );
     },
   );
 }
@@ -83,39 +140,9 @@ _botnav() {
               activeIcon: Icon(Icons.analytics_outlined),
             ),
             BottomNavigationBarItem(
+              icon: getWidgetNoti(Icons.notifications_outlined),
               label: 'Thông báo',
-              icon: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(Icons.notifications),
-                  // sno.unreadCount > 0
-                  //     ? Positioned(
-                  //         // draw a red marble
-                  //         top: -25.0.h,
-                  //         right: -20.0.w,
-                  //         child: Container(
-                  //           width: 60.w,
-                  //           height: 60.h,
-                  //           decoration: const BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             color: Colors.red,
-                  //           ),
-                  //           child: Center(
-                  //             child: CustomText(
-                  //               color: Colors.white,
-                  //               text: sno.unreadCount <= 99
-                  //                   ? '${sno.unreadCount}'
-                  //                   : '99+',
-                  //               fontSize: 30.sp,
-                  //               fontWeight: FontWeight.w600,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : const SizedBox.shrink(),
-                ],
-              ),
-              activeIcon: Icon(Icons.notifications_outlined),
+              activeIcon: getWidgetNoti(Icons.notifications),
             ),
             BottomNavigationBarItem(
               label: 'Trang chủ',
