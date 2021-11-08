@@ -1,10 +1,9 @@
-import 'package:dealer_app/providers/network/account_network.dart';
-import 'package:dealer_app/providers/network/login_network.dart';
-import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
-
 import 'dart:async';
 
-import 'package:dealer_app/utils/device_info.dart';
+import 'package:dealer_app/providers/configs/injection_config.dart';
+import 'package:dealer_app/providers/network/login_network.dart';
+import 'package:dealer_app/repositories/handlers/user_handler.dart';
+import 'package:dealer_app/repositories/models/access_token_holder_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/secure_storage.dart';
 
@@ -30,8 +29,7 @@ class AuthenticationHandler implements IAuthenticationHandler {
     required String password,
   }) async {
     try {
-      //get device ID
-      var _deviceId = await DeviceInfo.getDeviceId();
+      final userHandler = getIt.get<IUserHandler>();
       //get access token
       AccessTokenHolderModel accessTokenHolderModel =
           await LoginNetwork.fectchAccessToken(
@@ -42,13 +40,13 @@ class AuthenticationHandler implements IAuthenticationHandler {
           value: accessTokenHolderModel.accessToken);
       if (result) {
         //put device Id
-        if (_deviceId != null) {
-          await AccountNetwork.putDeviceId(
-              bearerToken: accessTokenHolderModel.accessToken,
-              deivceId: _deviceId);
-        }
-        //add event
-        _controller.add(AuthenticationStatus.authenticated);
+        result = await userHandler.putDeviceIdWhenLogin(
+            bearerToken: accessTokenHolderModel.accessToken);
+        if (result)
+          //add event
+          _controller.add(AuthenticationStatus.authenticated);
+        else
+          _controller.add(AuthenticationStatus.unauthenticated);
       } else
         _controller.add(AuthenticationStatus.unauthenticated);
     } catch (e) {

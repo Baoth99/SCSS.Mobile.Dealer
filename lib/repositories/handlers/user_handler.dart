@@ -1,6 +1,7 @@
+import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/providers/network/account_network.dart';
+import 'package:dealer_app/providers/services/firebase_service.dart';
 import 'package:dealer_app/repositories/models/response_models/dealer_response_model.dart';
-import 'package:dealer_app/utils/device_info.dart';
 
 abstract class IUserHandler {
   Future<DealerResponseModel?> getUser({required String bearerToken});
@@ -20,8 +21,9 @@ class UserHandler implements IUserHandler {
   }
 
   Future<bool> putDeviceIdWhenLogin({required String bearerToken}) async {
+    final firebase = getIt.get<FirebaseNotification>();
     //Get Device Id
-    var _deviceId = await DeviceInfo.getDeviceId();
+    var _deviceId = await firebase.getToken();
     if (_deviceId != null) {
       return await AccountNetwork.putDeviceId(
           bearerToken: bearerToken, deivceId: _deviceId);
