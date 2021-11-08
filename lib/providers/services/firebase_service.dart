@@ -1,7 +1,11 @@
+import 'package:dealer_app/blocs/notification_bloc.dart';
+import 'package:dealer_app/repositories/events/notification_event.dart';
+import 'package:dealer_app/ui/app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message : ${message.messageId}");
@@ -61,12 +65,29 @@ class FirebaseNotification {
     await Firebase.initializeApp();
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+    await FirebaseNotification.addMessagingHandler();
     await _firebaseLocalMessagingHandler();
   }
 
   Future<String?> getToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     return token;
+  }
+
+  static Future<void> addMessagingHandler() async {
+    firebaseForegroundMessagingHandler();
+  }
+
+  static Future<void> firebaseForegroundMessagingHandler() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //get uncount
+      DealerApp.navigatorKey.currentContext
+          ?.read<NotificationBloc>()
+          .add(NotificationUncountGet());
+      //get new messagelist
+      DealerApp.navigatorKey.currentContext
+          ?.read<NotificationBloc>()
+          .add(NotificationGetFirst());
+    });
   }
 }
