@@ -1,15 +1,47 @@
 import 'dart:io';
 import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/exceptions/custom_exceptions.dart';
+import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/repositories/models/response_models/base_response_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/secure_storage.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
+
+class CommonUtils {
+  static DateTime? convertDDMMYYYToDateTime(String date) {
+    DateTime? result;
+    try {
+      DateFormat format = DateFormat(Others.ddMMyyyyPattern);
+      result = format.parse(date);
+    } catch (e) {
+      AppLog.error('Exception at convertDDMMYYYToDateTime');
+    }
+    return result;
+  }
+}
 
 class NetworkUtils {
   static String toStringUrl(String uri, Map<String, dynamic>? queries) {
     var uRI = Uri.parse(uri).replace(queryParameters: queries);
     return uRI.toString();
+  }
+
+  static String getUrlWithQueryString(String uri, Map<String, String> queries) {
+    // ignore: non_constant_identifier_names
+    var URI = Uri.parse(uri);
+    URI = URI.replace(queryParameters: queries);
+    return URI.toString();
+  }
+
+  static Future<String> getBearerToken() async {
+    var accessToken =
+        await SecureStorage.readValue(key: CustomKeys.accessToken);
+    if (accessToken != null) {
+      return 'Bearer $accessToken';
+    } else {
+      throw Exception(CustomAPIError.missingBearerToken);
+    }
   }
 
   static Future<Response> putBodyWithBearerAuth({
