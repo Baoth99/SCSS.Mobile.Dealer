@@ -221,6 +221,11 @@ class CustomApiUrl {
   static final notificationGet = '${apiUrl}notification/get';
   static final notificationRead = '${apiUrl}notification/read';
   static final notificationUnreadCount = '${apiUrl}notification/unread-count';
+
+  //
+  static final accountCollectorInfo = '${apiUrl}dealer/account/dealer-info';
+
+  static final imageGet = '${apiUrl}image/get';
 }
 
 class CustomAPIError {

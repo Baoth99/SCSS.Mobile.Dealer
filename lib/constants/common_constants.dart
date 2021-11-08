@@ -17,3 +17,9 @@ class DeviceConstants {
   static const double logicalWidth = 1080;
   static const double logicalHeight = 2220;
 }
+
+class Others {
+  static const int otpLength = 6;
+
+  static final String ddMMyyyyPattern = 'dd-MM-yyyy';
+}

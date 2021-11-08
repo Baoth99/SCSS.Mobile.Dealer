@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/blocs/notification_bloc.dart';
+import 'package:dealer_app/blocs/profile_bloc.dart';
+import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/repositories/events/bot_nav_event.dart';
 import 'package:dealer_app/repositories/events/notification_event.dart';
+import 'package:dealer_app/repositories/events/profile_event.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
 import 'package:dealer_app/repositories/states/notification_state.dart';
+import 'package:dealer_app/ui/layouts/account_layout.dart';
 import 'package:dealer_app/ui/layouts/notification_view.dart';
 import 'package:dealer_app/ui/layouts/transaction_history_view.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
@@ -48,12 +54,36 @@ class BotNavView extends StatefulWidget {
 }
 
 class _BotNavViewState extends State<BotNavView> {
+  late final Timer _timer;
   @override
   void initState() {
     super.initState();
 
     // Get number of  unread notifcation count
     context.read<NotificationBloc>().add(NotificationUncountGet());
+
+    initProfileBloc();
+  }
+
+  void initProfileBloc() {
+    //profile
+    context.read<ProfileBloc>().add(ProfileClear());
+    context.read<ProfileBloc>().add(ProfileInitial());
+
+    try {
+      _timer = Timer.periodic(
+        const Duration(minutes: 1),
+        (timer) {
+          try {
+            context.read<ProfileBloc>().add(ProfileInitial());
+          } catch (e) {
+            AppLog.error(e);
+          }
+        },
+      );
+    } catch (e) {
+      AppLog.error(e);
+    }
   }
 
   @override
@@ -76,6 +106,8 @@ _body() {
         return TransactionHistoryView();
       if (state.index == BotNavItem.NOTIFICATION.index)
         return NotificationView();
+      if (state.index == BotNavItem.PROFILE.index)
+        return AccountLayout();
       else
         return Container();
     },
