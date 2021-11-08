@@ -24,8 +24,6 @@ class NotificationNetworkImpl extends NotificationNetwork {
     int pageSize,
     Client client,
   ) async {
-    NotificationGetResponseModel responseModel = NotificationGetResponseModel();
-
     var response = await NetworkUtils.getNetworkWithBearer(
       uri: CustomApiUrl.notificationGet,
       client: client,
@@ -34,13 +32,13 @@ class NotificationNetworkImpl extends NotificationNetwork {
         'PageSize': pageSize.toString(),
       },
     );
-    var result = await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
-        NotificationGetResponseModel>(
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+            NotificationGetResponseModel>(
       response,
       notificationGetResponseModelFromJson,
     );
     // get model
-    responseModel = result;
 
     return responseModel;
   }

@@ -296,6 +296,7 @@ class CustomRoutes {
   static const String promotionListView = '/promotionListView';
   static const String promotionDetailView = '/promotionDetailView';
   static const String addPromotion = '/addPromotion';
+  static const profilePasswordEdit = 'profilePasswordEdit';
 }
 
 class CustomKeys {
@@ -431,4 +432,29 @@ class AppColors {
 
   static const Color errorButtonBorder = greyFFB5B5B5;
   static final Color errorButtonText = Colors.grey[700]!;
+}
+
+class IdentityAPIConstants {
+  static final urlConnectToken = '${EnvID4AppSettingValue.apiUrl}connect/token';
+  static final urlConnectRevocation =
+      '${EnvID4AppSettingValue.apiUrl}connect/revocation';
+  static final urlChangePassword =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/change-password';
+
+  //Query parameter name
+  static const clientIdParamName = 'client_id';
+  static const clientSecretParamName = 'client_secret';
+  static const grantTypeParamName = 'grant_type';
+  static const scopeParamName = 'scope';
+  static const usernameParamName = 'username';
+  static const passwordParamName = 'password';
+  static const token = 'token';
+  static const tokenTypeHint = 'token_type_hint';
+
+  //value
+  static const accessToken = 'access_token';
+  static const refreshToken = 'refresh_token';
+
+  static const notApprovedAccountCode = 'ANA0001';
+  static const isApprovedBuOtherCollector = 'ICR0001';
 }

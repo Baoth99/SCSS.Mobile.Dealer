@@ -1,7 +1,7 @@
 import 'package:dealer_app/blocs/profile_bloc.dart';
 import 'package:dealer_app/repositories/models/gender_model.dart';
 import 'package:dealer_app/repositories/states/profile_state.dart';
-import 'package:dealer_app/ui/widgets/avartar_widget.dart';
+import 'package:dealer_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:dealer_app/ui/widgets/cached_avatar_widget.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -122,7 +122,11 @@ class AccountBody extends StatelessWidget {
             builder: (context, state) {
               return option(
                 'Đổi mật khẩu',
-                () {},
+                () {
+                  Navigator.of(context).pushNamed(
+                      CustomRoutes.profilePasswordEdit,
+                      arguments: ProfilePasswordEditArgs(state.id));
+                },
                 Colors.black,
                 Icons.arrow_forward_ios,
               );
