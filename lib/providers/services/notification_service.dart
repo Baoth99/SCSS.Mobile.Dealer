@@ -97,12 +97,8 @@ class NotificationServiceImp extends NotificationService {
     )
         .then(
       (responseModel) {
-        if (responseModel.isSuccess != null &&
-            responseModel.statusCode != null) {
-          return responseModel.isSuccess! &&
-              responseModel.statusCode == NetworkConstants.ok200;
-        }
-        return false;
+        return responseModel.isSuccess &&
+            responseModel.statusCode == NetworkConstants.ok200;
       },
     ).whenComplete(
       () => client.close(),

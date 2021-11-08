@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/exceptions/custom_exceptions.dart';
@@ -25,6 +26,27 @@ class NetworkUtils {
   static String toStringUrl(String uri, Map<String, dynamic>? queries) {
     var uRI = Uri.parse(uri).replace(queryParameters: queries);
     return uRI.toString();
+  }
+
+  static Future<Map<String, dynamic>> getMapFromResponse(
+      Response response) async {
+    return jsonDecode(response.body);
+  }
+
+  static Future<Response> postBody({
+    required String uri,
+    Map<String, String>? headers,
+    Object? body,
+    required Client client,
+  }) async {
+    var response = client.post(
+      Uri.parse(
+        uri,
+      ),
+      body: body,
+      headers: headers,
+    );
+    return response;
   }
 
   static String getUrlWithQueryString(String uri, Map<String, String> queries) {
@@ -144,8 +166,7 @@ class NetworkUtils {
     );
 
     if (responseModel.statusCode == NetworkConstants.ok200 &&
-        responseModel.isSuccess != null &&
-        responseModel.isSuccess!) return responseModel;
+        responseModel.isSuccess) return responseModel;
 
     //
     throw Exception();

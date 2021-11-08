@@ -8,6 +8,8 @@ import 'package:http/http.dart';
 
 abstract class IdentityServerService {
   Future<ProfileState?> getProfile();
+  Future<int?> updatePassword(
+      String id, String oldPassword, String newPassword);
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -46,6 +48,23 @@ class IdentityServerServiceImpl implements IdentityServerService {
         idCard: m.idCard ?? Symbols.empty,
       );
     }
+
+    return result;
+  }
+
+  @override
+  Future<int?> updatePassword(
+      String id, String oldPassword, String newPassword) async {
+    Client client = Client();
+
+    var result = await _identityServerNetwork
+        .updatePassword(
+          id,
+          oldPassword,
+          newPassword,
+          client,
+        )
+        .whenComplete(() => client.close());
 
     return result;
   }

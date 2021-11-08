@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class NetworkConstants {
   static const urlencoded = 'application/x-www-form-urlencoded';
   static const applicationJson = 'application/json';
@@ -16,6 +18,12 @@ class NetworkConstants {
 class DeviceConstants {
   static const double logicalWidth = 1080;
   static const double logicalHeight = 2220;
+}
+
+class WidgetConstants {
+  static const double buttonCommonFrontSize = 50;
+  static const FontWeight buttonCommonFrontWeight = FontWeight.w500;
+  static const double buttonCommonHeight = 120;
 }
 
 class Others {

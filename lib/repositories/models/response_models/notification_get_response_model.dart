@@ -7,8 +7,8 @@ NotificationGetResponseModel notificationGetResponseModelFromJson(String str) =>
 
 class NotificationGetResponseModel extends BaseResponseModel {
   NotificationGetResponseModel({
-    bool? isSuccess,
-    int? statusCode,
+    required bool isSuccess,
+    required int statusCode,
     this.msgCode,
     this.msgDetail,
     this.total,
