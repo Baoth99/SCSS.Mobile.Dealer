@@ -46,6 +46,10 @@ class CreateTransactionView extends StatelessWidget {
                   context: context,
                   title: CustomTexts.createTransactionSuccessfullyText,
                   type: CoolAlertType.success,
+                  onTap: () {
+                    Navigator.popUntil(
+                        context, ModalRoute.withName(CustomRoutes.botNav));
+                  },
                 );
               }
             },
