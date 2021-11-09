@@ -78,7 +78,7 @@ class LoginView extends StatelessWidget {
                   _passwordField(),
                   _loginButton(),
                   _forgetPasswordOption(context),
-                  _registerOption(),
+                  // _registerOption(),
                 ],
               ),
             ),
