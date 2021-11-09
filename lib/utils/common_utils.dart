@@ -20,6 +20,10 @@ class CommonUtils {
     }
     return result;
   }
+
+  static String toStringDDMMYYY(DateTime date) {
+    return DateFormat(Others.ddMMyyyyPattern).format(date);
+  }
 }
 
 class NetworkUtils {
