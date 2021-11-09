@@ -77,7 +77,7 @@ class LoginView extends StatelessWidget {
                   _phoneNumberField(),
                   _passwordField(),
                   _loginButton(),
-                  _forgetPasswordOption(),
+                  _forgetPasswordOption(context),
                   _registerOption(),
                 ],
               ),
@@ -177,14 +177,18 @@ class LoginView extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
-  _forgetPasswordOption() {
+  _forgetPasswordOption(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomWidgets.customText(text: CustomTexts.forgetPassword),
         //TODO: forget password
         CustomWidgets.customTextButton(
-            text: CustomTexts.forgetPasswordTextButton, onPressed: () {}),
+            text: CustomTexts.forgetPasswordTextButton,
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(CustomRoutes.forgetPasswordPhoneNumber);
+            }),
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -226,6 +227,13 @@ class CustomApiUrl {
   static final accountCollectorInfo = '${apiUrl}dealer/account/dealer-info';
 
   static final imageGet = '${apiUrl}image/get';
+
+  //forget pass
+  static final restorePassOTP = '${apiUrl}dealer/account/restore-pass-otp';
+  static final confirmRestorePassOTP =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp';
+  static final restorePassword =
+      '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
 }
 
 class CustomAPIError {
@@ -298,6 +306,11 @@ class CustomRoutes {
   static const String addPromotion = '/addPromotion';
   static const profilePasswordEdit = 'profilePasswordEdit';
   static const profileEdit = 'profileEdit';
+
+  //edit password
+  static const forgetPasswordPhoneNumber = 'editPasswordPhoneNumber';
+  static const forgetPasswordOTP = 'forgetPasswordOTP';
+  static const forgetPasswordNewPassword = 'forgetPasswordNewPassword';
 }
 
 class CustomKeys {
@@ -458,4 +471,41 @@ class IdentityAPIConstants {
 
   static const notApprovedAccountCode = 'ANA0001';
   static const isApprovedBuOtherCollector = 'ICR0001';
+}
+
+class PhoneNumberSignupLayoutConstants {
+  static const String welcomeTitle =
+      'Chào mừng bạn! Số điện thoại của bạn là gì?';
+  static const String phoneNumberHint = '87654321';
+  static const String next = 'Tiếp';
+  static const String errorText = 'Số di động có vẻ không chính xác.';
+  static const String progressIndicatorLabel =
+      'Progress Indicator for waiting to register Phone Nubmer.';
+  static const String waiting = 'Vui lòng chờ...';
+}
+
+class OTPFillPhoneNumberLayoutConstants {
+  static const String title = 'Nhập mã gồm 6 chữ số đã gửi tới';
+  static const String notHaveCode = 'Chưa nhận được mã?';
+
+  static const String hintText = '000000';
+  static const int inputLength = Others.otpLength;
+  static const int countdown = 30;
+
+  static const String requetsNewCode =
+      'Yêu cầu mã mới trong 00:$replacedSecondVar';
+  static const String replacedSecondVar = '{second}';
+
+  static const String checking = 'Đang kiểm tra.';
+  static const String checkingProgressIndicator = 'Checking Progress Indicator';
+
+  static const String resendOTP = 'Đang gửi lại mã OTP';
+  static const String resendOTPProgressIndicator =
+      'Resend OTP Progress Indicator';
+}
+
+class RegexConstants {
+  static final String otpCode = r'^\d{' + Others.otpLength.toString() + r'}$';
+  static final String email =
+      r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 }

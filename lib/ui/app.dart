@@ -9,6 +9,9 @@ import 'package:dealer_app/ui/layouts/add_promotion_view.dart';
 import 'package:dealer_app/ui/layouts/category_detail_view.dart';
 import 'package:dealer_app/ui/layouts/category_list_view.dart';
 import 'package:dealer_app/ui/layouts/create_transaction_view.dart';
+import 'package:dealer_app/ui/layouts/forget_password_new_password_layout.dart';
+import 'package:dealer_app/ui/layouts/forget_password_otp_layout.dart';
+import 'package:dealer_app/ui/layouts/forget_password_phone_number_layout.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
 import 'package:dealer_app/ui/layouts/profile_layout.dart';
 import 'package:dealer_app/ui/layouts/profile_password_edit_layout.dart';
@@ -93,6 +96,11 @@ class DealerApp extends StatelessWidget {
             CustomRoutes.profilePasswordEdit: (_) =>
                 const ProfilePasswordEditLayout(),
             CustomRoutes.profileEdit: (_) => ProfileLayout(),
+            CustomRoutes.forgetPasswordPhoneNumber: (_) =>
+                const ForgetPasswordPhoneNumberLayout(),
+            CustomRoutes.forgetPasswordOTP: (_) => const ForgetPasswordOTPLayout(),
+            CustomRoutes.forgetPasswordNewPassword: (_) =>
+                const ForgetPasswordNewPasswordLayout(),
           },
           home: LoginView(),
           builder: (context, child) {
