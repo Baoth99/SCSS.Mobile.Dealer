@@ -115,7 +115,7 @@ class CustomTexts {
       'Không có khuyến mãi nào được áp dụng';
   static const String addScrapButtonText = 'Thêm phế liệu';
   static const String saveUpdateButtonText = 'Lưu thay đổi';
-  static const String totalNegative = '$totalLabel không được là số âm';
+  static const String isItemTotalLowerThanZero = '$totalLabel phải lớn hơn 0 đ';
   static const String totalOverLimit = '$totalLabel thấp hơn 100 triệu đồng';
   static const String scrapCategoryUnitBlank = 'Xin chọn $unitLabel';
   static const String zeroString = '0';

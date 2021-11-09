@@ -731,8 +731,8 @@ class CreateTransactionView extends StatelessWidget {
             },
             validator: (value) {
               if (value == null || value.isEmpty) return CustomTexts.totalBlank;
-              if (!state.isItemTotalNegative) {
-                return CustomTexts.totalNegative;
+              if (!state.isItemTotalLowerThanZero) {
+                return CustomTexts.isItemTotalLowerThanZero;
               }
               if (!state.isItemTotalUnderLimit) {
                 return CustomTexts.totalOverLimit;
