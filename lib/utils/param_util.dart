@@ -123,12 +123,11 @@ class CustomTexts {
   static const String pleaseWaitText = 'Xin vui lòng đợi';
   static const String createTransactionSuccessfullyText =
       'Tạo giao dịch thành công';
-  static const String noItemsErrorText =
-      'Thêm chi tiết cho giao dịch bằng dấu +';
+  static const String noItemsErrorText = 'Giao dịch phải có một danh mục';
   static const String deleteItemButtonText = 'Xoá';
   // Add category
   static const String eachScrapCategoryHasAtLeastOneUnit =
-      'Mỗi danh mục nên có một đơn vị';
+      'Mỗi danh mục phải có một đơn vị';
   static const String image = 'Hình ảnh';
   static const String scrapCategoryName = 'Tên danh mục phế liệu';
   static const String inputScrapCategoryName = 'Nhập tên loại phế liệu';
