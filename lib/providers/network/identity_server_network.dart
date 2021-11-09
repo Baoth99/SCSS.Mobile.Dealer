@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:dealer_app/constants/common_constants.dart';
+import 'package:dealer_app/repositories/models/request_models/confirm_restore_password_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/restore_pass_otp_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/restore_password_request_model.dart';
 import 'package:dealer_app/repositories/models/response_models/base_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/confirm_restore_password_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/profile_info_response_model.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -13,6 +19,21 @@ abstract class IdentityServerNetwork {
     String id,
     String oldPassword,
     String newPassword,
+    Client client,
+  );
+
+  Future<BaseResponseModel> restorePassOTP(
+    RestorePassOtpRequestModel requestModel,
+    Client client,
+  );
+
+  Future<ConfirmRestorePasswordResponseModel> confirmRestorePassword(
+    ConfirmRestorePasswordRequestModel requestModel,
+    Client client,
+  );
+
+  Future<BaseResponseModel> restorePassword(
+    RestorePasswordRequestModel requestModel,
     Client client,
   );
 }
@@ -70,5 +91,74 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
     }
 
     return null;
+  }
+
+  @override
+  Future<BaseResponseModel> restorePassOTP(
+      RestorePassOtpRequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.postBody(
+      uri: CustomApiUrl.restorePassOTP,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: restorePassOtpRequestModelToJson(
+        requestModel,
+      ),
+      client: client,
+    );
+
+    var responseModel =
+        await NetworkUtils.getModelOfResponseMainAPI<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
+    return responseModel;
+  }
+
+  @override
+  Future<ConfirmRestorePasswordResponseModel> confirmRestorePassword(
+    ConfirmRestorePasswordRequestModel requestModel,
+    Client client,
+  ) async {
+    var response = await NetworkUtils.postBody(
+      uri: CustomApiUrl.confirmRestorePassOTP,
+      headers: {
+        IdentityAPIConstants.clientIdParamName: EnvID4AppSettingValue.clientId,
+      },
+      body: requestModel.toJson(),
+      client: client,
+    );
+
+    var responseModel = await NetworkUtils.getModelOfResponseMainAPI<
+        ConfirmRestorePasswordResponseModel>(
+      response,
+      confirmRestorePasswordResponseModelFromJson,
+    );
+
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> restorePassword(
+    RestorePasswordRequestModel requestModel,
+    Client client,
+  ) async {
+    var response = await NetworkUtils.postBody(
+      uri: CustomApiUrl.restorePassword,
+      headers: {
+        IdentityAPIConstants.clientIdParamName: EnvID4AppSettingValue.clientId,
+      },
+      body: requestModel.toJson(),
+      client: client,
+    );
+
+    var responseModel =
+        await NetworkUtils.getModelOfResponseMainAPI<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
+    return responseModel;
   }
 }

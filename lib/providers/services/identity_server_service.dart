@@ -1,6 +1,10 @@
+import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/providers/network/identity_server_network.dart';
 import 'package:dealer_app/repositories/models/gender_model.dart';
+import 'package:dealer_app/repositories/models/request_models/confirm_restore_password_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/restore_pass_otp_request_model.dart';
+import 'package:dealer_app/repositories/models/request_models/restore_password_request_model.dart';
 import 'package:dealer_app/repositories/states/profile_state.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -10,6 +14,11 @@ abstract class IdentityServerService {
   Future<ProfileState?> getProfile();
   Future<int?> updatePassword(
       String id, String oldPassword, String newPassword);
+  Future<bool> restorePassSendingOTP(String phoneNumber);
+
+  Future<String> confirmOTPRestorePass(String phoneNumber, String otp);
+  Future<int> restorePassword(
+      String phoneNumber, String token, String newPassword);
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -67,5 +76,60 @@ class IdentityServerServiceImpl implements IdentityServerService {
         .whenComplete(() => client.close());
 
     return result;
+  }
+
+  @override
+  Future<bool> restorePassSendingOTP(String phoneNumber) async {
+    phoneNumber = CommonUtils.addZeroBeforePhoneNumber(phoneNumber);
+
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .restorePassOTP(
+          RestorePassOtpRequestModel(phone: phoneNumber),
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    return result.isSuccess && result.statusCode == NetworkConstants.ok200;
+  }
+
+  @override
+  Future<String> confirmOTPRestorePass(String phoneNumber, String otp) async {
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .confirmRestorePassword(
+          ConfirmRestorePasswordRequestModel(phone: phoneNumber, otp: otp),
+          client,
+        )
+        .whenComplete(() => client.close());
+    if (result.isSuccess &&
+        result.statusCode == NetworkConstants.ok200 &&
+        result.resData != null &&
+        result.resData!.isNotEmpty) {
+      return result.resData!;
+    }
+    return Symbols.empty;
+  }
+
+  @override
+  Future<int> restorePassword(
+      String phoneNumber, String token, String newPassword) async {
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .restorePassword(
+          RestorePasswordRequestModel(
+            phone: phoneNumber,
+            newPassword: newPassword,
+            token: token,
+          ),
+          client,
+        )
+        .whenComplete(() => client.close());
+
+    if (result.isSuccess && result.statusCode == NetworkConstants.ok200) {
+      return NetworkConstants.ok200;
+    } else {
+      return NetworkConstants.badRequest400;
+    }
   }
 }

@@ -57,6 +57,7 @@ dependencies:
   cached_network_image: ^2.5.1
   awesome_dialog: ^2.1.1
   rflutter_alert: ^2.0.4
+  country_code_picker: ^2.0.2
 
 dev_dependencies:
   flutter_test:
