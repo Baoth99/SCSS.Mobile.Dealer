@@ -297,6 +297,7 @@ class CustomRoutes {
   static const String promotionDetailView = '/promotionDetailView';
   static const String addPromotion = '/addPromotion';
   static const profilePasswordEdit = 'profilePasswordEdit';
+  static const profileEdit = 'profileEdit';
 }
 
 class CustomKeys {

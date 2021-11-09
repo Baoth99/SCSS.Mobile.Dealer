@@ -1,6 +1,7 @@
 import 'package:dealer_app/blocs/profile_bloc.dart';
 import 'package:dealer_app/repositories/models/gender_model.dart';
 import 'package:dealer_app/repositories/states/profile_state.dart';
+import 'package:dealer_app/ui/layouts/profile_layout.dart';
 import 'package:dealer_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:dealer_app/ui/widgets/cached_avatar_widget.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
@@ -112,7 +113,21 @@ class AccountBody extends StatelessWidget {
             builder: (context, state) {
               return option(
                 'Thông tin tài khoản',
-                () {},
+                () {
+                  Navigator.of(context).pushNamed(
+                    CustomRoutes.profileEdit,
+                    arguments: ProfileArgs(
+                      name: state.name,
+                      imagePath: state.image ?? Symbols.empty,
+                      phoneNumber: state.phone,
+                      address: state.address ?? Symbols.empty,
+                      email: state.email ?? Symbols.empty,
+                      gender: state.gender,
+                      birthdate: state.birthDate ?? DateTime.now(),
+                      idCard: state.idCard,
+                    ),
+                  );
+                },
                 Colors.black,
                 Icons.arrow_forward_ios,
               );

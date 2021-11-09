@@ -10,6 +10,7 @@ import 'package:dealer_app/ui/layouts/category_detail_view.dart';
 import 'package:dealer_app/ui/layouts/category_list_view.dart';
 import 'package:dealer_app/ui/layouts/create_transaction_view.dart';
 import 'package:dealer_app/ui/layouts/login_view.dart';
+import 'package:dealer_app/ui/layouts/profile_layout.dart';
 import 'package:dealer_app/ui/layouts/profile_password_edit_layout.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/cupertino.dart';
@@ -91,6 +92,7 @@ class DealerApp extends StatelessWidget {
             CustomRoutes.addPromotion: (_) => AddPromotionView(),
             CustomRoutes.profilePasswordEdit: (_) =>
                 const ProfilePasswordEditLayout(),
+            CustomRoutes.profileEdit: (_) => ProfileLayout(),
           },
           home: LoginView(),
           builder: (context, child) {
