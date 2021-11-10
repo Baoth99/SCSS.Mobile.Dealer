@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:dealer_app/constants/common_constants.dart';
+import 'package:dealer_app/repositories/models/request_models/create_comlaint_request_model.dart';
+import 'package:dealer_app/repositories/models/response_models/base_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/dealer_brances_response_mode.dart';
 import 'package:dealer_app/repositories/models/response_models/get_statistic_response_model.dart';
 import 'package:dealer_app/utils/common_utils.dart';
@@ -13,6 +18,8 @@ abstract class TransactionNetwork {
     Client client,
   );
   Future<DealerBranchesResponseModel> getBranches(Client client);
+  Future<BaseResponseModel> createComplaint(
+      CreateComplaintequestModel requestModel, Client client);
 }
 
 class TransactionNetworkImpl implements TransactionNetwork {
@@ -54,6 +61,27 @@ class TransactionNetworkImpl implements TransactionNetwork {
       response,
       dealerBranchesResponseModelFromJson,
     );
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> createComplaint(
+      CreateComplaintequestModel requestModel, Client client) async {
+    var response = await NetworkUtils.postBodyWithBearerAuth(
+      uri: CustomApiUrl.createComplaint,
+      headers: {
+        HttpHeaders.contentTypeHeader: NetworkConstants.applicationJson,
+      },
+      body: createComplaintRequestModelToJson(requestModel),
+      client: client,
+    );
+
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
+    );
+
     return responseModel;
   }
 }

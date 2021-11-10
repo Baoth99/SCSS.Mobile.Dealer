@@ -14,6 +14,7 @@ class CDTransactionHistoryDetailModel {
     required this.totalBonus,
     required this.transactionFee,
     required this.itemDetails,
+    required this.complaint,
   });
 
   String collectorName;
@@ -26,6 +27,7 @@ class CDTransactionHistoryDetailModel {
   int totalBonus;
   int transactionFee;
   List<CDTransactionHistoryDetailItemModel> itemDetails;
+  Complaint complaint;
 
   factory CDTransactionHistoryDetailModel.fromJson(Map<String, dynamic> json) =>
       CDTransactionHistoryDetailModel(
@@ -45,5 +47,27 @@ class CDTransactionHistoryDetailModel {
         itemDetails: List<CDTransactionHistoryDetailItemModel>.from(
             json["itemDetail"]
                 .map((x) => CDTransactionHistoryDetailItemModel.fromJson(x))),
+        complaint: Complaint.fromJson(json["complaint"]),
+      );
+}
+
+class Complaint {
+  Complaint({
+    this.complaintId,
+    required this.complaintStatus,
+    this.complaintContent,
+    this.adminReply,
+  });
+
+  String? complaintId;
+  int complaintStatus;
+  String? complaintContent;
+  String? adminReply;
+
+  factory Complaint.fromJson(Map<String, dynamic> json) => Complaint(
+        complaintId: json["complaintId"],
+        complaintStatus: json["complaintStatus"],
+        complaintContent: json["complaintContent"],
+        adminReply: json["adminReply"],
       );
 }
