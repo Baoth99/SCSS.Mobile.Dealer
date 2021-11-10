@@ -214,6 +214,12 @@ class CustomApiUrl {
       '/api/v3/scrap-category/remove';
   static const String apiUrlPostPromotion = '/api/v3/promotion/create';
   static const String apiUrlGetPromotionDetail = '/api/v3/promotion/get-detail';
+  static const String apiUrlGetDealerInfoFromDealerInformation =
+      '/api/v3/dealer-information/get';
+  static const String apiUrlGetBranchesFromDealerInformation =
+      '/api/v3/dealer-information/get-branchs';
+  static const String apiUrlGetBranchDetailFromDealerInformation =
+      '/api/v3/dealer-information/get-branch-detail';
 
   // TienTD
   static final apiUrl = '${EnvBaseAppSettingValue.baseApiUrl}api/v3/';
@@ -266,6 +272,9 @@ class CustomAPIError {
       'Failed to Post Scrap Category';
   static const String getPromotionDetailFailedException =
       'Failed to get promotion detail';
+  static const String fetchBranchesFailedException = 'Failed to fetch branches';
+  static const String fetchBranchDetailFailedException =
+      'Failed to fetch branch detail';
 }
 
 class CustomFormats {
@@ -305,6 +314,7 @@ class CustomRoutes {
   static const String promotionListView = '/promotionListView';
   static const String promotionDetailView = '/promotionDetailView';
   static const String addPromotion = '/addPromotion';
+  static const String dealerInfo = '/dealerInfo';
   static const profilePasswordEdit = 'profilePasswordEdit';
   static const profileEdit = 'profileEdit';
 
@@ -514,4 +524,22 @@ class RegexConstants {
 class DealerType {
   static const int manager = 3;
   static const int member = 5;
+}
+
+enum DealerRoleKey {
+  MAIN_BRANCH,
+  MEMBER_BRANCH,
+}
+
+extension DealerRoleKeyExtension on DealerRoleKey {
+  int get number {
+    switch (this) {
+      case DealerRoleKey.MAIN_BRANCH:
+        return 3;
+      case DealerRoleKey.MEMBER_BRANCH:
+        return 5;
+      default:
+        return 0;
+    }
+  }
 }

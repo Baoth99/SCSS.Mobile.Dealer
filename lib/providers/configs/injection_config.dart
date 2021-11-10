@@ -9,6 +9,7 @@ import 'package:dealer_app/providers/services/transaction_service.dart';
 import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
+import 'package:dealer_app/repositories/handlers/dealer_info_handler.dart';
 import 'package:dealer_app/repositories/handlers/promotion_handler.dart';
 import 'package:dealer_app/repositories/handlers/scrap_category_handler.dart';
 import 'package:dealer_app/repositories/handlers/user_handler.dart';
@@ -29,6 +30,7 @@ void configureDependencies() async {
       CollectDealTransactionHandler());
   getIt.registerSingleton<TransactionHistoryBloc>(TransactionHistoryBloc());
   getIt.registerSingleton<IScrapCategoryHandler>(ScrapCategoryHandler());
+  getIt.registerSingleton<IDealerInfoHandler>(DealerInfoHandler());
   // Network
   getIt.registerLazySingleton<NotificationNetwork>(
     () => NotificationNetworkImpl(),
