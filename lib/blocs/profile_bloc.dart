@@ -45,6 +45,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               totalPoint: newState.totalPoint,
               idCard: newState.idCard,
               status: FormzStatus.submissionSuccess,
+              dealerType: newState.dealerType,
             );
           } else {
             throw Exception('New Sate is null');

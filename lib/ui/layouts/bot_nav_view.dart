@@ -11,6 +11,7 @@ import 'package:dealer_app/repositories/states/bot_nav_state.dart';
 import 'package:dealer_app/repositories/states/notification_state.dart';
 import 'package:dealer_app/ui/layouts/account_layout.dart';
 import 'package:dealer_app/ui/layouts/notification_view.dart';
+import 'package:dealer_app/ui/layouts/statistic_layout.dart';
 import 'package:dealer_app/ui/layouts/transaction_history_view.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -101,6 +102,7 @@ class _BotNavViewState extends State<BotNavView> {
 _body() {
   return BlocBuilder<BotNavBloc, BotNavState>(
     builder: (context, state) {
+      if (state.index == BotNavItem.STATISTIC.index) return StatisticLayout();
       if (state.index == BotNavItem.HOME.index) return HomeView();
       if (state.index == BotNavItem.ACTIVITY.index)
         return TransactionHistoryView();

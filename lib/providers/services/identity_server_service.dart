@@ -55,6 +55,7 @@ class IdentityServerServiceImpl implements IdentityServerService {
         phone: m.phone ?? Symbols.empty,
         totalPoint: m.totalPoint ?? 0,
         idCard: m.idCard ?? Symbols.empty,
+        dealerType: m.roleKey ?? 0,
       );
     }
 

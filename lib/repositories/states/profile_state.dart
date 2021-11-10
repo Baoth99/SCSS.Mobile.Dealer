@@ -18,6 +18,7 @@ class ProfileState extends Equatable {
     this.totalPoint = 0,
     this.status = FormzStatus.pure,
     this.imageProfile,
+    this.dealerType = 0,
   });
   final String id;
   final String name;
@@ -31,6 +32,7 @@ class ProfileState extends Equatable {
   final int totalPoint;
   final FormzStatus status;
   final ImageProvider<Object>? imageProfile;
+  final int dealerType;
 
   ProfileState copyWith({
     String? id,
@@ -46,6 +48,7 @@ class ProfileState extends Equatable {
     double? rate,
     FormzStatus? status,
     ImageProvider<Object>? imageProfile,
+    int? dealerType,
   }) {
     return ProfileState(
       id: id ?? this.id,
@@ -60,6 +63,7 @@ class ProfileState extends Equatable {
       totalPoint: totalPoint ?? this.totalPoint,
       status: status ?? this.status,
       imageProfile: imageProfile ?? this.imageProfile,
+      dealerType: dealerType ?? this.dealerType,
     );
   }
 
@@ -77,5 +81,6 @@ class ProfileState extends Equatable {
         totalPoint,
         status,
         imageProfile,
+        dealerType,
       ];
 }

@@ -1,9 +1,11 @@
 import 'package:dealer_app/blocs/transaction_history_bloc.dart';
 import 'package:dealer_app/providers/network/identity_server_network.dart';
 import 'package:dealer_app/providers/network/notification_network.dart';
+import 'package:dealer_app/providers/network/transaction_network.dart';
 import 'package:dealer_app/providers/services/firebase_service.dart';
 import 'package:dealer_app/providers/services/identity_server_service.dart';
 import 'package:dealer_app/providers/services/notification_service.dart';
+import 'package:dealer_app/providers/services/transaction_service.dart';
 import 'package:dealer_app/repositories/handlers/authentication_handler.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
@@ -34,12 +36,17 @@ void configureDependencies() async {
   getIt.registerLazySingleton<IdentityServerNetwork>(
     () => IdentityServerNetworkImpl(),
   );
-
+  getIt.registerLazySingleton<TransactionNetwork>(
+    () => TransactionNetworkImpl(),
+  );
 // Service
   getIt.registerLazySingleton<IdentityServerService>(
     () => IdentityServerServiceImpl(),
   );
   getIt.registerLazySingleton<NotificationService>(
     () => NotificationServiceImp(),
+  );
+  getIt.registerLazySingleton<TransactionService>(
+    () => TransactionServiceImpl(),
   );
 }
