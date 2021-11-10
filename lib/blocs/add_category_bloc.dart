@@ -114,6 +114,9 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
         );
       }
     }
+    if (event is EventCloseImagePicker) {
+      yield state.copyWith(isImageSourceActionSheetVisible: false);
+    }
   }
 
   Future<List<ScrapCategoryModel>> _getScrapCategoryUnitPriceList({
