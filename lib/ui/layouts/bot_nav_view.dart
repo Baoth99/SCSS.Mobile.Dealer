@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
+import 'package:dealer_app/blocs/dealer_information_bloc.dart';
 import 'package:dealer_app/blocs/notification_bloc.dart';
 import 'package:dealer_app/blocs/profile_bloc.dart';
 import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/repositories/events/bot_nav_event.dart';
+import 'package:dealer_app/repositories/events/dealer_information_event.dart';
 import 'package:dealer_app/repositories/events/notification_event.dart';
 import 'package:dealer_app/repositories/events/profile_event.dart';
 import 'package:dealer_app/repositories/states/bot_nav_state.dart';
@@ -70,21 +72,9 @@ class _BotNavViewState extends State<BotNavView> {
     //profile
     context.read<ProfileBloc>().add(ProfileClear());
     context.read<ProfileBloc>().add(ProfileInitial());
-
-    try {
-      _timer = Timer.periodic(
-        const Duration(minutes: 1),
-        (timer) {
-          try {
-            context.read<ProfileBloc>().add(ProfileInitial());
-          } catch (e) {
-            AppLog.error(e);
-          }
-        },
-      );
-    } catch (e) {
-      AppLog.error(e);
-    }
+    //dealer informatiom
+    context.read<DealerInformationBloc>().add(DealerInformationClear());
+    context.read<DealerInformationBloc>().add(DealerInformationInitial());
   }
 
   @override

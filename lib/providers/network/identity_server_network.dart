@@ -6,6 +6,8 @@ import 'package:dealer_app/repositories/models/request_models/restore_pass_otp_r
 import 'package:dealer_app/repositories/models/request_models/restore_password_request_model.dart';
 import 'package:dealer_app/repositories/models/response_models/base_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/confirm_restore_password_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/dealer_information_response_model.dart';
+import 'package:dealer_app/repositories/models/response_models/dealer_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/profile_info_response_model.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/env_util.dart';
@@ -36,6 +38,7 @@ abstract class IdentityServerNetwork {
     RestorePasswordRequestModel requestModel,
     Client client,
   );
+  Future<DealerInformationResponseModel> getDealerInfo(Client client);
 }
 
 class IdentityServerNetworkImpl implements IdentityServerNetwork {
@@ -157,6 +160,21 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
         await NetworkUtils.getModelOfResponseMainAPI<BaseResponseModel>(
       response,
       baseResponseModelFromJson,
+    );
+
+    return responseModel;
+  }
+
+  Future<DealerInformationResponseModel> getDealerInfo(Client client) async {
+    var response = await NetworkUtils.getNetworkWithBearer(
+      uri: CustomApiUrl.dealerInformation,
+      client: client,
+    );
+    var responseModel =
+        await NetworkUtils.checkSuccessStatusCodeAPIMainResponseModel<
+            DealerInformationResponseModel>(
+      response,
+      dealerInformationResponseModelFromJson,
     );
 
     return responseModel;

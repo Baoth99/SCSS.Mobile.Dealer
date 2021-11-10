@@ -1,4 +1,5 @@
 import 'package:dealer_app/blocs/authentication_bloc.dart';
+import 'package:dealer_app/blocs/dealer_information_bloc.dart';
 import 'package:dealer_app/blocs/notification_bloc.dart';
 import 'package:dealer_app/blocs/profile_bloc.dart';
 import 'package:dealer_app/constants/common_constants.dart';
@@ -67,6 +68,9 @@ class DealerApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => ProfileBloc(),
+          ),
+          BlocProvider(
+            create: (context) => DealerInformationBloc(),
           ),
         ],
         child: MaterialApp(

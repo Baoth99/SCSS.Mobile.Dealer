@@ -5,6 +5,7 @@ import 'package:dealer_app/repositories/models/gender_model.dart';
 import 'package:dealer_app/repositories/models/request_models/confirm_restore_password_request_model.dart';
 import 'package:dealer_app/repositories/models/request_models/restore_pass_otp_request_model.dart';
 import 'package:dealer_app/repositories/models/request_models/restore_password_request_model.dart';
+import 'package:dealer_app/repositories/states/dealer_information_state.dart';
 import 'package:dealer_app/repositories/states/profile_state.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -19,6 +20,7 @@ abstract class IdentityServerService {
   Future<String> confirmOTPRestorePass(String phoneNumber, String otp);
   Future<int> restorePassword(
       String phoneNumber, String token, String newPassword);
+  Future<DealerInformationState> getDealerInformation();
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -132,5 +134,39 @@ class IdentityServerServiceImpl implements IdentityServerService {
     } else {
       return NetworkConstants.badRequest400;
     }
+  }
+
+  @override
+  Future<DealerInformationState> getDealerInformation() async {
+    Client client = Client();
+    DealerInformationState result = await _identityServerNetwork
+        .getDealerInfo(
+      client,
+    )
+        .then<DealerInformationState>((responseModel) {
+      var d = responseModel.resData;
+      if (d != null) {
+        String dealerImageUrl = Symbols.empty;
+        if (d.dealerImageUrl != null && d.dealerImageUrl!.isNotEmpty) {
+          dealerImageUrl = NetworkUtils.getUrlWithQueryString(
+              CustomApiUrl.imageGet, {'imageUrl': d.dealerImageUrl!});
+        }
+        return DealerInformationState(
+          id: d.id,
+          dealerAddress: d.dealerAddress,
+          dealerImageUrl: dealerImageUrl,
+          dealerName: d.dealerName,
+          dealerPhone: d.dealerPhone,
+          dealerLatitude: d.dealerLatitude,
+          dealerLongtitude: d.dealerLongtitude,
+          openTime: d.openTime,
+          closeTime: d.closeTime,
+        );
+      } else {
+        return DealerInformationState();
+      }
+    }).whenComplete(() => client.close());
+
+    return result;
   }
 }
