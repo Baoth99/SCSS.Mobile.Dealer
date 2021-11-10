@@ -241,6 +241,7 @@ class CustomApiUrl {
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
   static final getBranches = '${apiUrl}dealer-information/branchs';
   static final getStatistic = '${apiUrl}statistic/get';
+  static final createComplaint = '${apiUrl}complaint/collect-deal-trans';
 }
 
 class CustomAPIError {
@@ -542,4 +543,11 @@ extension DealerRoleKeyExtension on DealerRoleKey {
         return 0;
     }
   }
+}
+
+class FeedbackToSystemStatus {
+  static const int canNotGiveFeedback = 1;
+  static const int canGiveFeedback = 2;
+  static const int haveGivenFeedback = 3;
+  static const int adminReplied = 4;
 }

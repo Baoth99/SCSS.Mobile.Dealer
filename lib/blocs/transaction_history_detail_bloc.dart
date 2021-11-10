@@ -34,7 +34,8 @@ class TransactionHistoryDetailBloc
           image = await _dataHandler.getImageBytes(imageUrl: model.profileURL);
         }
 
-        yield LoadedState(model: model, grandTotal: grandTotal, image: image);
+        yield LoadedState(
+            id: id, model: model, grandTotal: grandTotal, image: image);
       } catch (e) {
         print(e);
         //  if (e.toString().contains(CustomAPIError.missingBearerToken))

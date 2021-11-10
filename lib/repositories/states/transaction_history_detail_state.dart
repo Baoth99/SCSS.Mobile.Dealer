@@ -19,11 +19,13 @@ class NotLoadedState extends TransactionHistoryDetailState {
 }
 
 class LoadedState extends TransactionHistoryDetailState {
+  final String id;
   final CDTransactionHistoryDetailModel model;
   final int grandTotal;
   final ImageProvider? image;
 
   LoadedState({
+    required this.id,
     required this.model,
     required this.grandTotal,
     required this.image,
