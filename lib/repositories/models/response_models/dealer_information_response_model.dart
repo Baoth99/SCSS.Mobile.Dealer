@@ -46,6 +46,7 @@ class ResData {
     required this.dealerPhone,
     required this.openTime,
     required this.closeTime,
+    required this.isActive,
   });
 
   final String id;
@@ -57,6 +58,7 @@ class ResData {
   final String dealerPhone;
   final String openTime;
   final String closeTime;
+  final bool isActive;
 
   factory ResData.fromJson(Map<String, dynamic> json) => ResData(
         id: json["id"],
@@ -68,5 +70,6 @@ class ResData {
         dealerPhone: json["dealerPhone"],
         openTime: json["openTime"],
         closeTime: json["closeTime"],
+        isActive: json["isActive"],
       );
 }

@@ -243,6 +243,7 @@ class CustomApiUrl {
   static final getStatistic = '${apiUrl}statistic/get';
   static final createComplaint = '${apiUrl}complaint/collect-deal-trans';
   static final dealerInformation = '${apiUrl}dealer-information/get';
+  static final changeStatusDealer = '${apiUrl}dealer-information/change-status';
 }
 
 class CustomAPIError {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/dealer_information_bloc.dart';
+import 'package:dealer_app/repositories/events/dealer_information_event.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_information_state.dart';
 import 'package:dealer_app/ui/widgets/avartar_widget.dart';
@@ -26,6 +27,7 @@ class HomeView extends StatelessWidget {
           body: Container(
             child: Column(children: [
               avatar(context),
+              activeWidget(context),
               Expanded(
                   child: ListView(
                 children: [
@@ -70,6 +72,65 @@ class HomeView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget activeWidget(BuildContext context) {
+    return BlocBuilder<DealerInformationBloc, DealerInformationState>(
+      builder: (context, state) {
+        return state.status.isSubmissionSuccess
+            ? activeWidgetMain(context, state)
+            : state.status.isSubmissionInProgress || state.status.isPure
+                ? FunctionalWidgets.getLoadingAnimation()
+                : FunctionalWidgets.getErrorIcon();
+      },
+    );
+  }
+
+  Widget activeWidgetMain(BuildContext context, DealerInformationState state) {
+    return Container(
+      width: double.infinity,
+      constraints: BoxConstraints(minHeight: 500.h),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Colors.grey.withOpacity(0.4)),
+        ),
+        color: Colors.white,
+      ),
+      child: Center(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CustomText(
+                  text: 'Trạng thái hoạt động:',
+                  color: Colors.grey,
+                ),
+                Expanded(
+                  child: CustomText(
+                    text: state.isActive ? 'Đang hoạt động' : 'Ngưng hoạt động',
+                    color: state.isActive ? Colors.green : Colors.red,
+                  ),
+                ),
+                Switch(
+                  value: state.isActive,
+                  onChanged: (value) {
+                    context.read<DealerInformationBloc>().add(
+                          ModifyActivationSwitch(),
+                        );
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                ),
+              ],
+            ),
+            CustomText(
+              text:
+                  '* Thông tin vựa của bạn sẽ được hiển thị trong danh sách Vựa đang hoạt động',
+            ),
+          ],
+        ),
+      ),
     );
   }
 
