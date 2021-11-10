@@ -46,6 +46,19 @@ class DealerInformationBloc
       } catch (e) {
         AppLog.error(e);
       }
+    } else if (event is ModifyActivationSwitch) {
+      try {
+        bool expected = !state.isActive;
+        var result = await futureAppDuration(
+            _identityServerService.changeDealerStatus(expected));
+        yield state.copyWith(isActive: expected);
+        if (result) {
+        } else {
+          throw Exception('result is false');
+        }
+      } catch (e) {
+        AppLog.error(e);
+      }
     }
   }
 }

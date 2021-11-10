@@ -13,6 +13,7 @@ class DealerInformationState extends Equatable {
     this.dealerPhone = Symbols.empty,
     this.openTime = Symbols.empty,
     this.closeTime = Symbols.empty,
+    this.isActive = false,
     this.status = FormzStatus.pure,
   });
   final String id;
@@ -24,6 +25,7 @@ class DealerInformationState extends Equatable {
   final String dealerPhone;
   final String openTime;
   final String closeTime;
+  final bool isActive;
   final FormzStatus status;
 
   DealerInformationState copyWith({
@@ -36,6 +38,7 @@ class DealerInformationState extends Equatable {
     String? dealerPhone,
     String? openTime,
     String? closeTime,
+    bool? isActive,
     FormzStatus? status,
   }) {
     return DealerInformationState(
@@ -48,6 +51,7 @@ class DealerInformationState extends Equatable {
       dealerPhone: dealerPhone ?? this.dealerPhone,
       openTime: openTime ?? this.openTime,
       closeTime: closeTime ?? this.closeTime,
+      isActive: isActive ?? this.isActive,
       status: status ?? this.status,
     );
   }
@@ -63,6 +67,7 @@ class DealerInformationState extends Equatable {
         dealerPhone,
         openTime,
         closeTime,
+        isActive,
         status,
       ];
 }

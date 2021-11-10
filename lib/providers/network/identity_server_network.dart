@@ -39,6 +39,7 @@ abstract class IdentityServerNetwork {
     Client client,
   );
   Future<DealerInformationResponseModel> getDealerInfo(Client client);
+  Future<BaseResponseModel> changeStatusDealer(Client client, bool value);
 }
 
 class IdentityServerNetworkImpl implements IdentityServerNetwork {
@@ -175,6 +176,25 @@ class IdentityServerNetworkImpl implements IdentityServerNetwork {
             DealerInformationResponseModel>(
       response,
       dealerInformationResponseModelFromJson,
+    );
+
+    return responseModel;
+  }
+
+  @override
+  Future<BaseResponseModel> changeStatusDealer(
+      Client client, bool value) async {
+    String url = NetworkUtils.toStringUrl(
+        CustomApiUrl.changeStatusDealer, {"status": value.toString()});
+
+    var response = await NetworkUtils.putBodyWithBearerAuth(
+      uri: url,
+      client: client,
+    );
+    var responseModel = await NetworkUtils
+        .checkSuccessStatusCodeAPIMainResponseModel<BaseResponseModel>(
+      response,
+      baseResponseModelFromJson,
     );
 
     return responseModel;

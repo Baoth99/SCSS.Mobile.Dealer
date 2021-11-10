@@ -21,6 +21,7 @@ abstract class IdentityServerService {
   Future<int> restorePassword(
       String phoneNumber, String token, String newPassword);
   Future<DealerInformationState> getDealerInformation();
+  Future<bool> changeDealerStatus(bool status);
 }
 
 class IdentityServerServiceImpl implements IdentityServerService {
@@ -161,12 +162,32 @@ class IdentityServerServiceImpl implements IdentityServerService {
           dealerLongtitude: d.dealerLongtitude,
           openTime: d.openTime,
           closeTime: d.closeTime,
+          isActive: d.isActive,
         );
       } else {
         return DealerInformationState();
       }
     }).whenComplete(() => client.close());
 
+    return result;
+  }
+
+  @override
+  Future<bool> changeDealerStatus(bool status) async {
+    Client client = Client();
+    var result = await _identityServerNetwork
+        .changeStatusDealer(
+      client,
+      status,
+    )
+        .then(
+      (responseModel) {
+        return responseModel.isSuccess &&
+            responseModel.statusCode == NetworkConstants.ok200;
+      },
+    ).whenComplete(
+      () => client.close(),
+    );
     return result;
   }
 }
