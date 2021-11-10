@@ -233,6 +233,8 @@ class CustomApiUrl {
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/confirm-otp';
   static final restorePassword =
       '${EnvID4AppSettingValue.apiUrl}api/identity/account/restore-password';
+  static final getBranches = '${apiUrl}dealer-information/branchs';
+  static final getStatistic = '${apiUrl}statistic/get';
 }
 
 class CustomAPIError {
@@ -507,4 +509,9 @@ class RegexConstants {
   static final String otpCode = r'^\d{' + Others.otpLength.toString() + r'}$';
   static final String email =
       r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+}
+
+class DealerType {
+  static const int manager = 3;
+  static const int member = 5;
 }
