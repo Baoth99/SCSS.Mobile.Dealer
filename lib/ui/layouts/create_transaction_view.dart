@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class CreateTransactionView extends StatelessWidget {
   final TextEditingController _collectorPhoneController =
@@ -37,36 +38,30 @@ class CreateTransactionView extends StatelessWidget {
                 _showItemDialog(context);
               }
               //process
-              if (state.process == Process.processed) {
-                Navigator.of(context).pop();
-              } else if (state.process == Process.error) {
-                _showSnackBar(context, CustomTexts.generalErrorMessage);
-              } else if (state.process == Process.valid) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: CustomTexts.createTransactionSuccessfullyText,
-                  type: CoolAlertType.success,
-                  onTap: () {
-                    Navigator.popUntil(
-                        context, ModalRoute.withName(CustomRoutes.botNav));
-                  },
-                );
+              if (state.process == Process.processing) {
+                EasyLoading.show(status: CustomTexts.processing);
+              } else {
+                EasyLoading.dismiss();
+                if (state.process == Process.error) {
+                  CustomCoolAlert.showCoolAlert(
+                    context: context,
+                    title: CustomTexts.generalErrorMessage,
+                    type: CoolAlertType.error,
+                  );
+                } else if (state.process == Process.valid) {
+                  CustomCoolAlert.showCoolAlert(
+                    context: context,
+                    title: CustomTexts.createTransactionSuccessfullyText,
+                    type: CoolAlertType.success,
+                    onTap: () {
+                      Navigator.popUntil(
+                          context, ModalRoute.withName(CustomRoutes.botNav));
+                    },
+                  );
+                }
               }
             },
           ),
-          BlocListener<CreateTransactionBloc, CreateTransactionState>(
-              listenWhen: (previous, current) {
-            return previous.process == Process.neutral;
-          }, listener: (context, state) {
-            if (state.process == Process.processing) {
-              showDialog(
-                context: context,
-                builder: (context) => const CustomProgressIndicatorDialog(
-                  text: CustomTexts.pleaseWaitText,
-                ),
-              );
-            }
-          }),
           // Collector phone listener
           BlocListener<CreateTransactionBloc, CreateTransactionState>(
               listenWhen: (previous, current) {
