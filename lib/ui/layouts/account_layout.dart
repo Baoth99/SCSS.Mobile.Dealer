@@ -136,6 +136,18 @@ class AccountBody extends StatelessWidget {
           BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               return option(
+                'Thông tin vựa',
+                () {
+                  Navigator.of(context).pushNamed(CustomRoutes.dealerInfo);
+                },
+                Colors.black,
+                Icons.arrow_forward_ios,
+              );
+            },
+          ),
+          BlocBuilder<ProfileBloc, ProfileState>(
+            builder: (context, state) {
+              return option(
                 'Đổi mật khẩu',
                 () {
                   Navigator.of(context).pushNamed(
