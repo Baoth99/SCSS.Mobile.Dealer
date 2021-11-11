@@ -2,6 +2,11 @@ import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {}
 
+class EventInitData extends LoginEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class EventLoginPhoneNumberChanged extends LoginEvent {
   final String phoneNumber;
 

@@ -54,6 +54,7 @@ class AuthenticationBloc
       }
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationHandler.logout();
+      SecureStorage.deleteValue(key: CustomKeys.accessToken);
     }
   }
 
