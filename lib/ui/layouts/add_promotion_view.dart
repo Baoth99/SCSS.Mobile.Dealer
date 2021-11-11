@@ -1,6 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/add_promotion_bloc.dart';
-import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/events/add_promotion_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/add_promotion_state.dart';
@@ -26,7 +25,7 @@ class AddPromotionView extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         // Show loading
-        EasyLoading.show(status: 'Đang tải dữ liệu...');
+        EasyLoading.show();
         return AddPromotionBloc();
       },
       child: MultiBlocListener(
@@ -68,7 +67,7 @@ class AddPromotionView extends StatelessWidget {
           BlocListener<AddPromotionBloc, AddPromotionState>(
               listener: (context, state) {
             if (state is LoadingState) {
-              EasyLoading.show(status: CustomTexts.processing);
+              EasyLoading.show();
             } else {
               EasyLoading.dismiss();
               if (state is SuccessState) {

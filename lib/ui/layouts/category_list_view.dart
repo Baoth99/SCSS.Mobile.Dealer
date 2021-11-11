@@ -23,7 +23,7 @@ class CategoryListView extends StatelessWidget {
           BlocListener<CategoryListBloc, CategoryListState>(
             listener: (context, state) {
               if (state is NotLoadedState) {
-                EasyLoading.show(status: CustomTexts.processing);
+                EasyLoading.show();
               } else {
                 EasyLoading.dismiss();
                 if (state is ErrorState) {

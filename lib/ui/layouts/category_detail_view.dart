@@ -40,7 +40,7 @@ class CategoryDetailView extends StatelessWidget {
             BlocListener<CategoryDetailBloc, CategoryDetailState>(
                 listener: (context, state) {
               if (state is LoadingState) {
-                EasyLoading.show(status: CustomTexts.processing);
+                EasyLoading.show();
               } else {
                 EasyLoading.dismiss();
                 if (state is SubmittedState) {

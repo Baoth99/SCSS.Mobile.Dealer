@@ -54,8 +54,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await _authenticationHandler.autoLogin();
         // close progress indicator
       } on Exception catch (e) {
-        //close progress indicator
-        yield state.copyWith(process: Process.error);
+        print(e);
       } finally {
         yield state.copyWith(process: Process.processed);
       }

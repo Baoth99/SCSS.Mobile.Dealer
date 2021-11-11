@@ -6,7 +6,6 @@ import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
-import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/qr_scanner.dart';
@@ -39,7 +38,7 @@ class CreateTransactionView extends StatelessWidget {
               }
               //process
               if (state.process == Process.processing) {
-                EasyLoading.show(status: CustomTexts.processing);
+                EasyLoading.show();
               } else {
                 EasyLoading.dismiss();
                 if (state.process == Process.error) {
@@ -429,10 +428,6 @@ class CreateTransactionView extends StatelessWidget {
         );
       },
     );
-  }
-
-  _showSnackBar(context, text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
 // Item fields

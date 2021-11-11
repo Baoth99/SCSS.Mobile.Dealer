@@ -9,6 +9,7 @@ import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -28,7 +29,11 @@ class TransactionHistoryView extends StatelessWidget {
             listener: (context, state) {
               //process
               if (state.process == TransactionHistoryProcess.invalid) {
-                _showSnackBar(context, CustomTexts.generalErrorMessage);
+                CustomCoolAlert.showCoolAlert(
+                  context: context,
+                  title: CustomTexts.generalErrorMessage,
+                  type: CoolAlertType.error,
+                );
               } else if (state.process == TransactionHistoryProcess.valid) {
                 CustomCoolAlert.showCoolAlert(
                   context: context,
@@ -44,15 +49,9 @@ class TransactionHistoryView extends StatelessWidget {
             return previous.process == TransactionHistoryProcess.neutral;
           }, listener: (context, state) {
             if (state.process == TransactionHistoryProcess.processing) {
-              showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) => const CustomProgressIndicatorDialog(
-                  text: CustomTexts.pleaseWaitText,
-                ),
-              );
+              EasyLoading.show();
             } else if (state.process == TransactionHistoryProcess.processed) {
-              Navigator.of(context).pop();
+              EasyLoading.dismiss();
             }
           }),
           // Close processing dialog
@@ -414,9 +413,5 @@ class TransactionHistoryView extends StatelessWidget {
 
   Future _loadMoreTransactions(BuildContext context) async {
     context.read<TransactionHistoryBloc>().add(EventLoadMoreTransactions());
-  }
-
-  _showSnackBar(context, text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }
