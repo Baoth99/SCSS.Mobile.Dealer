@@ -24,7 +24,7 @@ class LoginView extends StatelessWidget {
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.process == Process.processing) {
-            EasyLoading.show(status: 'Đang xử lí...');
+            EasyLoading.show();
           } else {
             EasyLoading.dismiss();
             if (state.process == Process.invalid) {

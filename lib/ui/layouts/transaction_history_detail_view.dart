@@ -3,7 +3,6 @@ import 'package:dealer_app/blocs/feedback_admin_bloc.dart';
 import 'package:dealer_app/blocs/transaction_history_detail_bloc.dart';
 import 'package:dealer_app/constants/common_constants.dart';
 import 'package:dealer_app/repositories/events/feedback_admin_event.dart';
-import 'package:dealer_app/repositories/events/transaction_history_detail_event.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_history_detail_item_model.dart';
 import 'package:dealer_app/repositories/states/feedback_admin_state.dart';
 import 'package:dealer_app/repositories/states/transaction_history_detail_state.dart';
@@ -11,7 +10,6 @@ import 'package:dealer_app/ui/app.dart';
 import 'package:dealer_app/ui/widgets/common_margin_container.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/function_widgets.dart';
-import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +28,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
       return BlocProvider(
         create: (context) {
           // Show loading
-          EasyLoading.show(status: 'Đang tải dữ liệu...');
+          EasyLoading.show();
           return TransactionHistoryDetailBloc(id: id);
         },
         child: MultiBlocListener(

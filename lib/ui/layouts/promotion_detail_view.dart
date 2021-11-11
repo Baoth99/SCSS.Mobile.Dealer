@@ -16,7 +16,7 @@ class PromotionDetailView extends StatelessWidget {
       return BlocProvider(
         create: (context) {
           // Show loading
-          EasyLoading.show(status: 'Đang tải dữ liệu...');
+          EasyLoading.show();
           return PromotionDetailBloc(promotionId: id);
         },
         child: MultiBlocListener(

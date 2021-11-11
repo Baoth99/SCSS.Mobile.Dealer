@@ -20,7 +20,7 @@ class PromotionListView extends StatelessWidget {
           BlocListener<PromotionListBloc, PromotionListState>(
             listener: (context, state) {
               if (state is NotLoadedState) {
-                EasyLoading.show(status: CustomTexts.processing);
+                EasyLoading.show();
               } else {
                 EasyLoading.dismiss();
                 if (state is ErrorState) {

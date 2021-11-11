@@ -4,7 +4,6 @@ import 'package:dealer_app/repositories/events/dealer_info_event.dart';
 import 'package:dealer_app/repositories/models/get_branches_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_info_state.dart';
-import 'package:dealer_app/repositories/states/statistic_state.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -27,7 +26,7 @@ class DealerInfoView extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         // Show loading
-        EasyLoading.show(status: 'Đang tải dữ liệu...');
+        EasyLoading.show();
         return DealerInfoBloc();
       },
       child: MultiBlocListener(
