@@ -42,8 +42,8 @@ class AuthenticationBloc
       AuthenticationEvent event) async* {
     if (event is AuthenticationStatusChanged) {
       if (_periodicSubscription == null) {
-        _periodicSubscription ??=
-            Stream.periodic(const Duration(seconds: 17900), (x) => x).listen(
+        _periodicSubscription ??= Stream.periodic(
+            const Duration(seconds: CustomVar.refreshTime), (x) => x).listen(
           (_) {
             print('refresh token');
             _authenticationHandler.autoLogin();

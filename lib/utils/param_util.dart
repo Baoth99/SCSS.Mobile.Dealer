@@ -388,6 +388,8 @@ class CustomVar {
   static const totalLimit = 100000000;
 
   static const String zeroId = '00000000-0000-0000-0000-000000000000';
+
+  static const int refreshTime = 17900;
 }
 
 class Symbols {
