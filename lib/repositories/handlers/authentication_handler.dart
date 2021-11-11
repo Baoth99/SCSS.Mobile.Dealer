@@ -39,6 +39,10 @@ class AuthenticationHandler implements IAuthenticationHandler {
       bool result = await SecureStorage.writeValue(
           key: CustomKeys.accessToken,
           value: accessTokenHolderModel.accessToken);
+      //Save refresh token
+      result = await SecureStorage.writeValue(
+          key: CustomKeys.refreshToken,
+          value: accessTokenHolderModel.refreshToken);
       if (result) {
         //put device Id
         result = await userHandler.putDeviceIdWhenLogin(
@@ -65,20 +69,35 @@ class AuthenticationHandler implements IAuthenticationHandler {
   Future<void> autoLogin() async {
     try {
       final userHandler = getIt.get<IUserHandler>();
-      //get access token
-      String? accessToken =
-          await SecureStorage.readValue(key: CustomKeys.accessToken);
-      if (accessToken != null) {
-        //put device Id
-        var result =
-            await userHandler.putDeviceIdWhenLogin(bearerToken: accessToken);
-        if (result)
-          //add event
-          _controller.add(AuthenticationStatus.authenticated);
-        else
+      //get refresh token
+      String? refreshToken =
+          await SecureStorage.readValue(key: CustomKeys.refreshToken);
+      if (refreshToken != null) {
+        //get access token
+        AccessTokenHolderModel accessTokenHolderModel =
+            await LoginNetwork.refreshToken(refreshToken: refreshToken);
+        //save token
+        bool result = await SecureStorage.writeValue(
+            key: CustomKeys.accessToken,
+            value: accessTokenHolderModel.accessToken);
+        //Save refresh token
+        result = await SecureStorage.writeValue(
+            key: CustomKeys.refreshToken,
+            value: accessTokenHolderModel.refreshToken);
+        if (result) {
+          //put device Id
+          result = await userHandler.putDeviceIdWhenLogin(
+              bearerToken: accessTokenHolderModel.accessToken);
+          if (result)
+            //add event
+            _controller.add(AuthenticationStatus.authenticated);
+          else
+            _controller.add(AuthenticationStatus.unauthenticated);
+        } else
           _controller.add(AuthenticationStatus.unauthenticated);
-      } else
+      } else {
         _controller.add(AuthenticationStatus.unauthenticated);
+      }
     } catch (e) {
       _controller.add(AuthenticationStatus.unauthenticated);
       throw (e);

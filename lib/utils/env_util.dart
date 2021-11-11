@@ -27,6 +27,8 @@ class EnvID4AppSettingValue {
   static String grantTypePassword =
       dotenv.env['ID4_GRANT_TYPE_PASSWORD'].toString();
   static String grantTypeOTP = dotenv.env['ID4_GRANT_TYPE_OTP'].toString();
+  static String grantTypeRefreshToken =
+      dotenv.env['ID4_GRANT_TYPE_REFRESH_TOKEN'].toString();
 }
 
 class EnvMapSettingValue {
