@@ -248,6 +248,7 @@ class CustomApiUrl {
 
 class CustomAPIError {
   static const String loginFailedException = 'Login failed';
+  static const String refreshTokenException = 'refresh token failed';
   static const String fetchTokenFailedException = 'Failed to fetch token';
   static const String fetchDealerInfoFailedException =
       'Failed to fetch user info';
@@ -329,6 +330,7 @@ class CustomRoutes {
 
 class CustomKeys {
   static const String accessToken = 'accessToken';
+  static const String refreshToken = 'refreshToken';
 }
 
 class CustomTickerDurations {

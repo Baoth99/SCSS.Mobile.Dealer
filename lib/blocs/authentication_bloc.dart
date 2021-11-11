@@ -17,6 +17,8 @@ class AuthenticationBloc
   late StreamSubscription<AuthenticationStatus>
       _authenticationStatusSubscription;
 
+  StreamSubscription? _periodicSubscription;
+
   //constructor
   AuthenticationBloc() : super(AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationHandler.stream.listen(
@@ -27,9 +29,11 @@ class AuthenticationBloc
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     _authenticationStatusSubscription.cancel();
     _authenticationHandler.dispose();
+    await _periodicSubscription?.cancel();
+    _periodicSubscription = null;
     return super.close();
   }
 
@@ -37,6 +41,18 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
     if (event is AuthenticationStatusChanged) {
+      if (_periodicSubscription == null) {
+        _periodicSubscription ??=
+            Stream.periodic(const Duration(seconds: 17900), (x) => x).listen(
+          (_) {
+            print('refresh token');
+            _authenticationHandler.autoLogin();
+          },
+          onError: (error) => _authenticationHandler.logout(),
+        );
+      } else {
+        _periodicSubscription!.resume();
+      }
       switch (event.status) {
         case AuthenticationStatus.unauthenticated:
           yield AuthenticationState.unauthenticated();
@@ -55,6 +71,7 @@ class AuthenticationBloc
     } else if (event is AuthenticationLogoutRequested) {
       _authenticationHandler.logout();
       SecureStorage.deleteValue(key: CustomKeys.accessToken);
+      SecureStorage.deleteValue(key: CustomKeys.refreshToken);
     }
   }
 
