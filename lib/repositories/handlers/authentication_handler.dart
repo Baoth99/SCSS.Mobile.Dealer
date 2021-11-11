@@ -14,6 +14,7 @@ abstract class IAuthenticationHandler {
   Future<void> login({required String phone, required String password});
   void logout();
   void dispose();
+  Future<void> autoLogin();
 }
 
 class AuthenticationHandler implements IAuthenticationHandler {
@@ -60,4 +61,27 @@ class AuthenticationHandler implements IAuthenticationHandler {
   }
 
   void dispose() => _controller.close();
+
+  Future<void> autoLogin() async {
+    try {
+      final userHandler = getIt.get<IUserHandler>();
+      //get access token
+      String? accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        //put device Id
+        var result =
+            await userHandler.putDeviceIdWhenLogin(bearerToken: accessToken);
+        if (result)
+          //add event
+          _controller.add(AuthenticationStatus.authenticated);
+        else
+          _controller.add(AuthenticationStatus.unauthenticated);
+      } else
+        _controller.add(AuthenticationStatus.unauthenticated);
+    } catch (e) {
+      _controller.add(AuthenticationStatus.unauthenticated);
+      throw (e);
+    }
+  }
 }

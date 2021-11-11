@@ -1,4 +1,6 @@
+import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/profile_bloc.dart';
+import 'package:dealer_app/repositories/events/authentication_event.dart';
 import 'package:dealer_app/repositories/models/gender_model.dart';
 import 'package:dealer_app/repositories/states/profile_state.dart';
 import 'package:dealer_app/ui/layouts/profile_layout.dart';
@@ -161,7 +163,11 @@ class AccountBody extends StatelessWidget {
           ),
           option(
             'Đăng xuất',
-            () {},
+            () {
+              context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested());
+            },
             Colors.red,
             Icons.logout_outlined,
           ),

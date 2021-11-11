@@ -6,6 +6,7 @@ import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({Key? key}) : super(key: key);
@@ -21,31 +22,15 @@ class LoginView extends StatelessWidget {
       child: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.process == Process.processing) {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return WillPopScope(
-                  onWillPop: () async => false,
-                  child: Center(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-          if (state.process == Process.processed) {
-            Navigator.of(context).pop();
-          }
-          if (state.process == Process.invalid) {
-            _showSnackBar(context, CustomTexts.wrongPasswordOrPhone);
-          }
-          if (state.process == Process.error) {
-            _showSnackBar(context, CustomTexts.loginError);
+            EasyLoading.show(status: 'Đang xử lí...');
+          } else {
+            EasyLoading.dismiss();
+            if (state.process == Process.invalid) {
+              _showSnackBar(context, CustomTexts.wrongPasswordOrPhone);
+            }
+            if (state.process == Process.error) {
+              _showSnackBar(context, CustomTexts.loginError);
+            }
           }
         },
         child: _body(),

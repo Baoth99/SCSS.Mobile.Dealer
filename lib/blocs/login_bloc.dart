@@ -9,7 +9,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   var _authenticationHandler = getIt.get<IAuthenticationHandler>();
   LoginBloc({
     required LoginState initialState,
-  }) : super(initialState);
+  }) : super(initialState) {
+    add(EventInitData());
+  }
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is EventLoginPhoneNumberChanged) {
@@ -43,6 +45,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } else if (event is EventShowHidePassword) {
       yield state.copyWith(isPasswordObscured: !state.isPasswordObscured);
+    }
+    if (event is EventInitData) {
+      try {
+        //start progress indicator
+        yield state.copyWith(process: Process.processing);
+        //login
+        await _authenticationHandler.autoLogin();
+        // close progress indicator
+        yield state.copyWith(process: Process.processed);
+      } on Exception catch (e) {
+        //close progress indicator
+        yield state.copyWith(process: Process.processed);
+        yield state.copyWith(process: Process.error);
+      } finally {
+        yield state.copyWith(process: Process.neutral);
+      }
     }
   }
 }
