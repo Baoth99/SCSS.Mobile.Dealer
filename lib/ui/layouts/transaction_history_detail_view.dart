@@ -424,10 +424,7 @@ class FeedbackAdminWidget extends StatelessWidget {
     return BlocListener<FeedbackAdminBloc, FeedbackAdminState>(
       listener: (context, state) {
         if (state.status.isSubmissionInProgress) {
-          showDialog(
-            context: context,
-            builder: (context) => const CustomProgressIndicatorDialog(),
-          );
+          EasyLoading.show();
         }
 
         if (state.status.isSubmissionSuccess) {

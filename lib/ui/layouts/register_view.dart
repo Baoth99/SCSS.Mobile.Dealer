@@ -1,12 +1,15 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/register_bloc.dart';
 import 'package:dealer_app/repositories/events/register_event.dart';
 import 'package:dealer_app/repositories/states/register_state.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class RegisterView extends StatelessWidget {
   RegisterView({Key? key}) : super(key: key);
@@ -22,23 +25,15 @@ class RegisterView extends StatelessWidget {
           return BlocListener<RegisterBloc, RegisterState>(
             listener: (context, state) {
               if (state.process == Process.processing) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return Center(
-                      child: SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
-                );
+                EasyLoading.show();
               } else if (state.process == Process.processed) {
-                Navigator.of(context).pop();
+                EasyLoading.dismiss();
               } else if (state.process == Process.error) {
-                _showSnackBar(context, CustomTexts.otpErrorMessage);
+                CustomCoolAlert.showCoolAlert(
+                  context: context,
+                  title: CustomTexts.otpErrorMessage,
+                  type: CoolAlertType.error,
+                );
               } else if (state.process == Process.valid) {
                 Navigator.of(context).pushNamed(CustomRoutes.registerOTP,
                     arguments: {'phone': state.phone});
@@ -51,10 +46,6 @@ class RegisterView extends StatelessWidget {
         },
       ),
     );
-  }
-
-  _showSnackBar(context, text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   _body() {

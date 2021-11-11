@@ -1,6 +1,8 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +28,18 @@ class LoginView extends StatelessWidget {
           } else {
             EasyLoading.dismiss();
             if (state.process == Process.invalid) {
-              _showSnackBar(context, CustomTexts.wrongPasswordOrPhone);
+              CustomCoolAlert.showCoolAlert(
+                context: context,
+                title: CustomTexts.wrongPasswordOrPhone,
+                type: CoolAlertType.error,
+              );
             }
             if (state.process == Process.error) {
-              _showSnackBar(context, CustomTexts.loginError);
+              CustomCoolAlert.showCoolAlert(
+                context: context,
+                title: CustomTexts.loginError,
+                type: CoolAlertType.error,
+              );
             }
           }
         },
@@ -156,10 +166,6 @@ class LoginView extends StatelessWidget {
         );
       },
     );
-  }
-
-  _showSnackBar(context, text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   _forgetPasswordOption(BuildContext context) {

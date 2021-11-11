@@ -431,10 +431,6 @@ class CreateTransactionView extends StatelessWidget {
     );
   }
 
-  _showSnackBar(context, text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
-  }
-
 // Item fields
   void _showItemDialog(BuildContext context) {
     showDialog(
