@@ -28,13 +28,20 @@ class TransactionHistoryView extends StatelessWidget {
           BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
             listener: (context, state) {
               //process
+              if (state.process == TransactionHistoryProcess.processing) {
+                EasyLoading.show();
+              }
+              if (state.process == TransactionHistoryProcess.processed) {
+                EasyLoading.dismiss();
+              }
               if (state.process == TransactionHistoryProcess.invalid) {
                 CustomCoolAlert.showCoolAlert(
                   context: context,
                   title: CustomTexts.generalErrorMessage,
                   type: CoolAlertType.error,
                 );
-              } else if (state.process == TransactionHistoryProcess.valid) {
+              }
+              if (state.process == TransactionHistoryProcess.valid) {
                 CustomCoolAlert.showCoolAlert(
                   context: context,
                   title: CustomTexts.createTransactionSuccessfullyText,
@@ -43,26 +50,6 @@ class TransactionHistoryView extends StatelessWidget {
               }
             },
           ),
-          // Show processing dialog
-          BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
-              listenWhen: (previous, current) {
-            return previous.process == TransactionHistoryProcess.neutral;
-          }, listener: (context, state) {
-            if (state.process == TransactionHistoryProcess.processing) {
-              EasyLoading.show();
-            } else if (state.process == TransactionHistoryProcess.processed) {
-              EasyLoading.dismiss();
-            }
-          }),
-          // Close processing dialog
-          BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
-              listenWhen: (previous, current) {
-            return previous.process == TransactionHistoryProcess.processing;
-          }, listener: (context, state) {
-            if (state.process == TransactionHistoryProcess.processed) {
-              Navigator.of(context).pop();
-            }
-          }),
           // Date listener
           BlocListener<TransactionHistoryBloc, TransactionHistoryState>(
               listenWhen: (previous, current) {

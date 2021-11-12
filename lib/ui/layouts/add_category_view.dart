@@ -49,8 +49,9 @@ class AddCategoryView extends StatelessWidget {
                     title: state.message,
                     type: CoolAlertType.success,
                     onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(CustomRoutes.botNav));
+                      EasyLoading.dismiss();
+                      Navigator.popUntil(context,
+                          ModalRoute.withName(CustomRoutes.categoryList));
                     });
               }
               if (state is ErrorState) {
