@@ -30,7 +30,7 @@ class TransactionHistoryDetailBloc
         grandTotal = model.total + model.totalBonus;
 
         var image;
-        if (model.profileURL.isNotEmpty) {
+        if (model.profileURL != null && model.profileURL.isNotEmpty) {
           image = await _dataHandler.getImageBytes(imageUrl: model.profileURL);
         }
 

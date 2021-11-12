@@ -30,7 +30,7 @@ class CategoryListView extends StatelessWidget {
                   CustomCoolAlert.showCoolAlert(
                     context: context,
                     title: state.errorMessage,
-                    type: CoolAlertType.success,
+                    type: CoolAlertType.error,
                     onTap: () {
                       Navigator.popUntil(
                           context, ModalRoute.withName(CustomRoutes.botNav));
