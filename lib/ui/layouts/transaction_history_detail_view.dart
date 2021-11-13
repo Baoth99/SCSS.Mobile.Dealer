@@ -28,7 +28,6 @@ class TransactionHistoryDetailView extends StatelessWidget {
       return BlocProvider(
         create: (context) {
           // Show loading
-          EasyLoading.show();
           return TransactionHistoryDetailBloc(id: id);
         },
         child: MultiBlocListener(
@@ -36,11 +35,10 @@ class TransactionHistoryDetailView extends StatelessWidget {
             // Close loading dialog
             BlocListener<TransactionHistoryDetailBloc,
                 TransactionHistoryDetailState>(
-              listenWhen: (previous, current) {
-                return previous is NotLoadedState;
-              },
               listener: (context, state) {
-                if (state is LoadedState) {
+                if (state is NotLoadedState) {
+                  EasyLoading.show();
+                } else {
                   EasyLoading.dismiss();
                 }
               },
@@ -423,6 +421,8 @@ class FeedbackAdminWidget extends StatelessWidget {
       listener: (context, state) {
         if (state.status.isSubmissionInProgress) {
           EasyLoading.show();
+        } else {
+          EasyLoading.dismiss();
         }
 
         if (state.status.isSubmissionSuccess) {
