@@ -55,13 +55,3 @@ class EventChangeUnitAndPrice extends AddCategoryEvent {
   @override
   List<Object?> get props => [index, unit, price];
 }
-
-class EventDeleteScrapCategory extends AddCategoryEvent {
-  @override
-  List<Object?> get props => [];
-}
-
-class EventTapDeleteButton extends AddCategoryEvent {
-  @override
-  List<Object?> get props => [];
-}
