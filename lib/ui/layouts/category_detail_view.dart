@@ -80,14 +80,6 @@ class CategoryDetailView extends StatelessWidget {
                 listener: (context, state) {
                   _scrapNameController.text = state.initScrapName;
                 }),
-            // // Listen to controllers
-            // BlocListener<CategoryDetailBloc, CategoryDetailState>(
-            //     listenWhen: (p, c) =>
-            //         p.controllers.length != c.controllers.length &&
-            //         p.controllers.length == 0,
-            //     listener: (context, state) {
-            //       _unitControllers.addAll(state.controllers);
-            //     }),
           ],
           child: Scaffold(
             appBar: AppBar(
@@ -270,6 +262,7 @@ class CategoryDetailView extends StatelessWidget {
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                             suffix: Text(CustomTexts.vndSymbolText),
                           ),
+                          keyboardType: TextInputType.number,
                           inputFormatters: [CurrencyTextFormatter()],
                           initialValue: CustomFormats.numberFormat
                               .format(state.units[index].price),
