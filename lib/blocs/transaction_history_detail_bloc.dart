@@ -22,6 +22,7 @@ class TransactionHistoryDetailBloc
   Stream<TransactionHistoryDetailState> mapEventToState(
       TransactionHistoryDetailEvent event) async* {
     if (event is EventInitData) {
+      yield NotLoadedState();
       var grandTotal;
       try {
         CDTransactionHistoryDetailModel model =
