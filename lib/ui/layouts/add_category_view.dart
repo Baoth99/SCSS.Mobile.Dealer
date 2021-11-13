@@ -6,6 +6,7 @@ import 'package:dealer_app/repositories/events/add_category_event.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,6 @@ class AddCategoryView extends StatelessWidget {
 
   //controllers
   final TextEditingController _scrapNameController = TextEditingController();
-  final Map<TextEditingController, TextEditingController> _unitControllers = {
-    new TextEditingController(): new TextEditingController(),
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,6 @@ class AddCategoryView extends StatelessWidget {
                 }
               }),
           BlocListener<AddCategoryBloc, AddCategoryState>(
-              // listenWhen: (p, c) => state,
               listener: (context, state) {
             if (state is LoadingState) {
               EasyLoading.show();
@@ -49,7 +46,6 @@ class AddCategoryView extends StatelessWidget {
                     title: state.message,
                     type: CoolAlertType.success,
                     onTap: () {
-                      EasyLoading.dismiss();
                       Navigator.popUntil(context,
                           ModalRoute.withName(CustomRoutes.categoryList));
                     });
@@ -66,6 +62,7 @@ class AddCategoryView extends StatelessWidget {
         ],
         child: Scaffold(
           appBar: AppBar(
+            elevation: 1,
             title: Text(
               CustomTexts.addCategoryScreenTitle,
               style: Theme.of(context).textTheme.headline2,
@@ -121,12 +118,12 @@ class AddCategoryView extends StatelessWidget {
       buildWhen: (p, c) => p.isNameExisted != c.isNameExisted,
       builder: (context, state) {
         return TextFormField(
-          controller: _scrapNameController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: CustomTexts.scrapCategoryName,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
           ),
+          controller: _scrapNameController,
           onChanged: (value) {
             context
                 .read<AddCategoryBloc>()
@@ -150,11 +147,7 @@ class AddCategoryView extends StatelessWidget {
         CustomWidgets.customText(text: CustomTexts.detail),
         InkWell(
           onTap: () {
-            _unitControllers.putIfAbsent(
-                new TextEditingController(), () => new TextEditingController());
-            context
-                .read<AddCategoryBloc>()
-                .add(EventAddScrapCategoryUnit(controllers: _unitControllers));
+            context.read<AddCategoryBloc>().add(EventAddScrapCategoryUnit());
           },
           child: SizedBox(width: 50, child: Icon(Icons.add)),
         )
@@ -175,12 +168,7 @@ class AddCategoryView extends StatelessWidget {
                     .read<AddCategoryBloc>()
                     .add(EventChangeScrapImageRequest());
               },
-              child: state.pickedImageUrl != CustomTexts.emptyString
-                  ? Image.file(File(state.pickedImageUrl))
-                  : Icon(
-                      Icons.add_a_photo,
-                      size: 100,
-                    ),
+              child: _getScrapImage(state),
             ),
           ),
         );
@@ -202,24 +190,33 @@ class AddCategoryView extends StatelessWidget {
               ListView.builder(
                   primary: false,
                   shrinkWrap: true,
-                  itemCount: state.controllers.length,
+                  itemCount: state.units.length,
                   itemBuilder: (context, index) {
                     return rowFlexibleBuilder(
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.keys.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: CustomTexts.unit,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
                           ),
+                          initialValue: state.units[index].unit,
+                          onChanged: (value) {
+                            context
+                                .read<AddCategoryBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: value,
+                                  price: state.units[index].price.toString(),
+                                ));
+                          },
                           validator: (value) {
                             if (value == CustomTexts.emptyString) return null;
                             var text = CustomTexts.unitIsExisted;
                             var count = 0;
-                            _unitControllers.keys.forEach((element) {
-                              if (element.text == value?.trim()) {
+                            state.units.forEach((element) {
+                              if (element.unit == value?.trim()) {
                                 count++;
                               }
                             });
@@ -233,12 +230,26 @@ class AddCategoryView extends StatelessWidget {
                       SizedBox(
                         height: 90,
                         child: TextFormField(
-                          controller: state.controllers.values.elementAt(index),
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: CustomTexts.unitPrice,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
+                            suffix: Text(CustomTexts.vndSymbolText),
                           ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [CurrencyTextFormatter()],
+                          initialValue: CustomFormats.numberFormat
+                              .format(state.units[index].price),
+                          onChanged: (value) {
+                            context
+                                .read<AddCategoryBloc>()
+                                .add(EventChangeUnitAndPrice(
+                                  index: index,
+                                  unit: state.units[index].unit,
+                                  price:
+                                      value.replaceAll(RegExp(r'[^0-9]'), ''),
+                                ));
+                          },
                         ),
                       ),
                       rowFlexibleType.bigToSmall,
@@ -263,36 +274,34 @@ class AddCategoryView extends StatelessWidget {
     };
 
     showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
         ),
-      ),
-      builder: (_) => ListView(
-        shrinkWrap: true,
-        children: [
-          ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: Text(CustomTexts.camera),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.camera);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.image),
-            title: Text(CustomTexts.gallery),
-            onTap: () {
-              Navigator.pop(context);
-              selectImageSource(ImageSource.gallery);
-            },
-          ),
-        ],
-      ),
-    ).then((value) =>
-        context.read<AddCategoryBloc>().add(EventCloseImagePicker()));
+        builder: (_) => ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.camera_alt),
+                  title: Text(CustomTexts.camera),
+                  onTap: () {
+                    Navigator.pop(context);
+                    selectImageSource(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.image),
+                  title: Text(CustomTexts.gallery),
+                  onTap: () {
+                    Navigator.pop(context);
+                    selectImageSource(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ));
   }
 
   Container _buttons(BuildContext blocContext) {
@@ -309,5 +318,20 @@ class AddCategoryView extends StatelessWidget {
         rowFlexibleType.smallToBig,
       ),
     );
+  }
+
+  Widget _getScrapImage(state) {
+    if (state.pickedImageUrl != CustomTexts.emptyString) {
+      return Image.file(File(state.pickedImageUrl));
+    } else if (state.initScrapImage != null) {
+      return Image(
+        image: state.initScrapImage,
+        fit: BoxFit.cover,
+      );
+    } else
+      return Icon(
+        Icons.add_a_photo,
+        size: 100,
+      );
   }
 }

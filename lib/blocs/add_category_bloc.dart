@@ -5,7 +5,6 @@ import 'package:dealer_app/repositories/models/request_models/create_category_re
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/add_category_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,22 +12,25 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
   final _picker = ImagePicker();
   final _scrapCategoryHandler = getIt.get<IScrapCategoryHandler>();
 
-  AddCategoryBloc()
-      : super(
-          AddCategoryState(
-            controllers: {
-              new TextEditingController(): new TextEditingController(),
-            },
-          ),
-        );
+  AddCategoryBloc() : super(AddCategoryState()) {
+    add(EventInitData());
+  }
 
   @override
   Stream<AddCategoryState> mapEventToState(AddCategoryEvent event) async* {
+    if (event is EventInitData) {
+      // Add one empty unit
+      List<ScrapCategoryModel> units = [
+        ScrapCategoryModel.createCategoryModel(
+            unit: CustomTexts.emptyString, price: 0),
+      ];
+      yield AddCategoryState(units: units);
+    }
     if (event is EventChangeScrapImageRequest) {
       yield state.copyWith(isImageSourceActionSheetVisible: true);
+      yield state.copyWith(isImageSourceActionSheetVisible: false);
     }
     if (event is EventOpenImagePicker) {
-      yield state.copyWith(isImageSourceActionSheetVisible: false);
       final pickedImage = await _picker.pickImage(source: event.imageSource);
       if (pickedImage != null) {
         yield state.copyWith(pickedImageUrl: pickedImage.path);
@@ -42,38 +44,50 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
       );
     }
     if (event is EventAddScrapCategoryUnit) {
-      yield state.copyWith(controllers: event.controllers);
+      List<ScrapCategoryModel> units = List.from(state.units);
+      units.add(ScrapCategoryModel.createCategoryModel(
+        unit: CustomTexts.emptyString,
+        price: 0,
+      ));
+
+      yield state.copyWith(units: units);
+    }
+    if (event is EventChangeUnitAndPrice) {
+      List<ScrapCategoryModel> units = List.from(state.units);
+      units[event.index].unit = event.unit;
+      units[event.index].price = int.parse(event.price);
+
+      yield state.copyWith(units: units);
     }
     if (event is EventSubmitScrapCategory) {
       yield LoadingState(
-        controllers: state.controllers,
+        units: state.units,
         isImageSourceActionSheetVisible: state.isImageSourceActionSheetVisible,
         pickedImageUrl: state.pickedImageUrl,
+        initScrapName: state.initScrapName,
+        initScrapImage: state.initScrapImage,
+        initScrapImageUrl: state.initScrapImageUrl,
         scrapName: state.scrapName,
         isNameExisted: state.isNameExisted,
       );
       try {
+        // Check if name hasn't changed
         bool checkNameResult =
             await _scrapCategoryHandler.checkScrapName(name: state.scrapName);
-        print(checkNameResult);
         if (checkNameResult) {
-          String imagePath = CustomTexts.emptyString;
+          String imagePath = state.initScrapImageUrl;
           if (state.pickedImageUrl.isNotEmpty) {
             // Upload image
             imagePath = await _scrapCategoryHandler.uploadImage(
                 imagePath: state.pickedImageUrl);
           }
-          // Create details list
-          List<ScrapCategoryModel> details =
-              await _getScrapCategoryUnitPriceList(
-                  controllers: state.controllers);
 
           // Submit category
           var result = await _scrapCategoryHandler.createScrapCategory(
             model: CreateScrapCategoryRequestModel(
               name: state.scrapName,
               imageUrl: imagePath,
-              details: details,
+              details: await _getListFiltered(units: state.units),
             ),
           );
 
@@ -83,20 +97,25 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
           } else {
             yield ErrorState(
               message: CustomTexts.errorHappenedTryAgain,
-              controllers: state.controllers,
+              units: state.units,
               isImageSourceActionSheetVisible:
                   state.isImageSourceActionSheetVisible,
               pickedImageUrl: state.pickedImageUrl,
+              initScrapName: state.initScrapName,
+              initScrapImage: state.initScrapImage,
+              initScrapImageUrl: state.initScrapImageUrl,
               scrapName: state.scrapName,
               isNameExisted: state.isNameExisted,
             );
           }
         } else {
           yield AddCategoryState(
-            controllers: state.controllers,
+            units: state.units,
             isImageSourceActionSheetVisible:
                 state.isImageSourceActionSheetVisible,
             pickedImageUrl: state.pickedImageUrl,
+            initScrapName: state.initScrapName,
+            initScrapImageUrl: state.initScrapImageUrl,
             scrapName: state.scrapName,
             isNameExisted: true,
           );
@@ -105,32 +124,27 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
         print(e);
         yield ErrorState(
           message: CustomTexts.errorHappenedTryAgain,
-          controllers: state.controllers,
+          units: state.units,
           isImageSourceActionSheetVisible:
               state.isImageSourceActionSheetVisible,
           pickedImageUrl: state.pickedImageUrl,
+          initScrapName: state.initScrapName,
+          initScrapImage: state.initScrapImage,
+          initScrapImageUrl: state.initScrapImageUrl,
           scrapName: state.scrapName,
           isNameExisted: state.isNameExisted,
         );
       }
     }
-    if (event is EventCloseImagePicker) {
-      yield state.copyWith(isImageSourceActionSheetVisible: false);
-    }
   }
 
-  Future<List<ScrapCategoryModel>> _getScrapCategoryUnitPriceList({
-    required Map<TextEditingController, TextEditingController> controllers,
+  Future<List<ScrapCategoryModel>> _getListFiltered({
+    required List<ScrapCategoryModel> units,
   }) async {
-    List<ScrapCategoryModel> list = [];
-    for (var key in controllers.keys) {
-      if (key.text != CustomTexts.emptyString)
-        list.add(ScrapCategoryModel.createCategoryModel(
-            unit: key.text,
-            price: int.tryParse(
-                    controllers[key]?.text ?? CustomTexts.zeroString) ??
-                0));
-    }
+    List<ScrapCategoryModel> list = List.from(units);
+    // Remove empty new unit
+    list.removeWhere(
+        (element) => element.unit.isEmpty && element.id == CustomVar.zeroId);
     return list;
   }
 }
