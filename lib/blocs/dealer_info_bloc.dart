@@ -1,5 +1,4 @@
 import 'package:dealer_app/providers/configs/injection_config.dart';
-import 'package:dealer_app/providers/services/transaction_service.dart';
 import 'package:dealer_app/repositories/events/dealer_info_event.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/handlers/dealer_info_handler.dart';
@@ -25,17 +24,21 @@ class DealerInfoBloc extends Bloc<DealerInfoEvent, DealerInfoState> {
       try {
         GetDealerInfoModel getDealerInfoModel =
             await _dealerInfoHandler.getDealerInfo();
-
-        List<GetBranchesModel> branches =
-            await _dealerInfoHandler.getBranches();
-        branches.insert(
-          0,
-          GetBranchesModel(
-              id: getDealerInfoModel.id,
-              dealerBranchName: getDealerInfoModel.dealerName,
-              dealerBranchImageUrl: getDealerInfoModel.dealerImageUrl,
-              dealerBranchAddress: getDealerInfoModel.dealerAddress),
-        );
+        // Get branches
+        List<GetBranchesModel> branches = [];
+        try {
+          branches = await _dealerInfoHandler.getBranches();
+          branches.insert(
+            0,
+            GetBranchesModel(
+                id: getDealerInfoModel.id,
+                dealerBranchName: getDealerInfoModel.dealerName,
+                dealerBranchImageUrl: getDealerInfoModel.dealerImageUrl,
+                dealerBranchAddress: getDealerInfoModel.dealerAddress),
+          );
+        } catch (e) {
+          branches = List.empty();
+        }
 
         // Get image
         ImageProvider? image;

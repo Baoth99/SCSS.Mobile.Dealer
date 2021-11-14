@@ -1,9 +1,11 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/dealer_info_bloc.dart';
 import 'package:dealer_app/repositories/events/dealer_info_event.dart';
 import 'package:dealer_app/repositories/models/get_branches_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_info_state.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -14,12 +16,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class DealerInfoView extends StatelessWidget {
   DealerInfoView({Key? key}) : super(key: key);
 
-  TextEditingController _dealerNameController = TextEditingController();
-  TextEditingController _dealerPhoneController = TextEditingController();
-  TextEditingController _dealerAddressController = TextEditingController();
-  TextEditingController _dealerTimeController = TextEditingController();
-  TextEditingController _dealerBranchNameController = TextEditingController();
-  TextEditingController _dealerBranchPhoneController = TextEditingController();
+  final TextEditingController _dealerNameController = TextEditingController();
+  final TextEditingController _dealerPhoneController = TextEditingController();
+  final TextEditingController _dealerAddressController =
+      TextEditingController();
+  final TextEditingController _dealerTimeController = TextEditingController();
+  final TextEditingController _dealerBranchNameController =
+      TextEditingController();
+  final TextEditingController _dealerBranchPhoneController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +36,16 @@ class DealerInfoView extends StatelessWidget {
       },
       child: MultiBlocListener(
         listeners: [
-          // Close loading dialog
           BlocListener<DealerInfoBloc, DealerInfoState>(
-            listenWhen: (previous, current) {
-              return previous is LoadingState;
-            },
             listener: (context, state) {
+              if (state is ErrorState) {
+                EasyLoading.dismiss();
+                CustomCoolAlert.showCoolAlert(
+                  context: context,
+                  title: state.message,
+                  type: CoolAlertType.error,
+                );
+              }
               if (state is LoadedState) {
                 EasyLoading.dismiss();
               }
