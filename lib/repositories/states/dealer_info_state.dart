@@ -88,8 +88,9 @@ class LoadedState extends DealerInfoState {
 }
 
 class ErrorState extends DealerInfoState {
+  final String message;
   ErrorState.noData({
-    required String message,
+    required this.message,
   }) : super(
           branches: [],
           dealerImage: null,
@@ -102,7 +103,7 @@ class ErrorState extends DealerInfoState {
           dealerAccountBranch: null,
         );
   ErrorState({
-    required String message,
+    required this.message,
     required List<GetBranchesModel> branches,
     required ImageProvider? dealerImage,
     required String selectedId,

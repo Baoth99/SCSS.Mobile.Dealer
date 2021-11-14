@@ -9,14 +9,9 @@ abstract class IUserHandler {
 }
 
 class UserHandler implements IUserHandler {
-  DealerResponseModel? _responseModel;
-
   Future<DealerResponseModel?> getUser({required String bearerToken}) async {
-    if (_responseModel != null)
-      return _responseModel;
-    else
-      _responseModel =
-          await AccountNetwork.getDealerInfo(bearerToken: bearerToken);
+    DealerResponseModel? _responseModel =
+        await AccountNetwork.getDealerInfo(bearerToken: bearerToken);
     return _responseModel;
   }
 
