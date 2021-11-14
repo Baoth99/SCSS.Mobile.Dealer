@@ -199,6 +199,10 @@ class AddPromotionView extends StatelessWidget {
                   .read<AddPromotionBloc>()
                   .add(EventChangePromotionName(value));
             },
+            validator: (value) {
+              if (value == null || value.isEmpty)
+                return CustomTexts.promotionNameBlank;
+            },
           ),
         );
       },
@@ -339,6 +343,7 @@ class AddPromotionView extends StatelessWidget {
                                   ));
                             },
                             selectionMode: DateRangePickerSelectionMode.range,
+                            minDate: DateTime.now(),
                             initialSelectedRange: PickerDateRange(
                               state.appliedFromTime,
                               state.appliedToTime,
