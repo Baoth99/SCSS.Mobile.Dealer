@@ -11,7 +11,7 @@ extension PromotionStatusExtension on PromotionStatus {
   int get statusInt {
     switch (this) {
       case PromotionStatus.FUTURE:
-        return 4;
+        return 3;
       case PromotionStatus.CURRENT:
         return 1;
       case PromotionStatus.PAST:
