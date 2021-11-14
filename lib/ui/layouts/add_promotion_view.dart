@@ -343,6 +343,7 @@ class AddPromotionView extends StatelessWidget {
                                   ));
                             },
                             selectionMode: DateRangePickerSelectionMode.range,
+                            minDate: DateTime.now(),
                             initialSelectedRange: PickerDateRange(
                               state.appliedFromTime,
                               state.appliedToTime,
