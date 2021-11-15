@@ -1,5 +1,8 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:dealer_app/blocs/promotion_detail_bloc.dart';
+import 'package:dealer_app/repositories/events/promotion_detail_event.dart';
 import 'package:dealer_app/repositories/states/promotion_detail_state.dart';
+import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -9,26 +12,55 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class PromotionDetailView extends StatelessWidget {
   PromotionDetailView({Key? key}) : super(key: key);
 
+  late Map<String, dynamic>? _arguments;
+
   @override
   Widget build(BuildContext context) {
-    final String? id = ModalRoute.of(context)?.settings.arguments as String;
-    if (id != null)
+    _arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (_arguments != null)
       return BlocProvider(
         create: (context) {
           // Show loading
           EasyLoading.show();
-          return PromotionDetailBloc(promotionId: id);
+          return PromotionDetailBloc(promotionId: _arguments!['id']);
         },
         child: MultiBlocListener(
           listeners: [
             // Close loading dialog
             BlocListener<PromotionDetailBloc, PromotionDetailState>(
-              listenWhen: (previous, current) {
-                return previous is LoadingState;
-              },
               listener: (context, state) {
-                if (state is LoadedState) {
-                  EasyLoading.dismiss();
+                EasyLoading.dismiss();
+                if (state is ErrorState) {
+                  CustomCoolAlert.showCoolAlert(
+                    context: context,
+                    title: state.message,
+                    type: CoolAlertType.error,
+                  );
+                }
+                if (state is SuccessState) {
+                  CustomCoolAlert.showCoolAlert(
+                      context: context,
+                      title: state.message,
+                      type: CoolAlertType.success,
+                      onTap: () {
+                        Navigator.popUntil(
+                            context,
+                            ModalRoute.withName(
+                                CustomRoutes.promotionListView));
+                      });
+                }
+                if (state is DeleteState) {
+                  CustomCoolAlert.showWarningAlert(
+                      context: context,
+                      title: state.message,
+                      type: CoolAlertType.confirm,
+                      cancelBtnText: CustomTexts.cancel,
+                      onConfirmTap: () {
+                        context
+                            .read<PromotionDetailBloc>()
+                            .add(EventDeletePromotion());
+                      });
                 }
               },
             ),
@@ -61,7 +93,7 @@ class PromotionDetailView extends StatelessWidget {
   _body() {
     return BlocBuilder<PromotionDetailBloc, PromotionDetailState>(
       builder: (context, state) {
-        if (state is LoadedState)
+        if (!(state is LoadingState))
           return Container(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
               child: ListView(
@@ -74,6 +106,8 @@ class PromotionDetailView extends StatelessWidget {
                   _appliedAmount(),
                   _bonusAmount(),
                   _appliedTime(),
+                  if (_arguments!['status'] != PromotionStatus.PAST.index)
+                    _deleteButton(),
                 ],
               ));
         else if (state is LoadingState) {
@@ -97,7 +131,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Mã khuyến mãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -118,7 +152,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Tên khuyến mãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -139,7 +173,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Áp dụng cho danh mục',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -160,7 +194,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Mức giá áp dụng khuyến mãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -182,7 +216,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Số tiền khuyến mãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -204,7 +238,7 @@ class PromotionDetailView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
               labelText: 'Thời gian áp dụng',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
@@ -212,6 +246,21 @@ class PromotionDetailView extends StatelessWidget {
                 '${state.model.appliedFromTime} - ${state.model.appliedToTime}',
             readOnly: true,
           ),
+        );
+      },
+    );
+  }
+
+  _deleteButton() {
+    return BlocBuilder<PromotionDetailBloc, PromotionDetailState>(
+      builder: (context, state) {
+        return CustomWidgets.customSecondaryButton(
+          text: 'Kết thúc khuyến mãi',
+          action: () {
+            context.read<PromotionDetailBloc>().add(EventTapDeleteButton());
+          },
+          textColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(Colors.red),
         );
       },
     );

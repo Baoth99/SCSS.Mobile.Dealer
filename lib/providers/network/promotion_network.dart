@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dealer_app/repositories/models/response_models/get_promotion_detail_response_model.dart';
@@ -86,5 +87,26 @@ class PromotionNetwork {
       // then throw an exception.
       throw Exception(CustomAPIError.getPromotionDetailFailedException);
     }
+  }
+
+  static Future<Map<String, dynamic>> putPromotion({
+    required String bearerToken,
+    required String id,
+  }) async {
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $bearerToken',
+    };
+
+    Map<String, dynamic> queryParams = {
+      'id': id,
+    };
+
+    final uri = Uri.http(EnvAppApiSettingValue.apiUrl,
+        CustomApiUrl.apiUrlPutPromotion, queryParams);
+
+    final response = await http.put(uri, headers: headers);
+
+    return jsonDecode(response.body);
   }
 }

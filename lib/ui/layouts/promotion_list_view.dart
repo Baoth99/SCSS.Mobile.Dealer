@@ -188,8 +188,12 @@ class PromotionListView extends StatelessWidget {
           Navigator.pushNamed(
             context,
             CustomRoutes.promotionDetailView,
-            arguments: model.id,
-          );
+            arguments: <String, dynamic>{
+              'id': model.id,
+              'status': model.status,
+            },
+          ).then((value) =>
+              blocContext.read<PromotionListBloc>().add(EventInitData()));
         },
         child: Card(
           child: Container(
