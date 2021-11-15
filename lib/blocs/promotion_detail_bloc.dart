@@ -56,5 +56,36 @@ class PromotionDetailBloc
         // print(e);
       }
     }
+    if (event is EventTapDeleteButton) {
+      yield DeleteState(
+        message: 'Kết thúc khuyến mãi ${state.model.promotionName} ?',
+        model: new GetPromotionDetailModel(
+          code: state.model.code,
+          promotionName: state.model.promotionName,
+          appliedScrapCategory: state.model.appliedScrapCategory,
+          appliedAmount: state.model.appliedAmount,
+          bonusAmount: state.model.bonusAmount,
+          appliedFromTime: state.model.appliedFromTime,
+          appliedToTime: state.model.appliedToTime,
+        ),
+      );
+    }
+    if (event is EventDeletePromotion) {
+      bool result = await _promotionHandler.deletePromotion(id: promotionId);
+      if (result)
+        yield SuccessState(
+          message:
+              'Kết thúc khuyến mãi ${state.model.promotionName} thành công',
+          model: new GetPromotionDetailModel(
+            code: CustomTexts.emptyString,
+            promotionName: CustomTexts.emptyString,
+            appliedScrapCategory: CustomTexts.emptyString,
+            appliedAmount: 0,
+            bonusAmount: 0,
+            appliedFromTime: CustomTexts.emptyString,
+            appliedToTime: CustomTexts.emptyString,
+          ),
+        );
+    }
   }
 }

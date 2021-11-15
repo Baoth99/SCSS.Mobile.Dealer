@@ -10,6 +10,7 @@ abstract class IPromotionHandler {
   Future<List<GetPromotionModel>> getPromotions();
   Future<GetPromotionDetailModel> getPromotionDetail(
       {required String promotionId});
+  Future<bool> deletePromotion({required String id});
 }
 
 class PromotionHandler implements IPromotionHandler {
@@ -68,6 +69,26 @@ class PromotionHandler implements IPromotionHandler {
             .resData;
 
         return promotionDetail;
+      } else
+        throw Exception(CustomAPIError.missingBearerToken);
+    } catch (e) {
+      throw (e);
+    }
+  }
+
+  Future<bool> deletePromotion({required String id}) async {
+    try {
+      //get access token
+      var accessToken =
+          await SecureStorage.readValue(key: CustomKeys.accessToken);
+      if (accessToken != null) {
+        var result = (await PromotionNetwork.putPromotion(
+          bearerToken: accessToken,
+          id: id,
+        ));
+
+        //get scrap categories
+        return result['isSuccess'];
       } else
         throw Exception(CustomAPIError.missingBearerToken);
     } catch (e) {

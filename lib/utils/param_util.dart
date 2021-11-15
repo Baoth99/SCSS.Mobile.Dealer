@@ -220,6 +220,7 @@ class CustomApiUrl {
       '/api/v3/dealer-information/get-branchs';
   static const String apiUrlGetBranchDetailFromDealerInformation =
       '/api/v3/dealer-information/get-branch-detail';
+  static const String apiUrlPutPromotion = '/api/v3/promotion/finish';
 
   // TienTD
   static final apiUrl = '${EnvBaseAppSettingValue.baseApiUrl}api/v3/';
@@ -254,6 +255,7 @@ class CustomAPIError {
       'Failed to fetch user info';
   static const String putDeviceIdFailedException = 'Failed to put device Id';
   static const String getPromotionsFailedException = 'Failed to get promotions';
+  static const String putPromotionsFailedException = 'Failed to put promotions';
   static const String getScrapCategoriesFailedException =
       'Failed to get scrap categories';
   static const String getScrapCategoryDetailsFailedException =
