@@ -303,6 +303,20 @@ class CreateTransactionView extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+                              if (!(state.items[index].quantity != 0 &&
+                                  state.items[index].unit != null &&
+                                  state.items[index].isCalculatedByUnitPrice))
+                                Flexible(
+                                  flex: 3,
+                                  fit: FlexFit.loose,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '-',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
                               Flexible(
                                 flex: 4,
                                 fit: FlexFit.tight,
