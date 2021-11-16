@@ -9,7 +9,7 @@ class CDTransactionHistoryDetailItemModel {
   });
 
   String? scrapCategoryName;
-  int quantity;
+  double quantity;
   String? unit;
   int total;
   bool isBonus;
@@ -19,10 +19,10 @@ class CDTransactionHistoryDetailItemModel {
           Map<String, dynamic> json) =>
       CDTransactionHistoryDetailItemModel(
         scrapCategoryName: json["scrapCategoryName"],
-        quantity: json["quantity"] == null ? null : json["quantity"],
+        quantity: json["quantity"].toDouble(),
         unit: json['unit'],
-        total: json["total"] == null ? null : json["total"],
-        isBonus: json["isBonus"] == null ? null : json["isBonus"],
-        bonusAmount: json["bonusAmount"] == null ? null : json["bonusAmount"],
+        total: json["total"],
+        isBonus: json["isBonus"],
+        bonusAmount: json["bonusAmount"],
       );
 }

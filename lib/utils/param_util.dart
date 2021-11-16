@@ -286,6 +286,7 @@ class CustomAPIError {
 class CustomFormats {
   static const String birthday = 'dd/MM/yyyy';
   static NumberFormat numberFormat = NumberFormat('###,###');
+  static NumberFormat quantityFormat = NumberFormat('##0.0#');
   static NumberFormat currencyFormat =
       NumberFormat('###,### ${CustomTexts.vndSymbolText}');
 }

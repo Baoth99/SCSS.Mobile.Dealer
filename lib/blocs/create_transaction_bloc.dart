@@ -8,8 +8,8 @@ import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/models/get_promotion_model.dart';
 import 'package:dealer_app/repositories/models/info_review_model.dart';
 import 'package:dealer_app/repositories/models/request_models/collect_deal_transaction_request_model.dart';
-import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,6 +126,7 @@ class CreateTransactionBloc
         yield state.copyWith(process: Process.neutral);
       }
     } else if (event is EventShowItemDialog) {
+      yield state.copyWith(process: Process.processing);
       //clear item values
       _resetItemValue();
       // Update dropdown list
@@ -176,7 +177,10 @@ class CreateTransactionBloc
         state.isPromotionApplied = event.detail!.isPromotionnApplied;
       }
       // Open dialog
-      yield state.copyWith(isItemDialogShowed: true);
+      yield state.copyWith(
+        isItemDialogShowed: true,
+        process: Process.processed,
+      );
       yield state.copyWith(isItemDialogShowed: false);
     } else if (event is EventCalculatedByUnitPriceChanged) {
       // If switched on
@@ -246,11 +250,14 @@ class CreateTransactionBloc
       //Check promotion
       _setItemPromotion();
     } else if (event is EventQuantityChanged) {
-      var quantity = int.tryParse(event.quantity);
+      var quantity = double.tryParse(event.quantity);
       if (quantity != null)
         yield state.copyWith(itemQuantity: quantity);
       else {
-        yield state.copyWith(process: Process.error);
+        yield state.copyWith(
+          itemQuantity: 0,
+          process: Process.error,
+        );
         yield state.copyWith(process: Process.neutral);
       }
       //Check promotion

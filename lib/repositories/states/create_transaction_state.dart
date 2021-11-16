@@ -1,7 +1,7 @@
 import 'package:dealer_app/repositories/models/collect_deal_transaction_detail_model.dart';
 import 'package:dealer_app/repositories/models/collector_phone_model.dart';
-import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
+import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/utils/param_util.dart';
 
 class CreateTransactionState {
@@ -28,7 +28,7 @@ class CreateTransactionState {
   String? itemPromotionId;
   int itemBonusAmount;
   int itemTotal;
-  int itemQuantity;
+  double itemQuantity;
   int itemPrice;
   bool isItemTotalCalculatedByUnitPrice;
   List<ScrapCategoryUnitModel> scrapCategoryDetails;
@@ -42,7 +42,7 @@ class CreateTransactionState {
 
   int get itemTotalCalculated {
     if (isItemTotalCalculatedByUnitPrice && itemPrice != 0)
-      return itemPrice * itemQuantity;
+      return (itemPrice * itemQuantity).truncate();
     else
       return 0;
   }
@@ -161,7 +161,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,
@@ -223,7 +223,7 @@ class CreateTransactionState {
     int? key,
     String? itemDealerCategoryId,
     String? itemDealerCategoryDetailId,
-    int? itemQuantity,
+    double? itemQuantity,
     String? itemPromotionId,
     int? itemBonusAmount,
     int? itemTotal,

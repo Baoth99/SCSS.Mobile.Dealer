@@ -1,7 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/create_transaction_bloc.dart';
 import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
+import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
@@ -106,6 +108,19 @@ class CreateTransactionView extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
+                      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, state) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Chủ vựa: ${state.user!.name}'),
+                              SizedBox(height: 10),
+                              Text('SĐT chủ vựa: ${state.user!.phone}'),
+                            ],
+                          );
+                        },
+                      ),
+                      Divider(),
                       _phoneField(),
                       _nameField(),
                       _detailText(),
@@ -282,8 +297,22 @@ class CreateTransactionView extends StatelessWidget {
                                     child: Text(
                                       state.items[index].quantity != 0 &&
                                               state.items[index].unit != null
-                                          ? '${CustomFormats.numberFormat.format(state.items[index].quantity)} ${state.items[index].unit}'
+                                          ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              if (!(state.items[index].quantity != 0 &&
+                                  state.items[index].unit != null &&
+                                  state.items[index].isCalculatedByUnitPrice))
+                                Flexible(
+                                  flex: 3,
+                                  fit: FlexFit.loose,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '-',
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -440,31 +469,47 @@ class CreateTransactionView extends StatelessWidget {
           insetPadding: EdgeInsets.zero,
           content: SizedBox(
             width: 320,
-            height: 400,
+            height: 340,
             child: Form(
               key: _itemFormKey,
-              child: ListView(
-                children: [
-                  _calculatedByUnitPriceSwitch(),
-                  rowFlexibleBuilder(
-                    _scrapCategoryUnitField(),
-                    _scrapCategoryField(),
-                    rowFlexibleType.bigToSmall,
-                  ),
-                  _quantityField(),
-                  _unitPriceField(),
-                  Stack(
-                    children: [
-                      _totalField(),
-                      Positioned(
-                        top: 3,
-                        right: 30,
-                        child: _promotionApplicationBonusAmount(),
-                      )
-                    ],
-                  ),
-                  _promotionApplicationDescription(),
-                ],
+              child: Scrollbar(
+                isAlwaysShown: true,
+                child: ListView(
+                  children: [
+                    _calculatedByUnitPriceSwitch(),
+                    rowFlexibleBuilder(
+                      _scrapCategoryUnitField(),
+                      _scrapCategoryField(),
+                      rowFlexibleType.bigToSmall,
+                    ),
+                    _quantityField(),
+                    BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                      builder: (context, state) {
+                        return Visibility(
+                          visible: (state.itemQuantity -
+                                  state.itemQuantity.truncate()) >
+                              0,
+                          child: SizedBox(
+                            height: 30,
+                            child: Text('abcxyz'),
+                          ),
+                        );
+                      },
+                    ),
+                    _unitPriceField(),
+                    Stack(
+                      children: [
+                        _totalField(),
+                        Positioned(
+                          top: 3,
+                          right: 30,
+                          child: _promotionApplicationBonusAmount(),
+                        )
+                      ],
+                    ),
+                    _promotionApplicationDescription(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -614,15 +659,19 @@ class CreateTransactionView extends StatelessWidget {
                 labelText: CustomTexts.quantityLabel,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
+              ],
               initialValue:
-                  CustomFormats.numberFormat.format(state.itemQuantity),
+                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
               onChanged: (value) {
-                if (value != CustomTexts.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventQuantityChanged(
-                          quantity: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                if (value != CustomTexts.emptyString && value != ',') {
+                  var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');
+                  valueWithDot = valueWithDot.replaceAll(RegExp(r','), '.');
+                  context
+                      .read<CreateTransactionBloc>()
+                      .add(EventQuantityChanged(quantity: valueWithDot));
                 } else {
                   context.read<CreateTransactionBloc>().add(
                       EventQuantityChanged(quantity: CustomTexts.zeroString));

@@ -38,9 +38,8 @@ class TransactionHistoryDetailBloc
         yield LoadedState(
             id: id, model: model, grandTotal: grandTotal, image: image);
       } catch (e) {
-        print(e);
         //  if (e.toString().contains(CustomAPIError.missingBearerToken))
-        // print(e);
+        print(e);
       }
     }
   }
