@@ -1,7 +1,9 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/create_transaction_bloc.dart';
 import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
+import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
@@ -106,6 +108,19 @@ class CreateTransactionView extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
+                      BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, state) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Chủ vựa: ${state.user!.name}'),
+                              SizedBox(height: 10),
+                              Text('SĐT chủ vựa: ${state.user!.phone}'),
+                            ],
+                          );
+                        },
+                      ),
+                      Divider(),
                       _phoneField(),
                       _nameField(),
                       _detailText(),
