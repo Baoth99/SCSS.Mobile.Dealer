@@ -302,6 +302,18 @@ class TransactionHistoryDetailView extends StatelessWidget {
                     ),
                   ),
                 ),
+              if (!(item.quantity != 0 && item.unit != null))
+                Flexible(
+                  flex: 3,
+                  fit: FlexFit.loose,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      '-',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               Flexible(
                 flex: 4,
                 fit: FlexFit.tight,
