@@ -452,6 +452,19 @@ class CreateTransactionView extends StatelessWidget {
                     rowFlexibleType.bigToSmall,
                   ),
                   _quantityField(),
+                  BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                    builder: (context, state) {
+                      return Visibility(
+                        visible: (state.itemQuantity -
+                                state.itemQuantity.truncate()) >
+                            0,
+                        child: SizedBox(
+                          height: 30,
+                          child: Text('abcxyz'),
+                        ),
+                      );
+                    },
+                  ),
                   _unitPriceField(),
                   Stack(
                     children: [
