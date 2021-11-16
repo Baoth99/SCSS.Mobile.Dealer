@@ -3,7 +3,7 @@ import 'package:dealer_app/utils/param_util.dart';
 class CollectDealTransactionDetailModel {
   String dealerCategoryId;
   String? dealerCategoryDetailId;
-  int quantity;
+  double quantity;
   String? unit;
   String? promotionId;
   int bonusAmount;
@@ -15,7 +15,7 @@ class CollectDealTransactionDetailModel {
 
   int get totalCalculated {
     if (isCalculatedByUnitPrice && price != 0)
-      return price * quantity;
+      return (price * quantity).truncate();
     else
       return 0;
   }
