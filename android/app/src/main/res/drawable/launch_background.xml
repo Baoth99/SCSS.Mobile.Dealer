@@ -16,15 +16,15 @@
     </item>
     <item android:top="170dp"
         android:gravity="center|top"
-        android:height="90dp"
-        android:width="90dp">
+        android:height="250dp"
+        android:width="250dp">
         <bitmap
-            android:src="@mipmap/vechaixanh_ic_launcher" />
+            android:src="@drawable/logo_and_text" />
     </item>
     <item android:width="400dp"
         android:height="300dp" 
         android:gravity="center|bottom">
         <bitmap
-            android:src="@mipmap/illu_1" />
+            android:src="@drawable/illu_1" />
     </item>
 </layer-list>
