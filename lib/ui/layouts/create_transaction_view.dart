@@ -440,44 +440,47 @@ class CreateTransactionView extends StatelessWidget {
           insetPadding: EdgeInsets.zero,
           content: SizedBox(
             width: 320,
-            height: 400,
+            height: 340,
             child: Form(
               key: _itemFormKey,
-              child: ListView(
-                children: [
-                  _calculatedByUnitPriceSwitch(),
-                  rowFlexibleBuilder(
-                    _scrapCategoryUnitField(),
-                    _scrapCategoryField(),
-                    rowFlexibleType.bigToSmall,
-                  ),
-                  _quantityField(),
-                  BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-                    builder: (context, state) {
-                      return Visibility(
-                        visible: (state.itemQuantity -
-                                state.itemQuantity.truncate()) >
-                            0,
-                        child: SizedBox(
-                          height: 30,
-                          child: Text('abcxyz'),
-                        ),
-                      );
-                    },
-                  ),
-                  _unitPriceField(),
-                  Stack(
-                    children: [
-                      _totalField(),
-                      Positioned(
-                        top: 3,
-                        right: 30,
-                        child: _promotionApplicationBonusAmount(),
-                      )
-                    ],
-                  ),
-                  _promotionApplicationDescription(),
-                ],
+              child: Scrollbar(
+                isAlwaysShown: true,
+                child: ListView(
+                  children: [
+                    _calculatedByUnitPriceSwitch(),
+                    rowFlexibleBuilder(
+                      _scrapCategoryUnitField(),
+                      _scrapCategoryField(),
+                      rowFlexibleType.bigToSmall,
+                    ),
+                    _quantityField(),
+                    BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                      builder: (context, state) {
+                        return Visibility(
+                          visible: (state.itemQuantity -
+                                  state.itemQuantity.truncate()) >
+                              0,
+                          child: SizedBox(
+                            height: 30,
+                            child: Text('abcxyz'),
+                          ),
+                        );
+                      },
+                    ),
+                    _unitPriceField(),
+                    Stack(
+                      children: [
+                        _totalField(),
+                        Positioned(
+                          top: 3,
+                          right: 30,
+                          child: _promotionApplicationBonusAmount(),
+                        )
+                      ],
+                    ),
+                    _promotionApplicationDescription(),
+                  ],
+                ),
               ),
             ),
           ),
