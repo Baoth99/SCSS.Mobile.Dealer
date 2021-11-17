@@ -208,7 +208,7 @@ class PromotionListView extends StatelessWidget {
                       Text(model.promotionName),
                       SizedBox(height: 5),
                       Text(
-                          '${CustomFormats.currencyFormat.format(model.bonusAmount)} thưởng'),
+                          '${CustomFormats.currencyFormat(model.bonusAmount)} thưởng'),
                       Text(
                           '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
                       Text('${model.appliedFromTime} - ${model.appliedToTime}'),

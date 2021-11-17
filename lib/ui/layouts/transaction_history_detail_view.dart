@@ -320,7 +320,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    CustomFormats.currencyFormat.format(item.total),
+                    CustomFormats.currencyFormat(item.total),
                     textAlign: TextAlign.right,
                   ),
                 ),
@@ -339,7 +339,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      CustomFormats.currencyFormat.format(item.bonusAmount),
+                      CustomFormats.currencyFormat(item.bonusAmount),
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ],
@@ -363,7 +363,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 height: 30,
               ),
               CustomWidgets.customText(
-                text: CustomFormats.currencyFormat.format(state.model.total),
+                text: CustomFormats.currencyFormat(state.model.total),
                 height: 30,
               ),
             ],
@@ -387,8 +387,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 height: 30,
               ),
               CustomWidgets.customText(
-                text:
-                    CustomFormats.currencyFormat.format(state.model.totalBonus),
+                text: CustomFormats.currencyFormat(state.model.totalBonus),
                 height: 30,
               ),
             ],
@@ -412,7 +411,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 height: 30,
               ),
               CustomWidgets.customText(
-                text: CustomFormats.currencyFormat.format(state.grandTotal),
+                text: CustomFormats.currencyFormat(state.grandTotal),
                 height: 30,
               ),
             ],

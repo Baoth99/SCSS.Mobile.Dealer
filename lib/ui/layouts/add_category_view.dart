@@ -238,8 +238,8 @@ class AddCategoryView extends StatelessWidget {
                           ),
                           keyboardType: TextInputType.number,
                           inputFormatters: [CurrencyTextFormatter()],
-                          initialValue: CustomFormats.numberFormat
-                              .format(state.units[index].price),
+                          initialValue: CustomFormats.numberFormat(
+                              state.units[index].price),
                           onChanged: (value) {
                             context
                                 .read<AddCategoryBloc>()

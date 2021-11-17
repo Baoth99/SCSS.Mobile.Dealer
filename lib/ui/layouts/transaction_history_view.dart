@@ -266,14 +266,12 @@ class TransactionHistoryView extends StatelessWidget {
               Positioned(
                 left: 10,
                 bottom: 50,
-                child:
-                    Text(CustomFormats.currencyFormat.format(state.totalMin)),
+                child: Text(CustomFormats.currencyFormat(state.totalMin)),
               ),
               Positioned(
                 right: 10,
                 bottom: 50,
-                child:
-                    Text(CustomFormats.currencyFormat.format(state.totalMax)),
+                child: Text(CustomFormats.currencyFormat(state.totalMax)),
               ),
               RangeSlider(
                 values: RangeValues(
@@ -290,8 +288,8 @@ class TransactionHistoryView extends StatelessWidget {
                 max: state.totalMax.toDouble(),
                 divisions: state.getDivision,
                 labels: RangeLabels(
-                    '${CustomFormats.currencyFormat.format(state.fromTotal)}',
-                    '${CustomFormats.currencyFormat.format(state.toTotal)}'),
+                    '${CustomFormats.currencyFormat(state.fromTotal)}',
+                    '${CustomFormats.currencyFormat(state.toTotal)}'),
               ),
             ],
           ),
@@ -387,7 +385,7 @@ class TransactionHistoryView extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5))),
       tileColor: CustomColors.lightGray,
       title: Text(model.collectorName),
-      subtitle: Text(CustomFormats.currencyFormat.format(model.total)),
+      subtitle: Text(CustomFormats.currencyFormat(model.total)),
       trailing: Text(
           '${model.transactionDateTime.hour}:${model.transactionDateTime.minute}'),
       onTap: () => Navigator.pushNamed(

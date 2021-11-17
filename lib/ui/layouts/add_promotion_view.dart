@@ -253,8 +253,7 @@ class AddPromotionView extends StatelessWidget {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [CurrencyTextFormatter()],
-            initialValue:
-                CustomFormats.numberFormat.format(state.appliedAmount),
+            initialValue: CustomFormats.numberFormat(state.appliedAmount),
             onChanged: (value) {
               context
                   .read<AddPromotionBloc>()
@@ -288,7 +287,7 @@ class AddPromotionView extends StatelessWidget {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [CurrencyTextFormatter()],
-            initialValue: CustomFormats.numberFormat.format(state.bonusAmount),
+            initialValue: CustomFormats.numberFormat(state.bonusAmount),
             onChanged: (value) {
               context
                   .read<AddPromotionBloc>()
