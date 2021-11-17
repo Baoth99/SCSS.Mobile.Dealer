@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/providers/configs/injection_config.dart';
 import 'package:dealer_app/providers/services/identity_server_service.dart';
@@ -22,8 +20,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is ProfileInitial) {
       if (state.status != FormzStatus.submissionInProgress) {
-        var oldimage = state.image;
-
         try {
           yield state.copyWith(
             status: FormzStatus.submissionInProgress,

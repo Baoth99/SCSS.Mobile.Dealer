@@ -7,7 +7,6 @@ import 'package:dealer_app/repositories/models/request_models/restore_password_r
 import 'package:dealer_app/repositories/models/response_models/base_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/confirm_restore_password_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/dealer_information_response_model.dart';
-import 'package:dealer_app/repositories/models/response_models/dealer_response_model.dart';
 import 'package:dealer_app/repositories/models/response_models/profile_info_response_model.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/env_util.dart';

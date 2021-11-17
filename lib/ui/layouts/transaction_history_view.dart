@@ -4,7 +4,6 @@ import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
-import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';

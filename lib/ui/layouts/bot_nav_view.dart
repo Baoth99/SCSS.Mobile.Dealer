@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:dealer_app/blocs/bot_nav_bloc.dart';
 import 'package:dealer_app/blocs/dealer_information_bloc.dart';
 import 'package:dealer_app/blocs/notification_bloc.dart';
 import 'package:dealer_app/blocs/profile_bloc.dart';
-import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/repositories/events/bot_nav_event.dart';
 import 'package:dealer_app/repositories/events/dealer_information_event.dart';
 import 'package:dealer_app/repositories/events/notification_event.dart';
@@ -57,7 +54,6 @@ class BotNavView extends StatefulWidget {
 }
 
 class _BotNavViewState extends State<BotNavView> {
-  late final Timer _timer;
   @override
   void initState() {
     super.initState();
