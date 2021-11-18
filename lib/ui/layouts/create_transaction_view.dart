@@ -706,7 +706,7 @@ class CreateTransactionView extends StatelessWidget {
                 border: OutlineInputBorder(),
                 labelText: CustomTexts.unitPriceLabel,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
-                suffixText: CustomTexts.vndSymbolText,
+                suffixText: CustomTexts.vndSymbolUnderlined,
               ),
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyTextFormatter()],
@@ -747,7 +747,7 @@ class CreateTransactionView extends StatelessWidget {
               border: OutlineInputBorder(),
               labelText: CustomTexts.totalLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              suffixText: CustomTexts.vndSymbolText,
+              suffixText: CustomTexts.vndSymbolUnderlined,
               errorStyle: TextStyle(
                 color: Theme.of(context).errorColor, // or any other color
               ),
