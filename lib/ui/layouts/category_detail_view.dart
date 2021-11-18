@@ -260,7 +260,7 @@ class CategoryDetailView extends StatelessWidget {
                             border: OutlineInputBorder(),
                             labelText: CustomTexts.unitPrice,
                             floatingLabelBehavior: FloatingLabelBehavior.auto,
-                            suffix: Text(CustomTexts.vndSymbolText),
+                            suffix: Text(CustomTexts.vndSymbolUnderlined),
                           ),
                           keyboardType: TextInputType.number,
                           inputFormatters: [CurrencyTextFormatter()],

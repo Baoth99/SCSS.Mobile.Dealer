@@ -99,6 +99,7 @@ class CustomTexts {
   static const String unitPriceLabel = 'Đơn giá';
   static const String totalLabel = 'Tổng cộng';
   static const String vndSymbolText = 'đ';
+  static const String vndSymbolUnderlined = '₫';
   static String promotionAppliedText({required String promotionCode}) =>
       '* Khuyến mãi $promotionCode đang được áp dụng';
   static const String generalErrorMessage =
@@ -298,7 +299,8 @@ class CustomFormats {
       string.replaceAll(RegExp(r'\.'), ',');
   static String currencyFormat(int value) {
     return replaceCommaWithDot(
-        NumberFormat('###,### ${CustomTexts.vndSymbolText}').format(value));
+        NumberFormat('###,### ${CustomTexts.vndSymbolUnderlined}')
+            .format(value));
   }
 }
 
