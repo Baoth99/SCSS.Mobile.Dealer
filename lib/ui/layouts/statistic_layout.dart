@@ -117,6 +117,7 @@ class MainLayout extends StatelessWidget {
   }
 
   Widget chooseDealer() {
+    var dropDownColor = Colors.white;
     return BlocBuilder<StatisticBloc, StatisticState>(
       builder: (context, state) {
         return Container(
@@ -134,6 +135,19 @@ class MainLayout extends StatelessWidget {
                     .add(StatisticDealerChanged(value.id));
               }
             },
+            dropdownBuilder: (context, selectedItem) {
+              if (selectedItem != null) {
+                return CustomText(
+                  text: selectedItem.name,
+                  color: dropDownColor,
+                );
+              }
+              return Container();
+            },
+            dropDownButton: Icon(
+              Icons.arrow_drop_down,
+              color: dropDownColor,
+            ),
             dropdownSearchDecoration: InputDecoration(border: InputBorder.none),
             itemAsString: (item) {
               return item!.name;

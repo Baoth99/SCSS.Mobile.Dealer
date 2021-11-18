@@ -5,6 +5,7 @@ import 'package:dealer_app/repositories/events/dealer_info_event.dart';
 import 'package:dealer_app/repositories/models/get_branches_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_info_state.dart';
+import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -96,6 +97,7 @@ class DealerInfoView extends StatelessWidget {
   }
 
   Widget chooseDealer() {
+    var dropDownColor = Colors.white;
     return BlocBuilder<DealerInfoBloc, DealerInfoState>(
       builder: (context, state) {
         return DropdownSearch<GetBranchesModel>(
@@ -106,6 +108,19 @@ class DealerInfoView extends StatelessWidget {
             if (value != null) {
               context.read<DealerInfoBloc>().add(EventChangeBranch(value.id));
             }
+          },
+          dropDownButton: Icon(
+            Icons.arrow_drop_down,
+            color: dropDownColor,
+          ),
+          dropdownBuilder: (context, selectedItem) {
+            if (selectedItem != null) {
+              return CustomText(
+                text: selectedItem.dealerBranchName,
+                color: dropDownColor,
+              );
+            }
+            return Container();
           },
           dropdownSearchDecoration: InputDecoration(border: InputBorder.none),
           itemAsString: (item) {
