@@ -13,7 +13,7 @@ class EventPhoneNumberChanged extends CreateTransactionEvent {
 }
 
 class EventCollectorIdChanged extends CreateTransactionEvent {
-  String collectorId;
+  final String collectorId;
 
   EventCollectorIdChanged({required this.collectorId});
 

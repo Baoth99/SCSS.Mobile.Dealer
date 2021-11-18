@@ -4,7 +4,6 @@ import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
-import 'package:dealer_app/utils/custom_progress_indicator_dialog_widget.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -266,14 +265,12 @@ class TransactionHistoryView extends StatelessWidget {
               Positioned(
                 left: 10,
                 bottom: 50,
-                child:
-                    Text(CustomFormats.currencyFormat.format(state.totalMin)),
+                child: Text(CustomFormats.currencyFormat(state.totalMin)),
               ),
               Positioned(
                 right: 10,
                 bottom: 50,
-                child:
-                    Text(CustomFormats.currencyFormat.format(state.totalMax)),
+                child: Text(CustomFormats.currencyFormat(state.totalMax)),
               ),
               RangeSlider(
                 values: RangeValues(
@@ -290,8 +287,8 @@ class TransactionHistoryView extends StatelessWidget {
                 max: state.totalMax.toDouble(),
                 divisions: state.getDivision,
                 labels: RangeLabels(
-                    '${CustomFormats.currencyFormat.format(state.fromTotal)}',
-                    '${CustomFormats.currencyFormat.format(state.toTotal)}'),
+                    '${CustomFormats.currencyFormat(state.fromTotal)}',
+                    '${CustomFormats.currencyFormat(state.toTotal)}'),
               ),
             ],
           ),
@@ -387,7 +384,7 @@ class TransactionHistoryView extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5))),
       tileColor: CustomColors.lightGray,
       title: Text(model.collectorName),
-      subtitle: Text(CustomFormats.currencyFormat.format(model.total)),
+      subtitle: Text(CustomFormats.currencyFormat(model.total)),
       trailing: Text(
           '${model.transactionDateTime.hour}:${model.transactionDateTime.minute}'),
       onTap: () => Navigator.pushNamed(

@@ -199,7 +199,7 @@ class PromotionDetailView extends StatelessWidget {
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             initialValue:
-                CustomFormats.currencyFormat.format(state.model.appliedAmount),
+                CustomFormats.currencyFormat(state.model.appliedAmount),
             readOnly: true,
           ),
         );
@@ -220,8 +220,7 @@ class PromotionDetailView extends StatelessWidget {
               labelText: 'Số tiền khuyến mãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
-            initialValue:
-                CustomFormats.currencyFormat.format(state.model.bonusAmount),
+            initialValue: CustomFormats.currencyFormat(state.model.bonusAmount),
             readOnly: true,
           ),
         );

@@ -3,7 +3,6 @@ import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/handlers/collect_deal_transaction_handler.dart';
 import 'package:dealer_app/repositories/handlers/data_handler.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
-import 'package:dealer_app/repositories/models/collector_phone_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +20,6 @@ class TransactionHistoryBloc
   final _initPage = 1;
   final _pageSize = 10;
   int _currentPage = 1;
-  List<CollectorPhoneModel>? _collectorList;
 
   @override
   Stream<TransactionHistoryState> mapEventToState(
@@ -30,8 +28,6 @@ class TransactionHistoryBloc
       yield state.copyWith(process: TransactionHistoryProcess.processing);
       try {
         _currentPage = 1;
-
-        _collectorList = await _dataHandler.getCollectorPhoneList();
 
         List<CollectDealTransactionModel> transactionList =
             await _collectDealTransactionHandler.getCollectDealHistories(

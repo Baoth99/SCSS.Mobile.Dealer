@@ -61,9 +61,8 @@ class LoginView extends StatelessWidget {
                 children: [
                   //logo
                   Image.asset(
-                    CustomAssets.logo,
-                    height: 100,
-                    width: 100,
+                    CustomAssets.logoAndText,
+                    height: 140,
                   ),
                   CustomWidgets.customText(
                     text: CustomTexts.loginToContinue,

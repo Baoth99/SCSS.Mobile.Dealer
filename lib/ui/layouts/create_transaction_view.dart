@@ -297,7 +297,7 @@ class CreateTransactionView extends StatelessWidget {
                                     child: Text(
                                       state.items[index].quantity != 0 &&
                                               state.items[index].unit != null
-                                          ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
+                                          ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
                                       textAlign: TextAlign.center,
                                     ),
@@ -323,8 +323,8 @@ class CreateTransactionView extends StatelessWidget {
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    CustomFormats.currencyFormat
-                                        .format(state.items[index].total),
+                                    CustomFormats.currencyFormat(
+                                        state.items[index].total),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
@@ -346,8 +346,8 @@ class CreateTransactionView extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                CustomFormats.currencyFormat
-                                    .format(state.items[index].bonusAmount),
+                                CustomFormats.currencyFormat(
+                                    state.items[index].bonusAmount),
                                 style: Theme.of(context).textTheme.bodyText2,
                               ),
                             ],
@@ -387,7 +387,7 @@ class CreateTransactionView extends StatelessWidget {
               height: 30,
             ),
             CustomWidgets.customText(
-              text: CustomFormats.currencyFormat.format(state.total),
+              text: CustomFormats.currencyFormat(state.total),
               height: 30,
             ),
           ],
@@ -407,7 +407,7 @@ class CreateTransactionView extends StatelessWidget {
               height: 30,
             ),
             CustomWidgets.customText(
-              text: CustomFormats.currencyFormat.format(state.totalBonus),
+              text: CustomFormats.currencyFormat(state.totalBonus),
               height: 30,
             ),
           ],
@@ -427,7 +427,7 @@ class CreateTransactionView extends StatelessWidget {
               height: 30,
             ),
             CustomWidgets.customText(
-              text: CustomFormats.currencyFormat.format(state.grandTotal),
+              text: CustomFormats.currencyFormat(state.grandTotal),
               height: 30,
             ),
           ],
@@ -663,8 +663,8 @@ class CreateTransactionView extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
               ],
-              initialValue:
-                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
+              initialValue: CustomFormats.replaceDotWithComma(
+                  CustomFormats.quantityFormat.format(state.itemQuantity)),
               onChanged: (value) {
                 if (value != CustomTexts.emptyString && value != ',') {
                   var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');
@@ -711,7 +711,7 @@ class CreateTransactionView extends StatelessWidget {
               keyboardType: TextInputType.number,
               inputFormatters: [CurrencyTextFormatter()],
               //get the unit price for each unit
-              initialValue: CustomFormats.numberFormat.format(state.itemPrice),
+              initialValue: CustomFormats.numberFormat(state.itemPrice),
               onChanged: (value) {
                 if (value != CustomTexts.emptyString) {
                   context.read<CreateTransactionBloc>().add(
@@ -756,8 +756,8 @@ class CreateTransactionView extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [CurrencyTextFormatter()],
             initialValue: state.isItemTotalCalculatedByUnitPrice
-                ? CustomFormats.numberFormat.format(state.itemTotalCalculated)
-                : CustomFormats.numberFormat.format(state.itemTotal),
+                ? CustomFormats.numberFormat(state.itemTotalCalculated)
+                : CustomFormats.numberFormat(state.itemTotal),
             onChanged: (value) {
               if (value != CustomTexts.emptyString) {
                 context.read<CreateTransactionBloc>().add(EventItemTotalChanged(
@@ -790,8 +790,7 @@ class CreateTransactionView extends StatelessWidget {
           visible: state.isPromotionApplied,
           child: CustomWidgets.customText(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            text:
-                '+ ${CustomFormats.numberFormat.format(state.itemBonusAmount)}',
+            text: '+ ${CustomFormats.numberFormat(state.itemBonusAmount)}',
           ),
         );
       },
