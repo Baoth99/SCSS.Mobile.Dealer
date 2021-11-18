@@ -310,6 +310,7 @@ class CustomRegexs {
 
 class CustomAssets {
   static const String logo = 'assets/images/vua_192x192.png';
+  static const String logoAndText = 'assets/images/logo_and_text.png';
 }
 
 class CustomRoutes {
@@ -419,23 +420,12 @@ class Symbols {
 
 class ImagesPaths {
   static const String imagePath = 'assets/images';
-  static const String loginLogo = '$imagePath/collector_login_logo.png';
-  static const String markerPoint = '$imagePath/marker_point.png';
-  static const String notBulky = '$imagePath/not_bulky.png';
-  static const String bulky = '$imagePath/bulky.png';
+  static const String logo = '$imagePath/logo_and_text.png';
   static const String maleProfile = '$imagePath/male_profile.png';
   static const String femaleProfile = '$imagePath/female_profile.png';
   static const String createNewIcon = '$imagePath/newRequestIcon.png';
   static const String categoriesIcon = '$imagePath/categoryIcon.png';
-  static const String dealerIcon = '$imagePath/dealerIcon.png';
-  static const String noRequestAvailable = '$imagePath/noRequestAvailable.png';
-  static const String qrcode = '$imagePath/qrcode.png';
-  static const String splashScreen = '$imagePath/splash_screen.png';
-  static const String placeSymbol = '$imagePath/place_symbol.png';
-  static const String placeSymbolName = 'placeSymbol';
   static const String emptyActivityList = '$imagePath/empty_activity_list.png';
-  static const String sellerLogo = '$imagePath/seller_logo.png';
-  static const String sellerLogoName = 'sellerLogoName';
   static const String ticketLogo = '$imagePath/ticket_logo.png';
 }
 
