@@ -297,7 +297,7 @@ class CreateTransactionView extends StatelessWidget {
                                     child: Text(
                                       state.items[index].quantity != 0 &&
                                               state.items[index].unit != null
-                                          ? '${CustomFormats.quantityFormat.format(state.items[index].quantity).replaceAll(RegExp(r'\.'), ',')} ${state.items[index].unit}'
+                                          ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
                                       textAlign: TextAlign.center,
                                     ),
@@ -663,8 +663,8 @@ class CreateTransactionView extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'(^\d*,?\d*)')),
               ],
-              initialValue:
-                  state.itemQuantity.toString().replaceAll(RegExp(r'\.'), ','),
+              initialValue: CustomFormats.replaceDotWithComma(
+                  CustomFormats.quantityFormat.format(state.itemQuantity)),
               onChanged: (value) {
                 if (value != CustomTexts.emptyString && value != ',') {
                   var valueWithDot = value.replaceAll(RegExp(r'[^0-9],'), '');

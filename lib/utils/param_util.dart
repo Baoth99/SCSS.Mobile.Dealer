@@ -289,11 +289,13 @@ class CustomFormats {
     return replaceCommaWithDot(NumberFormat('###,###').format(value));
   }
 
-  static NumberFormat quantityFormat = NumberFormat('##0.0#');
+  static NumberFormat quantityFormat = NumberFormat('##0.##');
   static String removeNotNumber(String string) =>
       string.replaceAll(RegExp(r'[^0-9]'), '');
   static String replaceCommaWithDot(String string) =>
       string.replaceAll(RegExp(r','), '.');
+  static String replaceDotWithComma(String string) =>
+      string.replaceAll(RegExp(r'\.'), ',');
   static String currencyFormat(int value) {
     return replaceCommaWithDot(
         NumberFormat('###,### ${CustomTexts.vndSymbolText}').format(value));

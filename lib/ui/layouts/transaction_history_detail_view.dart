@@ -296,7 +296,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       item.quantity != 0 && item.unit != null
-                          ? '${CustomFormats.quantityFormat.format(item.quantity).replaceAll(RegExp(r'\.'), ',')} ${item.unit}'
+                          ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(item.quantity))} ${item.unit}'
                           : CustomTexts.emptyString,
                       textAlign: TextAlign.center,
                     ),
