@@ -474,14 +474,14 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 150,
-                      child: Text(
-                        CustomTexts.promotionText,
-                        style: Theme.of(context).textTheme.bodyText2,
+                      child: CustomText(
+                        text: CustomTexts.promotionText,
+                        fontSize: 40.sp,
                       ),
                     ),
-                    Text(
-                      CustomFormats.currencyFormat(item.bonusAmount),
-                      style: Theme.of(context).textTheme.bodyText2,
+                    CustomText(
+                      text: CustomFormats.currencyFormat(item.bonusAmount),
+                      fontSize: 40.sp,
                     ),
                   ],
                 )
