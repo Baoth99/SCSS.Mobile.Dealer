@@ -128,7 +128,7 @@ class AddPromotionBloc extends Bloc<AddPromotionEvent, AddPromotionState> {
           );
           if (result)
             yield SuccessState(
-              message: 'Tạo khuyến mãi thành công',
+              message: 'Thêm ưu đãi thành công',
               promotionName: state.promotionName,
               promotionScrapCategoryId: state.promotionScrapCategoryId,
               appliedAmount: state.appliedAmount,
@@ -139,7 +139,7 @@ class AddPromotionBloc extends Bloc<AddPromotionEvent, AddPromotionState> {
             );
           else
             yield ErrorState(
-              message: 'Có lỗi xảy ra khi tạo khuyến mãi',
+              message: 'Có lỗi xảy ra khi tạo ưu đãi',
               promotionName: state.promotionName,
               promotionScrapCategoryId: state.promotionScrapCategoryId,
               appliedAmount: state.appliedAmount,
@@ -150,7 +150,7 @@ class AddPromotionBloc extends Bloc<AddPromotionEvent, AddPromotionState> {
             );
         } else {
           yield ErrorState(
-            message: 'Có lỗi xảy ra khi tạo khuyến mãi',
+            message: 'Có lỗi xảy ra khi tạo ưu đãi',
             promotionName: state.promotionName,
             promotionScrapCategoryId: state.promotionScrapCategoryId,
             appliedAmount: state.appliedAmount,
@@ -162,7 +162,7 @@ class AddPromotionBloc extends Bloc<AddPromotionEvent, AddPromotionState> {
         }
       } catch (e) {
         yield ErrorState(
-          message: 'Có lỗi xảy ra khi tạo khuyến mãi',
+          message: 'Có lỗi xảy ra khi tạo ưu đãi',
           promotionName: state.promotionName,
           promotionScrapCategoryId: state.promotionScrapCategoryId,
           appliedAmount: state.appliedAmount,

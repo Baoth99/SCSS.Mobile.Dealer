@@ -13,6 +13,8 @@ import 'package:dealer_app/ui/layouts/notification_view.dart';
 import 'package:dealer_app/ui/layouts/statistic_layout.dart';
 import 'package:dealer_app/ui/layouts/transaction_history_view.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
+import 'package:dealer_app/ui/widgets/radiant_gradient_mask.dart';
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -149,7 +151,7 @@ _botnav() {
           backgroundColor: Colors.transparent,
           elevation: 0,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Color(0xFF61C53D),
+          selectedItemColor: AppColors.greenFF01C971,
           unselectedFontSize: 23.sp,
           selectedFontSize: 26.sp,
           currentIndex: state.index,
@@ -157,7 +159,7 @@ _botnav() {
             BottomNavigationBarItem(
               label: 'Thống kê',
               icon: Icon(Icons.analytics_outlined),
-              activeIcon: Icon(Icons.analytics),
+              activeIcon: RadiantGradientMask(child: Icon(Icons.analytics)),
             ),
             BottomNavigationBarItem(
               icon: getWidgetNoti(Icons.notifications_outlined),
@@ -167,17 +169,17 @@ _botnav() {
             BottomNavigationBarItem(
               label: 'Trang chủ',
               icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
+              activeIcon: RadiantGradientMask(child: Icon(Icons.home)),
             ),
             BottomNavigationBarItem(
               label: 'Hoạt động',
               icon: Icon(Icons.history_outlined),
-              activeIcon: Icon(Icons.history),
+              activeIcon: RadiantGradientMask(child: Icon(Icons.history)),
             ),
             BottomNavigationBarItem(
               label: 'Tài khoản',
               icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
+              activeIcon: RadiantGradientMask(child: Icon(Icons.person)),
             ),
           ],
           onTap: (value) {

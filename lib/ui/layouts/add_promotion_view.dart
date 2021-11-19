@@ -91,6 +91,7 @@ class AddPromotionView extends StatelessWidget {
           }),
         ],
         child: Scaffold(
+          backgroundColor: AppColors.white,
           appBar: _appBar(),
           body: _body(),
         ),
@@ -100,12 +101,12 @@ class AddPromotionView extends StatelessWidget {
 
   _appBar() {
     return AppBar(
-      backgroundColor: Colors.lightGreen,
+      // backgroundColor: Colors.lightGreen,
       elevation: 0,
       title: BlocBuilder<AddPromotionBloc, AddPromotionState>(
         builder: (context, state) {
           return Text(
-            CustomTexts.promotionDetail,
+            'Ưu đãi mới',
             style: Theme.of(context).textTheme.headline2,
           );
         },

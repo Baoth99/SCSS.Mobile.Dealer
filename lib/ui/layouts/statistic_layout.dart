@@ -124,6 +124,7 @@ class MainLayout extends StatelessWidget {
           padding: EdgeInsets.symmetric(
             horizontal: 100.w,
           ),
+          height: 180.h,
           child: DropdownSearch<DealerInfo>(
             mode: Mode.BOTTOM_SHEET,
             items: state.listDealer,
@@ -140,6 +141,9 @@ class MainLayout extends StatelessWidget {
                 return CustomText(
                   text: selectedItem.name,
                   color: dropDownColor,
+                  fontSize: 55.sp,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.ellipsis,
                 );
               }
               return Container();
@@ -157,6 +161,7 @@ class MainLayout extends StatelessWidget {
             emptyBuilder: (context, searchEntry) => Center(
               child: CustomText(text: 'Không có vựa nào'),
             ),
+
           ),
         );
       },
@@ -277,7 +282,7 @@ class MainLayout extends StatelessWidget {
                 data: state.statisticData.totalCollecting.toAppPrice(),
               ),
               SizedBox(
-                height: 40.h,
+                height: 70.h,
               ),
               DataPattern(
                 title: 'Đơn hoàn thành',

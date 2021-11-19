@@ -71,6 +71,7 @@ class TransactionHistoryView extends StatelessWidget {
           }),
         ],
         child: Scaffold(
+          backgroundColor: AppColors.white,
           appBar: _appBar(),
           body: _body(),
         ),
@@ -94,10 +95,10 @@ class TransactionHistoryView extends StatelessWidget {
 
   _body() {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 10, 20, 40),
+      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Column(
         children: [
-          _searchAndFilter(),
+          // _searchAndFilter(),
           _transactionList(),
         ],
       ),
@@ -129,7 +130,7 @@ class TransactionHistoryView extends StatelessWidget {
                       Icon(
                         Icons.filter_alt,
                         size: 35,
-                        color: Theme.of(context).accentColor,
+                        color: AppColors.greenFF61C53D,
                       ),
                       Text('Bộ lọc'),
                     ],
@@ -152,11 +153,16 @@ class TransactionHistoryView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+                  OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
               labelText: 'Tìm tên người bán...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               prefixIcon:
-                  Icon(Icons.search, color: Theme.of(context).accentColor),
+                Icon(Icons.search, color: Colors.grey[600]),
+              fillColor: Colors.grey[200],
+              filled: true,
             ),
             onChanged: (value) {
               context

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class LoginView extends StatelessWidget {
           body: Form(
             key: _formKey,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(30, 100, 30, 50),
+              padding: const EdgeInsets.fromLTRB(20, 100, 20, 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -67,6 +68,7 @@ class LoginView extends StatelessWidget {
                   CustomWidgets.customText(
                     text: CustomTexts.loginToContinue,
                     alignment: Alignment.center,
+                    fontSize: 50.sp,
                   ),
                   _phoneNumberField(),
                   _passwordField(),
@@ -86,10 +88,12 @@ class LoginView extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return SizedBox(
-          height: 90,
+          height: 75,
           child: TextFormField(
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
               labelText: CustomTexts.phoneLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
@@ -112,11 +116,13 @@ class LoginView extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return SizedBox(
-          height: 90,
+          height: 85,
           child: TextFormField(
               obscureText: state.isPasswordObscured,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
                 labelText: CustomTexts.passwordLabel,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 //show hide pw icon
@@ -171,14 +177,19 @@ class LoginView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomWidgets.customText(text: CustomTexts.forgetPassword),
+        // CustomWidgets.customText(text: CustomTexts.forgetPassword),
         //TODO: forget password
-        CustomWidgets.customTextButton(
-            text: CustomTexts.forgetPasswordTextButton,
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(CustomRoutes.forgetPasswordPhoneNumber);
-            }),
+        Container(
+          margin: EdgeInsets.only(
+            top: 50.h
+          ),
+          child: CustomWidgets.customTextButton(
+              text: CustomTexts.forgetPasswordText,
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(CustomRoutes.forgetPasswordPhoneNumber);
+              }),
+        ),
       ],
     );
   }

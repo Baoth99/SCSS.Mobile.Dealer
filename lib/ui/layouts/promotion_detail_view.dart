@@ -66,6 +66,7 @@ class PromotionDetailView extends StatelessWidget {
             ),
           ],
           child: Scaffold(
+            backgroundColor: AppColors.white,
             appBar: _appBar(),
             body: _body(),
           ),
@@ -77,7 +78,7 @@ class PromotionDetailView extends StatelessWidget {
 
   _appBar() {
     return AppBar(
-      backgroundColor: Colors.lightGreen,
+      // backgroundColor: Colors.lightGreen,
       elevation: 0,
       title: BlocBuilder<PromotionDetailBloc, PromotionDetailState>(
         builder: (context, state) {
@@ -132,7 +133,7 @@ class PromotionDetailView extends StatelessWidget {
             decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              labelText: 'Mã khuyến mãi',
+              labelText: 'Mã ưu đãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             initialValue: state.model.code,
@@ -153,7 +154,7 @@ class PromotionDetailView extends StatelessWidget {
             decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              labelText: 'Tên khuyến mãi',
+              labelText: 'Tên ưu đãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             initialValue: state.model.promotionName,
@@ -195,7 +196,7 @@ class PromotionDetailView extends StatelessWidget {
             decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              labelText: 'Mức giá áp dụng khuyến mãi',
+              labelText: 'Mức giá áp dụng ưu đãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             initialValue:
@@ -217,7 +218,7 @@ class PromotionDetailView extends StatelessWidget {
             decoration: InputDecoration(
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-              labelText: 'Số tiền khuyến mãi',
+              labelText: 'Số tiền ưu đãi',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             initialValue: CustomFormats.currencyFormat(state.model.bonusAmount),
@@ -254,7 +255,7 @@ class PromotionDetailView extends StatelessWidget {
     return BlocBuilder<PromotionDetailBloc, PromotionDetailState>(
       builder: (context, state) {
         return CustomWidgets.customSecondaryButton(
-          text: 'Kết thúc khuyến mãi',
+          text: 'Kết thúc ưu đãi',
           action: () {
             context.read<PromotionDetailBloc>().add(EventTapDeleteButton());
           },
