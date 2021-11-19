@@ -325,12 +325,14 @@ class CreateTransactionView extends StatelessWidget {
                                   fit: FlexFit.loose,
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      state.items[index].quantity != 0 &&
+                                    child: CustomText(
+                                      text: state.items[index].quantity != 0 &&
                                               state.items[index].unit != null
                                           ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
                                       textAlign: TextAlign.center,
+                                      fontSize: 42.sp,
+                                      color: Colors.grey[800],
                                     ),
                                   ),
                                 ),
@@ -532,9 +534,14 @@ class CreateTransactionView extends StatelessWidget {
                             visible: (state.itemQuantity -
                                     state.itemQuantity.truncate()) >
                                 0,
-                            child: SizedBox(
-                              height: 30,
-                              child: Text('abcxyz'),
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 40.h, left: 20.w),
+                              child: CustomText(
+                                text: '* Chữ số thập phân sử dụng dấu "," '
+                                    'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
+                                fontSize: 35.sp,
+                                color: AppColors.greyFF939393,
+                              ),
                             ),
                           );
                         },
@@ -710,8 +717,8 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 30.h),
             child: TextFormField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -755,39 +762,42 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
-            child: TextFormField(
-              key: state.itemDealerCategoryDetailId != null
-                  ? Key(state.itemDealerCategoryDetailId!)
-                  : null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: CustomTexts.unitPriceLabel,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                suffixText: CustomTexts.vndSymbolUnderlined,
+          child: Container(
+            margin: EdgeInsets.only(top: 16),
+            child: SizedBox(
+              height: 90,
+              child: TextFormField(
+                key: state.itemDealerCategoryDetailId != null
+                    ? Key(state.itemDealerCategoryDetailId!)
+                    : null,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: CustomTexts.unitPriceLabel,
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  suffixText: CustomTexts.vndSymbolUnderlined,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [CurrencyTextFormatter()],
+                //get the unit price for each unit
+                initialValue: CustomFormats.numberFormat(state.itemPrice),
+                onChanged: (value) {
+                  if (value != CustomTexts.emptyString) {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(
+                            unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                  } else {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(unitPrice: CustomTexts.zeroString));
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty)
+                    return CustomTexts.unitPriceBlank;
+                  if (!state.isItemPriceValid) {
+                    return CustomTexts.unitPriceNegative;
+                  }
+                },
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
-              //get the unit price for each unit
-              initialValue: CustomFormats.numberFormat(state.itemPrice),
-              onChanged: (value) {
-                if (value != CustomTexts.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(
-                          unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
-                } else {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(unitPrice: CustomTexts.zeroString));
-                }
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty)
-                  return CustomTexts.unitPriceBlank;
-                if (!state.isItemPriceValid) {
-                  return CustomTexts.unitPriceNegative;
-                }
-              },
             ),
           ),
         );
