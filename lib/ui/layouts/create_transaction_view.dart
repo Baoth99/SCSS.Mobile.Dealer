@@ -5,18 +5,21 @@ import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
+import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dealer_app/utils/qr_scanner.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CreateTransactionView extends StatelessWidget {
   final TextEditingController _collectorPhoneController =
@@ -80,8 +83,9 @@ class CreateTransactionView extends StatelessWidget {
           }),
         ],
         child: Scaffold(
+          backgroundColor: AppColors.white,
           appBar: AppBar(
-            elevation: 1,
+            elevation: 0,
             title: Text(
               CustomTexts.createTransactionScreenTitle,
               style: Theme.of(context).textTheme.headline2,
@@ -89,6 +93,17 @@ class CreateTransactionView extends StatelessWidget {
           ),
           body: _body(),
         ),
+      ),
+    );
+  }
+
+  _getDottedDivider() {
+    return Container(
+      padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+      child: DottedLine(
+        direction: Axis.horizontal,
+        dashGapLength: 3.0,
+        dashColor: AppColors.greyFFB5B5B5,
       ),
     );
   }
@@ -108,27 +123,35 @@ class CreateTransactionView extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: ListView(
                     children: [
-                      BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                        builder: (context, state) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Chủ vựa: ${state.user!.name}'),
-                              SizedBox(height: 10),
-                              Text('SĐT chủ vựa: ${state.user!.phone}'),
-                            ],
-                          );
-                        },
-                      ),
-                      Divider(),
+                      // BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      //   builder: (context, state) {
+                      //     return Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Text('Chủ vựa: ${state.user!.nxame}'),
+                      //         SizedBox(height: 10),
+                      //         Text('SĐT chủ vựa: ${state.user!.phone}'),
+                      //       ],
+                      //     );
+                      //   },
+                      // ),
+                      // Divider(),
                       _phoneField(),
                       _nameField(),
                       _detailText(),
-                      _items(),
-                      const Divider(),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: 30.h
+                        ),
+                        child: _items(),
+                      ),
+                      _getDottedDivider(),
                       _subTotal(),
+                      SizedBox(
+                        height: 20.h,
+                      ),
                       _promotioBonusnAmount(),
-                      const Divider(),
+                      _getDottedDivider(),
                       _total(),
                     ],
                   ),
@@ -153,7 +176,9 @@ class CreateTransactionView extends StatelessWidget {
           child: TextFormField(
             controller: _collectorPhoneController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
               labelText: CustomTexts.collectorPhoneLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               suffixIcon: _scanQRIcon(),
@@ -203,7 +228,9 @@ class CreateTransactionView extends StatelessWidget {
             enabled: false,
             controller: _collectorNameController,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
               labelText: CustomTexts.collectorNameLabel,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
             ),
@@ -219,7 +246,11 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomWidgets.customText(text: CustomTexts.detailText),
+            CustomText(
+                text: CustomTexts.detailText,
+              color: AppColors.black,
+              fontSize: 42.sp,
+            ),
             //add item button
             Visibility(
               visible: state.scrapCategoryMap.length != 0,
@@ -264,7 +295,7 @@ class CreateTransactionView extends StatelessWidget {
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    tileColor: CustomColors.lightGray,
+                    tileColor: Colors.grey[200],
                     title: state.items[index] != null
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -274,15 +305,15 @@ class CreateTransactionView extends StatelessWidget {
                                 fit: FlexFit.tight,
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    state.scrapCategories
+                                  child: CustomText(
+                                    text: state.scrapCategories
                                         .firstWhere((element) =>
                                             element.id ==
                                             state.items[index].dealerCategoryId)
                                         .name,
                                     overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                    maxLines: 1,
+                                    fontSize: 42.sp,
+                                    color: Colors.grey[800],
                                   ),
                                 ),
                               ),
@@ -294,12 +325,14 @@ class CreateTransactionView extends StatelessWidget {
                                   fit: FlexFit.loose,
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      state.items[index].quantity != 0 &&
+                                    child: CustomText(
+                                      text: state.items[index].quantity != 0 &&
                                               state.items[index].unit != null
                                           ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(state.items[index].quantity))} ${state.items[index].unit}'
                                           : CustomTexts.emptyString,
                                       textAlign: TextAlign.center,
+                                      fontSize: 42.sp,
+                                      color: Colors.grey[800],
                                     ),
                                   ),
                                 ),
@@ -311,8 +344,10 @@ class CreateTransactionView extends StatelessWidget {
                                   fit: FlexFit.loose,
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      '-',
+                                    child: CustomText(
+                                      text: '-',
+                                      fontSize: 60.sp,
+                                      color: Colors.grey[800],
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -322,10 +357,12 @@ class CreateTransactionView extends StatelessWidget {
                                 fit: FlexFit.tight,
                                 child: Align(
                                   alignment: Alignment.centerRight,
-                                  child: Text(
-                                    CustomFormats.currencyFormat(
+                                  child: CustomText(
+                                    text: CustomFormats.currencyFormat(
                                         state.items[index].total),
                                     textAlign: TextAlign.right,
+                                    fontSize: 42.sp,
+                                    color: Colors.grey[800],
                                   ),
                                 ),
                               ),
@@ -382,13 +419,15 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomWidgets.customText(
+            CustomText(
               text: CustomTexts.subTotalText,
-              height: 30,
+              color: AppColors.black,
+              fontSize: 42.sp,
             ),
-            CustomWidgets.customText(
+            CustomText(
               text: CustomFormats.currencyFormat(state.total),
-              height: 30,
+              color: AppColors.black,
+              fontSize: 42.sp,
             ),
           ],
         );
@@ -402,13 +441,15 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomWidgets.customText(
+            CustomText(
               text: CustomTexts.promotionText,
-              height: 30,
+              color: AppColors.black,
+              fontSize: 42.sp,
             ),
-            CustomWidgets.customText(
+            CustomText(
               text: CustomFormats.currencyFormat(state.totalBonus),
-              height: 30,
+              color: AppColors.black,
+              fontSize: 42.sp,
             ),
           ],
         );
@@ -422,13 +463,15 @@ class CreateTransactionView extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomWidgets.customText(
+            CustomText(
               text: CustomTexts.totalText,
-              height: 30,
+              fontSize: 48.sp,
+              fontWeight: FontWeight.w500,
             ),
-            CustomWidgets.customText(
+            CustomText(
               text: CustomFormats.currencyFormat(state.grandTotal),
-              height: 30,
+              fontSize: 48.sp,
+              fontWeight: FontWeight.w500,
             ),
           ],
         );
@@ -474,41 +517,49 @@ class CreateTransactionView extends StatelessWidget {
               key: _itemFormKey,
               child: Scrollbar(
                 isAlwaysShown: true,
-                child: ListView(
-                  children: [
-                    _calculatedByUnitPriceSwitch(),
-                    rowFlexibleBuilder(
-                      _scrapCategoryUnitField(),
-                      _scrapCategoryField(),
-                      rowFlexibleType.bigToSmall,
-                    ),
-                    _quantityField(),
-                    BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
-                      builder: (context, state) {
-                        return Visibility(
-                          visible: (state.itemQuantity -
-                                  state.itemQuantity.truncate()) >
-                              0,
-                          child: SizedBox(
-                            height: 30,
-                            child: Text('abcxyz'),
-                          ),
-                        );
-                      },
-                    ),
-                    _unitPriceField(),
-                    Stack(
-                      children: [
-                        _totalField(),
-                        Positioned(
-                          top: 3,
-                          right: 30,
-                          child: _promotionApplicationBonusAmount(),
-                        )
-                      ],
-                    ),
-                    _promotionApplicationDescription(),
-                  ],
+                child: Container(
+                  padding: EdgeInsets.only(right: 15.w),
+                  child: ListView(
+                    children: [
+                      _calculatedByUnitPriceSwitch(),
+                      rowFlexibleBuilder(
+                        _scrapCategoryUnitField(),
+                        _scrapCategoryField(),
+                        rowFlexibleType.bigToSmall,
+                      ),
+                      _quantityField(),
+                      BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                        builder: (context, state) {
+                          return Visibility(
+                            visible: (state.itemQuantity -
+                                    state.itemQuantity.truncate()) >
+                                0,
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 40.h, left: 20.w),
+                              child: CustomText(
+                                text: '* Chữ số thập phân sử dụng dấu "," '
+                                    'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
+                                fontSize: 35.sp,
+                                color: AppColors.greyFF939393,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      _unitPriceField(),
+                      Stack(
+                        children: [
+                          _totalField(),
+                          Positioned(
+                            top: 3,
+                            right: 30,
+                            child: _promotionApplicationBonusAmount(),
+                          )
+                        ],
+                      ),
+                      _promotionApplicationDescription(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -547,20 +598,34 @@ class CreateTransactionView extends StatelessWidget {
   _calculatedByUnitPriceSwitch() {
     return BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
       builder: (context, state) {
-        return ListTile(
-          isThreeLine: true,
-          title: Text(CustomTexts.calculatedByUnitPriceText),
-          subtitle: Text(CustomTexts.calculatedByUnitPriceExplainationText),
-          trailing: Switch(
-            value: state.isItemTotalCalculatedByUnitPrice,
-            onChanged:
-                state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id
-                    ? (value) {
-                        context.read<CreateTransactionBloc>().add(
-                            EventCalculatedByUnitPriceChanged(
-                                isCalculatedByUnitPrice: value));
-                      }
-                    : null,
+        return Container(
+          decoration: BoxDecoration(
+            color: AppColors.greyFFF8F8F8,
+            borderRadius: BorderRadius.circular(30.0.r),
+          ),
+          margin: EdgeInsets.only(bottom: 50.h),
+          child: SizedBox(
+            height: 210.h,
+            child: ListTile(
+              // dense: true,
+              isThreeLine: true,
+              title: Text(CustomTexts.calculatedByUnitPriceText, style: TextStyle(fontWeight: FontWeight.w500),),
+              subtitle: Text(CustomTexts.calculatedByUnitPriceExplainationText, style: TextStyle(fontSize: 37.sp),),
+              trailing: SizedBox(
+                height: 80.h,
+                child: Switch(
+                  value: state.isItemTotalCalculatedByUnitPrice,
+                  onChanged:
+                      state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id
+                          ? (value) {
+                              context.read<CreateTransactionBloc>().add(
+                                  EventCalculatedByUnitPriceChanged(
+                                      isCalculatedByUnitPrice: value));
+                            }
+                          : null,
+                ),
+              ),
+            ),
           ),
         );
       },
@@ -640,6 +705,7 @@ class CreateTransactionView extends StatelessWidget {
                     EventDealerCategoryUnitChanged(
                         dealerCategoryDetailId: selectedValue.id));
             },
+
           ),
         );
       },
@@ -651,8 +717,8 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 30.h),
             child: TextFormField(
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -696,39 +762,42 @@ class CreateTransactionView extends StatelessWidget {
       builder: (context, state) {
         return Visibility(
           visible: state.isItemTotalCalculatedByUnitPrice,
-          child: SizedBox(
-            height: 90,
-            child: TextFormField(
-              key: state.itemDealerCategoryDetailId != null
-                  ? Key(state.itemDealerCategoryDetailId!)
-                  : null,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: CustomTexts.unitPriceLabel,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                suffixText: CustomTexts.vndSymbolUnderlined,
+          child: Container(
+            margin: EdgeInsets.only(top: 16),
+            child: SizedBox(
+              height: 90,
+              child: TextFormField(
+                key: state.itemDealerCategoryDetailId != null
+                    ? Key(state.itemDealerCategoryDetailId!)
+                    : null,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: CustomTexts.unitPriceLabel,
+                  floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  suffixText: CustomTexts.vndSymbolUnderlined,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [CurrencyTextFormatter()],
+                //get the unit price for each unit
+                initialValue: CustomFormats.numberFormat(state.itemPrice),
+                onChanged: (value) {
+                  if (value != CustomTexts.emptyString) {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(
+                            unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                  } else {
+                    context.read<CreateTransactionBloc>().add(
+                        EventUnitPriceChanged(unitPrice: CustomTexts.zeroString));
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty)
+                    return CustomTexts.unitPriceBlank;
+                  if (!state.isItemPriceValid) {
+                    return CustomTexts.unitPriceNegative;
+                  }
+                },
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [CurrencyTextFormatter()],
-              //get the unit price for each unit
-              initialValue: CustomFormats.numberFormat(state.itemPrice),
-              onChanged: (value) {
-                if (value != CustomTexts.emptyString) {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(
-                          unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
-                } else {
-                  context.read<CreateTransactionBloc>().add(
-                      EventUnitPriceChanged(unitPrice: CustomTexts.zeroString));
-                }
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty)
-                  return CustomTexts.unitPriceBlank;
-                if (!state.isItemPriceValid) {
-                  return CustomTexts.unitPriceNegative;
-                }
-              },
             ),
           ),
         );
@@ -845,7 +914,7 @@ class CreateTransactionView extends StatelessWidget {
             Navigator.of(context).pop();
           },
           textColor: MaterialStateProperty.all(Colors.white),
-          backgroundColor: MaterialStateProperty.all(Colors.red),
+          backgroundColor: MaterialStateProperty.all(AppColors.orangeFFF5670A),
         );
       },
     );

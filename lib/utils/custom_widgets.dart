@@ -1,3 +1,4 @@
+import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 
 class CustomWidgets {
@@ -104,7 +105,7 @@ class CustomWidgets {
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(fontSize: fontSize ?? 15),
+          style: TextStyle(fontSize: fontSize ?? 15, color: AppColors.black, fontWeight: FontWeight.w500),
         ),
       ),
     );
@@ -122,25 +123,25 @@ class CustomWidgets {
     String weekday = '';
     switch (time.weekday) {
       case 1:
-        weekday = 'THỨ HAI';
+        weekday = 'Th 2';
         break;
       case 2:
-        weekday = 'THỨ BA';
+        weekday = 'Th 3';
         break;
       case 3:
-        weekday = 'THỨ TƯ';
+        weekday = 'Th 4';
         break;
       case 4:
-        weekday = 'THỨ NĂM';
+        weekday = 'Th 5';
         break;
       case 5:
-        weekday = 'THỨ SÁU';
+        weekday = 'Th 6';
         break;
       case 6:
-        weekday = 'THỨ BẢY';
+        weekday = 'Th 7';
         break;
       case 7:
-        weekday = 'CHỦ NHẬT';
+        weekday = 'CN';
         break;
       default:
     }
@@ -148,7 +149,7 @@ class CustomWidgets {
       height: height ?? 50,
       alignment: alignment ?? Alignment.centerLeft,
       child: Text(
-        '$weekday, ${time.day} THÁNG ${time.month}, ${time.year}',
+        '$weekday, ${time.day} thg ${time.month}',
         style: textStyle ??
             TextStyle(
               fontSize: fontSize ?? 15,

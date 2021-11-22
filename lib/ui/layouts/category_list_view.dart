@@ -107,11 +107,16 @@ class CategoryListView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-              labelText: 'Tìm danh mục...',
+                  OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+              hintText: 'Tìm danh mục...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               prefixIcon:
-                  Icon(Icons.search, color: Theme.of(context).accentColor),
+              Icon(Icons.search, color: Colors.grey[600]),
+              fillColor: Colors.grey[200],
+              filled: true,
             ),
             onChanged: (value) {
               context

@@ -7,11 +7,14 @@ import 'package:dealer_app/repositories/models/collect_deal_transaction_history_
 import 'package:dealer_app/repositories/states/feedback_admin_state.dart';
 import 'package:dealer_app/repositories/states/transaction_history_detail_state.dart';
 import 'package:dealer_app/ui/app.dart';
+import 'package:dealer_app/ui/widgets/arrow_back_button.dart';
 import 'package:dealer_app/ui/widgets/common_margin_container.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/function_widgets.dart';
+import 'package:dealer_app/ui/widgets/radiant_gradient_mask.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -45,6 +48,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
             ),
           ],
           child: Scaffold(
+            backgroundColor: AppColors.white,
             appBar: _appBar(),
             body: _body(),
           ),
@@ -56,16 +60,44 @@ class TransactionHistoryDetailView extends StatelessWidget {
 
   _appBar() {
     return AppBar(
-      backgroundColor: Colors.lightGreen,
       elevation: 0,
       title: BlocBuilder<TransactionHistoryDetailBloc,
           TransactionHistoryDetailState>(
         builder: (context, state) {
-          return Text(
-            CustomTexts.transactionHistoryDetailScreenTitle,
-            style: Theme.of(context).textTheme.headline2,
+          return CustomText(
+            text: CustomTexts.transactionHistoryScreenTitle,
+            color: AppColors.white,
           );
         },
+      ),
+      leading: ArrowBackIconButton(
+        color: AppColors.white,
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment
+                .centerLeft, // 10% of the width, so there are ten blinds.
+            colors: <Color>[
+              AppColors.greenFF61C53D.withOpacity(1),
+              AppColors.greenFF39AC8F.withOpacity(1),
+            ], // red to yellow
+            tileMode:
+            TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        ),
+      ),
+    );
+  }
+
+  _getDottedDivider() {
+    return Container(
+      padding: EdgeInsets.only(top: 10.h, bottom: 30.h, left: 48.w, right: 48.w),
+      child: DottedLine(
+        direction: Axis.horizontal,
+        dashGapLength: 3.0,
+        dashColor: AppColors.greyFFB5B5B5,
       ),
     );
   }
@@ -76,64 +108,157 @@ class TransactionHistoryDetailView extends StatelessWidget {
       builder: (context, state) {
         if (state is LoadedState)
           return Container(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
               child: ListView(
                 primary: false,
                 shrinkWrap: true,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.receipt_long,
-                        color: Colors.green,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 48.w
+                    ),
+                    child: Row(
+                      children: [
+                        RadiantGradientMask(
+                          child: Icon(
+                            Icons.description_outlined,
+                            color: AppColors.greenFF01C971,
+                            size: 60.sp,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20.w,
+                            ),
+                            child: CustomText(
+                              text: 'Mã Đơn: ${state.model.transactionCode}',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 35.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 20.h,
+                    height: 100.h,
+                    color: AppColors.greyFFEEEEEE,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 48.w
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 150.r,
+                            width: 150.r,
+                            child: CustomWidgets.customAvatar(avatar: state.image)
+                        ),
+                        SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                                text: state.model.collectorName,
+                              fontSize: 45.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 20.h,
+                    height: 100.h,
+                    color: AppColors.greyFFEEEEEE,
+                  ),
+                  Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 48.w
                       ),
-                      SizedBox(width: 10),
-                      Text('Mã Đơn: ${state.model.transactionCode}'),
-                    ],
+                      margin: EdgeInsets.only(bottom: 30.h),
+                      child: CustomText(text: 'Thông tin thu gom')
                   ),
-                  Divider(),
-                  Row(
-                    children: [
-                      CustomWidgets.customAvatar(avatar: state.image),
-                      SizedBox(width: 20),
-                      Text(state.model.collectorName),
-                    ],
-                  ),
-                  Divider(),
-                  CustomWidgets.customText(text: 'Thông tin thu gom'),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.event),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Thời gian giao dịch'),
-                          Row(
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 48.w
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        RadiantGradientMask(
+                            child: Icon(
+                                Icons.event,
+                              color: AppColors.greenFF01C971,
+                            size: 60.sp,
+                            ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: 20.w,
+                            top: 5.h,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomWidgets.customDateText(
-                                  time: state.model.transactionDate),
-                              SizedBox(width: 10),
-                              Text(state.model.transactionTime),
+                              CustomText(
+                                  text: 'Thời gian giao dịch',
+                                fontSize: 40.sp,
+                                color: Colors.grey[600],
+                              ),
+                              Row(
+                                children: [
+                                  CustomWidgets.customDateText(
+                                      time: state.model.transactionDate),
+                                  CustomText(text: ', ' + state.model.transactionTime),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Icon(Icons.list_alt),
-                      SizedBox(width: 10),
-                      Text('Thông tin đơn hàng'),
-                    ],
+                  Container(padding: EdgeInsets.symmetric(
+                      horizontal: 48.w
+                  ),
+                    child: Row(
+                      children: [
+                        RadiantGradientMask(
+                            child: Icon(
+                            Icons.list_alt,
+                              color: AppColors.greenFF01C971,
+                              size: 60.sp,
+                          )
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: 20.w,
+                          ),
+                          child: CustomText(
+                              text: 'Thông tin đơn hàng',
+                            fontSize: 40.sp,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   _items(),
-                  Divider(),
+                  SizedBox(
+                    height: 30.h,
+                  ),
                   _subTotal(),
                   _promotioBonusnAmount(),
-                  Divider(),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  _getDottedDivider(),
                   _total(),
                   _getFeedbackToAdmin(context),
                 ],
@@ -156,6 +281,9 @@ class TransactionHistoryDetailView extends StatelessWidget {
       alignment: Alignment.centerRight,
       margin: EdgeInsets.only(
         top: 40.h,
+      ),
+      padding: EdgeInsets.symmetric(
+          horizontal: 48.w
       ),
       child: CommonMarginContainer(
         child: BlocBuilder<TransactionHistoryDetailBloc,
@@ -244,18 +372,24 @@ class TransactionHistoryDetailView extends StatelessWidget {
         TransactionHistoryDetailState>(
       builder: (context, state) {
         if (state is LoadedState)
-          return ListView.separated(
-            padding: EdgeInsets.only(top: 10),
-            primary: false,
-            shrinkWrap: true,
-            itemCount: state.model.itemDetails.length,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                height: 10,
-              );
-            },
-            itemBuilder: (itemContext, index) =>
-                _itemBulder(item: state.model.itemDetails[index]),
+          return Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: 48.w
+            ),
+            child: ListView.separated(
+
+              padding: EdgeInsets.only(top: 10),
+              primary: false,
+              shrinkWrap: true,
+              itemCount: state.model.itemDetails.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  height: 10,
+                );
+              },
+              itemBuilder: (itemContext, index) =>
+                  _itemBulder(item: state.model.itemDetails[index]),
+            ),
           );
         else
           return CustomWidgets.customErrorWidget();
@@ -270,7 +404,7 @@ class TransactionHistoryDetailView extends StatelessWidget {
         return ListTile(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(5))),
-          tileColor: CustomColors.lightGray,
+          tileColor: Colors.grey[200],
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -279,12 +413,12 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 fit: FlexFit.tight,
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    item.scrapCategoryName ??
+                  child: CustomText(
+                    text: item.scrapCategoryName ??
                         CustomVar.unnamedScrapCategory.name,
+                    fontSize: 42.sp,
+                    color: Colors.grey[800],
                     overflow: TextOverflow.ellipsis,
-                    softWrap: false,
-                    maxLines: 1,
                   ),
                 ),
               ),
@@ -294,11 +428,14 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   fit: FlexFit.loose,
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text(
-                      item.quantity != 0 && item.unit != null
+                    child: CustomText(
+                      text: item.quantity != 0 && item.unit != null
                           ? '${CustomFormats.replaceDotWithComma(CustomFormats.quantityFormat.format(item.quantity))} ${item.unit}'
                           : CustomTexts.emptyString,
                       textAlign: TextAlign.center,
+                      fontSize: 42.sp,
+                      color: Colors.grey[800],
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
@@ -308,8 +445,10 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   fit: FlexFit.loose,
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text(
-                      '-',
+                    child: CustomText(
+                      text: '-',
+                      fontSize: 60.sp,
+                      color: Colors.grey[800],
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -319,9 +458,11 @@ class TransactionHistoryDetailView extends StatelessWidget {
                 fit: FlexFit.tight,
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    CustomFormats.currencyFormat(item.total),
+                  child: CustomText(
+                    text: CustomFormats.currencyFormat(item.total),
                     textAlign: TextAlign.right,
+                    fontSize: 42.sp,
+                    color: Colors.grey[800],
                   ),
                 ),
               ),
@@ -333,14 +474,14 @@ class TransactionHistoryDetailView extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 150,
-                      child: Text(
-                        CustomTexts.promotionText,
-                        style: Theme.of(context).textTheme.bodyText2,
+                      child: CustomText(
+                        text: CustomTexts.promotionText,
+                        fontSize: 40.sp,
                       ),
                     ),
-                    Text(
-                      CustomFormats.currencyFormat(item.bonusAmount),
-                      style: Theme.of(context).textTheme.bodyText2,
+                    CustomText(
+                      text: CustomFormats.currencyFormat(item.bonusAmount),
+                      fontSize: 40.sp,
                     ),
                   ],
                 )
@@ -355,18 +496,26 @@ class TransactionHistoryDetailView extends StatelessWidget {
         TransactionHistoryDetailState>(
       builder: (context, state) {
         if (state is LoadedState)
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomWidgets.customText(
-                text: CustomTexts.subTotalText,
-                height: 30,
-              ),
-              CustomWidgets.customText(
-                text: CustomFormats.currencyFormat(state.model.total),
-                height: 30,
-              ),
-            ],
+          return Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: 48.w,
+              vertical: 12.h,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: CustomTexts.subTotalText,
+                  color: AppColors.black,
+                  fontSize: 38.sp,
+                ),
+                CustomText(
+                  text: CustomFormats.currencyFormat(state.model.total),
+                  color: AppColors.black,
+                  fontSize: 38.sp,
+                ),
+              ],
+            ),
           );
         else
           return CustomWidgets.customErrorWidget();
@@ -379,18 +528,26 @@ class TransactionHistoryDetailView extends StatelessWidget {
         TransactionHistoryDetailState>(
       builder: (context, state) {
         if (state is LoadedState)
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomWidgets.customText(
-                text: CustomTexts.promotionText,
-                height: 30,
-              ),
-              CustomWidgets.customText(
-                text: CustomFormats.currencyFormat(state.model.totalBonus),
-                height: 30,
-              ),
-            ],
+          return Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: 48.w,
+              vertical: 12.h
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: CustomTexts.promotionText,
+                  color: AppColors.black,
+                  fontSize: 38.sp,
+                ),
+                CustomText(
+                  text: CustomFormats.currencyFormat(state.model.totalBonus),
+                  color: AppColors.black,
+                  fontSize: 38.sp,
+                ),
+              ],
+            ),
           );
         else
           return CustomWidgets.customErrorWidget();
@@ -403,18 +560,25 @@ class TransactionHistoryDetailView extends StatelessWidget {
         TransactionHistoryDetailState>(
       builder: (context, state) {
         if (state is LoadedState)
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomWidgets.customText(
-                text: CustomTexts.totalText,
-                height: 30,
-              ),
-              CustomWidgets.customText(
-                text: CustomFormats.currencyFormat(state.grandTotal),
-                height: 30,
-              ),
-            ],
+          return Container(
+            padding: EdgeInsets.symmetric(
+                horizontal: 48.w
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(
+                  text: CustomTexts.totalText,
+                  fontSize: 48.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                CustomText(
+                  text: CustomFormats.currencyFormat(state.grandTotal),
+                  fontSize: 48.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ],
+            ),
           );
         else
           return CustomWidgets.customErrorWidget();

@@ -187,7 +187,7 @@ class DealerApp extends StatelessWidget {
         // orange subtitle
         bodyText2: TextStyle(
           fontSize: 15,
-          color: Color.fromARGB(204, 228, 121, 7),
+          color: Color.fromARGB(255, 20, 20, 21),
           // fontWeight: FontWeight.w500,
         ),
       ),

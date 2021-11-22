@@ -58,7 +58,7 @@ class PromotionDetailBloc
     }
     if (event is EventTapDeleteButton) {
       yield DeleteState(
-        message: 'Kết thúc khuyến mãi ${state.model.promotionName} ?',
+        message: 'Kết thúc ưu đãi ${state.model.promotionName} ?',
         model: new GetPromotionDetailModel(
           code: state.model.code,
           promotionName: state.model.promotionName,
@@ -75,7 +75,7 @@ class PromotionDetailBloc
       if (result)
         yield SuccessState(
           message:
-              'Kết thúc khuyến mãi ${state.model.promotionName} thành công',
+              'Kết thúc ưu đãi ${state.model.promotionName} thành công',
           model: new GetPromotionDetailModel(
             code: CustomTexts.emptyString,
             promotionName: CustomTexts.emptyString,

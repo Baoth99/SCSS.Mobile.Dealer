@@ -3,12 +3,14 @@ import 'package:dealer_app/blocs/promotion_list_bloc.dart';
 import 'package:dealer_app/repositories/events/promotion_list_event.dart';
 import 'package:dealer_app/repositories/models/get_promotion_model.dart';
 import 'package:dealer_app/repositories/states/promotion_list_state.dart';
+import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PromotionListView extends StatelessWidget {
   @override
@@ -122,11 +124,16 @@ class PromotionListView extends StatelessWidget {
           child: TextFormField(
             decoration: InputDecoration(
               border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-              labelText: CustomTexts.searchPromotionName,
+                  OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+              hintText: CustomTexts.searchPromotionName,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
               prefixIcon:
-                  Icon(Icons.search, color: Theme.of(context).accentColor),
+                Icon(Icons.search, color: Colors.grey[600]),
+              fillColor: Colors.grey[200],
+              filled: true,
             ),
             onChanged: (value) {
               context
@@ -200,49 +207,97 @@ class PromotionListView extends StatelessWidget {
             padding: EdgeInsets.all(10),
             child: Row(
               children: [
+                // SizedBox(
+                //   width: 80,
+                //   height: 80,
+                //   child: Center(
+                //     child: ClipRRect(
+                //       borderRadius: BorderRadius.circular(5.0),
+                //       child: Stack(
+                //         children: [
+                //           const SizedBox(
+                //             width: 80,
+                //             height: 80,
+                //             child: const DecoratedBox(
+                //               decoration:
+                //               const BoxDecoration(color: Colors.green),
+                //             ),
+                //           ),
+                //           if (model.image != null)
+                //             Positioned(
+                //               width: 80,
+                //               height: 80,
+                //               child: Image(
+                //                 image: model.image!,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //             ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(
+                  width: 50.w,
+                ),
                 Flexible(
                   fit: FlexFit.tight,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(model.promotionName),
+                      CustomText(text: model.promotionName,
+                        fontSize: 45.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                       SizedBox(height: 5),
-                      Text(
-                          '${CustomFormats.currencyFormat(model.bonusAmount)} thưởng'),
-                      Text(
-                          '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
-                      Text('${model.appliedFromTime} - ${model.appliedToTime}'),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 80,
-                  height: 80,
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5.0),
-                      child: Stack(
+                      Row(
                         children: [
-                          const SizedBox(
-                            width: 80,
-                            height: 80,
-                            child: const DecoratedBox(
-                              decoration:
-                                  const BoxDecoration(color: Colors.green),
-                            ),
+                          CustomText(
+                              text: 'Loại phế liệu: ',
+                            fontSize: 43.sp,
                           ),
-                          if (model.image != null)
-                            Positioned(
-                              width: 80,
-                              height: 80,
-                              child: Image(
-                                image: model.image!,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          CustomText(
+                            text: model.appliedScrapCategory,
+                            fontSize: 43.sp,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.orangeFFF5670A,
+                          )
                         ],
                       ),
-                    ),
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          CustomText(
+                            text: 'Thưởng ',
+                            fontSize: 43.sp,
+                          ),
+                          CustomText(
+                            text: CustomFormats.currencyFormat(model.bonusAmount),
+                            color: AppColors.orangeFFF5670A,
+                            fontSize: 43.sp,
+                          ),
+                          CustomText(
+                            text: ' khi bán đủ ',
+                            fontSize: 43.sp,
+                          ),
+                          CustomText(
+                            text: CustomFormats.currencyFormat(model.appliedAmount),
+                            color: AppColors.orangeFFF5670A,
+                            fontSize: 43.sp,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      CustomText(
+                          text: 'Thời gian: ${model.appliedFromTime} đến ${model.appliedToTime}',
+                        fontSize: 43.sp,
+                      ),
+                      // Text(
+                      //     '${CustomFormats.currencyFormat.format(model.bonusAmount)} thưởng'),
+                      // Text(
+                      //     '${model.appliedScrapCategory} tối thiếu ${model.appliedAmount}'),
+                      // Text('${model.appliedFromTime} - ${model.appliedToTime}'),
+                    ],
                   ),
                 ),
               ],

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/dealer_information_bloc.dart';
+import 'package:dealer_app/log/logger.dart';
 import 'package:dealer_app/repositories/events/dealer_information_event.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_information_state.dart';
@@ -11,6 +12,7 @@ import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/common_utils.dart';
 import 'package:dealer_app/utils/param_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,45 +31,50 @@ class HomeView extends StatelessWidget {
               avatar(context),
               activeWidget(context),
               Expanded(
-                  child: ListView(
+                  child: Container(
+                    margin: EdgeInsets.only(
+                      top: 30.h,
+                    ),
+                    child: ListView(
                 children: [
-                  _option(
-                    'Tạo giao dịch mới',
-                    'Giao dịch thu mua phế liệu',
-                    () {
-                      Navigator.pushNamed(
-                          context, CustomRoutes.createTransaction);
-                    },
-                    Colors.white,
-                    Color.fromARGB(255, 57, 172, 143),
-                    Color.fromARGB(255, 97, 197, 61),
-                    ImagesPaths.createNewIcon,
-                  ),
-                  _option(
-                    'Bảng giá phế liệu',
-                    'Danh mục các loại phế liệu của bạn',
-                    () {
-                      Navigator.pushNamed(context, CustomRoutes.categoryList);
-                    },
-                    Colors.white,
-                    Color.fromARGB(255, 79, 148, 232),
-                    Color.fromARGB(255, 53, 192, 234),
-                    ImagesPaths.categoriesIcon,
-                  ),
-                  _option(
-                    'Ưu đãi',
-                    'Sự kiện diễn ra cho người bán phế liệu',
-                    () {
-                      Navigator.pushNamed(
-                          context, CustomRoutes.promotionListView);
-                    },
-                    Colors.white,
-                    Color.fromARGB(255, 228, 98, 93),
-                    Color.fromARGB(255, 254, 202, 35),
-                    ImagesPaths.ticketLogo,
-                  ),
+                    _option(
+                      'Tạo giao dịch mới',
+                      'Giao dịch thu mua phế liệu',
+                      () {
+                        Navigator.pushNamed(
+                            context, CustomRoutes.createTransaction);
+                      },
+                      Colors.white,
+                      Color.fromARGB(255, 57, 172, 143),
+                      Color.fromARGB(255, 97, 197, 61),
+                      ImagesPaths.createNewIcon,
+                    ),
+                    _option(
+                      'Bảng giá phế liệu',
+                      'Danh mục các loại phế liệu của bạn',
+                      () {
+                        Navigator.pushNamed(context, CustomRoutes.categoryList);
+                      },
+                      Colors.white,
+                      Color.fromARGB(255, 79, 148, 232),
+                      Color.fromARGB(255, 53, 192, 234),
+                      ImagesPaths.categoriesIcon,
+                    ),
+                    _option(
+                      'Ưu đãi',
+                      'Sự kiện diễn ra cho người bán phế liệu',
+                      () {
+                        Navigator.pushNamed(
+                            context, CustomRoutes.promotionListView);
+                      },
+                      Colors.white,
+                      Color.fromARGB(255, 228, 98, 93),
+                      Color.fromARGB(255, 254, 202, 35),
+                      ImagesPaths.ticketLogo,
+                    ),
                 ],
-              ))
+              ),
+                  ))
             ]),
           ),
         );
@@ -90,46 +97,68 @@ class HomeView extends StatelessWidget {
   Widget activeWidgetMain(BuildContext context, DealerInformationState state) {
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(minHeight: 500.h),
+      constraints: BoxConstraints(minHeight: 220.h),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey.withOpacity(0.4)),
         ),
         color: Colors.white,
       ),
-      child: Center(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CustomText(
-                  text: 'Trạng thái hoạt động:',
-                  color: Colors.grey,
-                ),
-                Expanded(
+      padding: EdgeInsets.symmetric(
+          horizontal: 60.w,
+        vertical: 40.h
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CustomText(
+                text: 'Trạng thái hoạt động:',
+                color: AppColors.black.withOpacity(0.6),
+                fontWeight: FontWeight.w700,
+                fontSize: 43.sp,
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: 20.w
+                  ),
                   child: CustomText(
                     text: state.isActive ? 'Đang hoạt động' : 'Ngưng hoạt động',
-                    color: state.isActive ? Colors.green : Colors.red,
+                    color: state.isActive ? AppColors.greenFF61C53D : AppColors.orangeFFF5670A,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 43.sp,
                   ),
                 ),
-                Switch(
+              ),
+              SizedBox(
+                height: 80.h,
+                child: Switch(
                   value: state.isActive,
                   onChanged: (value) {
                     context.read<DealerInformationBloc>().add(
                           ModifyActivationSwitch(),
                         );
                   },
-                  activeTrackColor: Colors.lightGreenAccent,
-                  activeColor: Colors.green,
+                  // activeTrackColor: AppColors.greenFF80D063,
+                  // activeColor: AppColors.greenFF61C53D,
                 ),
-              ],
+              ),
+            ],
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 10.h
             ),
-            CustomText(
+            child: CustomText(
               text:
                   '* Thông tin vựa của bạn sẽ được hiển thị trong danh sách Vựa đang hoạt động',
+              color: AppColors.greyFF939393,
+              fontSize: 32.sp,
+              fontWeight: FontWeight.w500,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -168,10 +197,10 @@ class HomeView extends StatelessWidget {
         Container(
           child: CachedAvatarWidget(
             path: state.dealerImageUrl ?? Symbols.empty,
-            width: 250,
+            width: 200,
           ),
           margin: EdgeInsets.only(
-              left: 70.w, top: 170.h, right: 40.w, bottom: 40.h),
+              left: 30.w, top: 170.h, right: 40.w, bottom: 40.h),
         ),
         Expanded(
           child: Column(
@@ -194,8 +223,9 @@ class HomeView extends StatelessWidget {
                 child: CustomText(
                   text: state.dealerAddress,
                   fontSize: 40.sp,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                   color: AppColors.white,
+                  // overflow: TextOverflow.ellipsis,
                 ),
               )
             ],
@@ -209,8 +239,8 @@ class HomeView extends StatelessWidget {
       Color contentColor, Color startColor, Color endColor, String icon) {
     return Container(
       // color: Colors.white70,
-      height: 100,
-      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+      height: 270.h,
+      margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 100.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -229,7 +259,7 @@ class HomeView extends StatelessWidget {
             offset: Offset(1.0, 2.0), // shadow direction: bottom right
           )
         ],
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(30.0.r),
       ),
       child: Material(
         color: Colors.transparent,
@@ -239,8 +269,8 @@ class HomeView extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    child: Image.asset(icon, width: 50)),
+                    margin: EdgeInsets.only(left: 50.w, right: 40.w),
+                    child: Image.asset(icon, width: 130.w)),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -251,9 +281,10 @@ class HomeView extends StatelessWidget {
                             name,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 60.sp,
+                              fontWeight: FontWeight.w500,
                             ),
+                            textAlign: TextAlign.left,
                           ),
                         ],
                       ),
@@ -263,8 +294,10 @@ class HomeView extends StatelessWidget {
                             description,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: 35.sp,
+                              fontWeight: FontWeight.w400,
                             ),
+                            textAlign: TextAlign.left,
                           ),
                         ],
                       ),

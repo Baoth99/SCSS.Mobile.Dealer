@@ -6,6 +6,7 @@ import 'package:dealer_app/repositories/models/get_branches_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_info_state.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
+import 'package:dealer_app/ui/widgets/arrow_back_button.dart';
 import 'package:dealer_app/utils/cool_alert.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -13,6 +14,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DealerInfoView extends StatelessWidget {
   DealerInfoView({Key? key}) : super(key: key);
@@ -71,6 +73,7 @@ class DealerInfoView extends StatelessWidget {
           ),
         ],
         child: Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: _appBar(),
           body: _body(),
         ),
@@ -80,8 +83,25 @@ class DealerInfoView extends StatelessWidget {
 
   _appBar() {
     return AppBar(
-      backgroundColor: Colors.lightGreen,
       elevation: 0,
+      leading: ArrowBackIconButton(
+        color: AppColors.white,
+      ),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment
+                .centerLeft, // 10% of the width, so there are ten blinds.
+            colors: <Color>[
+              AppColors.greenFF61C53D.withOpacity(1),
+              AppColors.greenFF39AC8F.withOpacity(1),
+            ], // red to yellow
+            tileMode:
+            TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        ),
+      ),
       title: BlocBuilder<DealerInfoBloc, DealerInfoState>(
         builder: (dealerInfoContext, dealerInfoState) {
           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -89,7 +109,8 @@ class DealerInfoView extends StatelessWidget {
             if (authState.user!.roleKey == DealerRoleKey.MAIN_BRANCH.number)
               return chooseDealer();
             else
-              return Text(dealerInfoState.dealerName);
+              return Text(dealerInfoState.dealerName, style: TextStyle(
+                  color: AppColors.white, fontSize: 50.sp), overflow: TextOverflow.ellipsis,);
           });
         },
       ),
@@ -144,18 +165,23 @@ class DealerInfoView extends StatelessWidget {
             children: [
               if (state.dealerImage != null) _image(),
               ListView(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 primary: false,
                 shrinkWrap: true,
                 children: [
-                  CustomWidgets.customText(text: 'Thông tin vựa'),
+                  CustomWidgets.customText(
+                      text: 'Thông tin vựa',
+                    fontWeight: FontWeight.w500
+                  ),
                   _dealerName(),
                   _dealerPhone(),
                   _dealerAddress(),
                   SizedBox(height: 20),
                   _dealerTime(),
                   if (state.dealerAccountBranch != null)
-                    CustomWidgets.customText(text: 'Người quản lý'),
+                    CustomWidgets.customText(
+                        text: 'Người quản lý',
+                        fontWeight: FontWeight.w500),
                   if (state.dealerAccountBranch != null) _dealerBranchName(),
                   if (state.dealerAccountBranch != null) _dealerBranchPhone(),
                 ],

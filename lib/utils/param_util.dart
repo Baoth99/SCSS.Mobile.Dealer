@@ -13,7 +13,7 @@ class CustomTexts {
   static const String transactionHistoryScreenTitle = 'Lịch sử giao dịch';
   static const String transactionHistoryDetailScreenTitle =
       'Chi tiết giao dịch';
-  static const String promotion = 'Khuyến mãi';
+  static const String promotion = 'Ưu đãi';
   //login_view
   static const String loginToContinue = 'Đăng nhập để tiếp tục';
   static const String loginFailed = 'Đăng nhập thất bại';
@@ -29,6 +29,7 @@ class CustomTexts {
       'Đăng nhập thất bại, xin thử lại sau vài phút';
   static const String forgetPassword = 'Bạn quên mật khẩu?';
   static const String forgetPasswordTextButton = 'Lấy lại mật khẩu';
+  static const String forgetPasswordText = 'Quên mật khẩu';
   static const String register = 'Bạn chưa có tài khoản?';
   static const String registerTextButton = 'Đăng ký';
   //register
@@ -87,7 +88,7 @@ class CustomTexts {
   static const String detailText = 'Chi tiết';
   static const String subTotalText = 'Tạm tính';
   static const String totalText = 'Khách hàng nhận';
-  static const String promotionText = 'Khuyến mãi';
+  static const String promotionText = 'Ưu đãi';
   static const String collectorPhoneLabel = 'SĐT người bán';
   static const String collectorNameLabel = 'Tên người bán';
   static const String calculatedByUnitPriceText = 'Tính theo đơn giá';
@@ -101,7 +102,7 @@ class CustomTexts {
   static const String vndSymbolText = 'đ';
   static const String vndSymbolUnderlined = '₫';
   static String promotionAppliedText({required String promotionCode}) =>
-      '* Khuyến mãi $promotionCode đang được áp dụng';
+      '* Ưu đãi $promotionCode đang được áp dụng';
   static const String generalErrorMessage =
       'Đã có lỗi xảy ra, vui lòng thử lại';
   static const String totalBlank = 'Tổng cộng không được để trống';
@@ -113,7 +114,7 @@ class CustomTexts {
   static const String scrapTypeNotChoosenError = 'Xin chọn $scrapTypeLabel';
   static const String emptyString = '';
   static const String promotionNotAppliedText =
-      'Không có khuyến mãi nào được áp dụng';
+      'Không có ưu đãi nào được áp dụng';
   static const String addScrapButtonText = 'Thêm phế liệu';
   static const String saveUpdateButtonText = 'Lưu thay đổi';
   static const String isItemTotalLowerThanZero = '$totalLabel phải lớn hơn 0 đ';
@@ -124,11 +125,11 @@ class CustomTexts {
   static const String pleaseWaitText = 'Xin vui lòng đợi';
   static const String createTransactionSuccessfullyText =
       'Tạo giao dịch thành công';
-  static const String noItemsErrorText = 'Giao dịch phải có một danh mục';
+  static const String noItemsErrorText = 'Giao dịch phải có một phế liệu';
   static const String deleteItemButtonText = 'Xoá';
   // Add category
   static const String eachScrapCategoryHasAtLeastOneUnit =
-      'Mỗi danh mục phải có một đơn vị';
+      'Mỗi loại phế liệu nên có tối thiểu một đơn vị';
   static const String image = 'Hình ảnh';
   static const String scrapCategoryName = 'Tên danh mục phế liệu';
   static const String inputScrapCategoryName = 'Nhập tên loại phế liệu';
@@ -154,29 +155,29 @@ class CustomTexts {
   static const String upcoming = 'Sắp diễn ra';
   static const String ongoing = 'Đang diễn ra';
   static const String finished = 'Đã kết thúc';
-  static const String noPromotion = 'Không có khuyến mãi';
-  static const String searchPromotionName = 'Tìm tên khuyến mãi';
-  static const String promotionDetail = 'Chi tiết khuyến mãi';
+  static const String noPromotion = 'Không có ưu đãi';
+  static const String searchPromotionName = 'Tìm tên ưu đãi';
+  static const String promotionDetail = 'Chi tiết ưu đãi';
   static const String appliedScrapCategory = 'Danh mục phế liệu được áp dụng';
-  static const String promotionNameBlank = 'Tên khuyến mãi không được để trống';
+  static const String promotionNameBlank = 'Tên ưu đãi không được để trống';
   static const String scrapCategoryBlank = 'Danh mục không được để trống';
   static const String appliedAmountBlank =
-      'Mức giá áp dụng khuyến mãi không được để trống';
+      'Mức giá áp dụng ưu đãi không được để trống';
   static const String bonusAmountBlank =
-      'Số tiền khuyến mãi không được để trống';
+      'Số tiền ưu đãi không được để trống';
   static const String appliedAmountNegative =
-      'Mức giá áp dụng khuyến mãi phải lớn hơn 0đ';
+      'Mức giá áp dụng ưu đãi phải lớn hơn 0đ';
   static const String bonusAmountNegative =
-      'Số tiền khuyến mãi phải là số dương';
-  static const String promotionDuration = 'Thời gian áp dụng khuyến mãi';
-  static const String promotionName = 'Tên khuyến mãi';
-  static const String appliedAmount = 'Mức giá áp dụng khuyến mãi';
-  static const String bonusAmount = 'Số tiền khuyến mãi';
-  static const String addPromotion = 'Thêm khuyến mãi';
+      'Số tiền ưu đãi phải là số dương';
+  static const String promotionDuration = 'Thời gian áp dụng ưu đãi';
+  static const String promotionName = 'Tên ưu đãi';
+  static const String appliedAmount = 'Mức giá áp dụng ưu đãi';
+  static const String bonusAmount = 'Số tiền ưu đãi';
+  static const String addPromotion = 'Thêm ưu đãi';
   static const String promotionStartDateBlank =
-      'Ngày bắt đầu khuyến mãi không được để trống';
+      'Ngày bắt đầu ưu đãi không được để trống';
   static const String promotionEndDateBlank =
-      'Ngày kết thúc khuyến mãi không được để trống';
+      'Ngày kết thúc ưu đãi không được để trống';
 }
 
 class CustomApiUrl {
@@ -447,6 +448,7 @@ class AppColors {
   static const Color greyFF848484 = Color(0xFF848484);
   static const Color greyFFB5B5B5 = Color(0xFFB5B5B5);
   static const Color greyFF969090 = Color(0xFF969090);
+  static const Color greyFFF8F8F8 = Color(0xFFF8F8F8);
 
   //Orange
   static const Color orangeFFF5670A = Color(0xFFF5670A);
