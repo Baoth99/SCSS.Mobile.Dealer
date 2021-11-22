@@ -686,7 +686,6 @@ class CreateTransactionView extends StatelessWidget {
             mode: Mode.DIALOG,
             maxHeight: 250,
             showSelectedItems: true,
-            label: CustomTexts.unitLabel,
             items: state.scrapCategoryDetails,
             compareFn: (ScrapCategoryUnitModel? item,
                     ScrapCategoryUnitModel? selectedItem) =>
@@ -705,10 +704,31 @@ class CreateTransactionView extends StatelessWidget {
                     EventDealerCategoryUnitChanged(
                         dealerCategoryDetailId: selectedValue.id));
             },
-
+            dropdownSearchDecoration: InputDecoration(
+              labelText: CustomTexts.unitLabel,
+              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+              border: OutlineInputBorder(),
+            ),
+            dropdownBuilder: _customDropDownExample,
           ),
         );
       },
+    );
+  }
+
+  Widget _customDropDownExample(
+      BuildContext context, ScrapCategoryUnitModel? item) {
+    if (item == null) {
+      return SizedBox(
+        height: 46,
+      );
+    }
+
+    return Container(
+      child: Text(
+        item.unit,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 
