@@ -41,6 +41,7 @@ class DealerInfoView extends StatelessWidget {
         listeners: [
           BlocListener<DealerInfoBloc, DealerInfoState>(
             listener: (context, state) {
+              if (state is LoadingState) EasyLoading.show();
               if (state is ErrorState) {
                 FunctionalWidgets.showAwesomeDialog(
                   context,
