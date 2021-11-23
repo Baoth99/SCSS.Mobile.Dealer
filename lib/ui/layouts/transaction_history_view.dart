@@ -1,9 +1,9 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/transaction_history_bloc.dart';
 import 'package:dealer_app/repositories/events/transaction_history_event.dart';
 import 'package:dealer_app/repositories/models/collect_deal_transaction_model.dart';
 import 'package:dealer_app/repositories/states/transaction_history_state.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +34,19 @@ class TransactionHistoryView extends StatelessWidget {
                 EasyLoading.dismiss();
               }
               if (state.process == TransactionHistoryProcess.invalid) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: CustomTexts.generalErrorMessage,
-                  type: CoolAlertType.error,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.ERROR,
+                  desc: CustomTexts.generalErrorMessage,
+                  btnOkText: 'Đóng',
                 );
               }
               if (state.process == TransactionHistoryProcess.valid) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: CustomTexts.createTransactionSuccessfullyText,
-                  type: CoolAlertType.success,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.SUCCES,
+                  desc: CustomTexts.createTransactionSuccessfullyText,
+                  btnOkText: 'Đóng',
                 );
               }
             },
@@ -152,15 +154,13 @@ class TransactionHistoryView extends StatelessWidget {
           height: 90,
           child: TextFormField(
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
               labelText: 'Tìm tên người bán...',
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              prefixIcon:
-                Icon(Icons.search, color: Colors.grey[600]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
               fillColor: Colors.grey[200],
               filled: true,
             ),

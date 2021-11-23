@@ -1,8 +1,8 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/login_bloc.dart';
 import 'package:dealer_app/repositories/events/login_event.dart';
 import 'package:dealer_app/repositories/states/login_state.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -29,17 +29,19 @@ class LoginView extends StatelessWidget {
           } else {
             EasyLoading.dismiss();
             if (state.process == Process.invalid) {
-              CustomCoolAlert.showCoolAlert(
-                context: context,
-                title: CustomTexts.wrongPasswordOrPhone,
-                type: CoolAlertType.error,
+              FunctionalWidgets.showAwesomeDialog(
+                context,
+                dialogType: DialogType.ERROR,
+                desc: CustomTexts.wrongPasswordOrPhone,
+                btnOkText: 'Đóng',
               );
             }
             if (state.process == Process.error) {
-              CustomCoolAlert.showCoolAlert(
-                context: context,
-                title: CustomTexts.loginError,
-                type: CoolAlertType.error,
+              FunctionalWidgets.showAwesomeDialog(
+                context,
+                dialogType: DialogType.ERROR,
+                desc: CustomTexts.loginError,
+                btnOkText: 'Đóng',
               );
             }
           }
@@ -180,9 +182,7 @@ class LoginView extends StatelessWidget {
         // CustomWidgets.customText(text: CustomTexts.forgetPassword),
         //TODO: forget password
         Container(
-          margin: EdgeInsets.only(
-            top: 50.h
-          ),
+          margin: EdgeInsets.only(top: 50.h),
           child: CustomWidgets.customTextButton(
               text: CustomTexts.forgetPasswordText,
               onPressed: () {

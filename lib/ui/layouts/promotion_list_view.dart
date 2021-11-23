@@ -1,10 +1,10 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/promotion_list_bloc.dart';
 import 'package:dealer_app/repositories/events/promotion_list_event.dart';
 import 'package:dealer_app/repositories/models/get_promotion_model.dart';
 import 'package:dealer_app/repositories/states/promotion_list_state.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +26,12 @@ class PromotionListView extends StatelessWidget {
               } else {
                 EasyLoading.dismiss();
                 if (state is ErrorState) {
-                  CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: state.errorMessage,
-                    type: CoolAlertType.success,
-                    onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(CustomRoutes.botNav));
-                    },
+                  FunctionalWidgets.showAwesomeDialog(
+                    context,
+                    dialogType: DialogType.SUCCES,
+                    desc: state.errorMessage,
+                    btnOkText: 'Đóng',
+                    okRoutePress: CustomRoutes.botNav,
                   );
                 }
               }
@@ -123,15 +121,13 @@ class PromotionListView extends StatelessWidget {
           color: Colors.white,
           child: TextFormField(
             decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
-                  ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
               hintText: CustomTexts.searchPromotionName,
               floatingLabelBehavior: FloatingLabelBehavior.auto,
-              prefixIcon:
-                Icon(Icons.search, color: Colors.grey[600]),
+              prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
               fillColor: Colors.grey[200],
               filled: true,
             ),
@@ -245,7 +241,8 @@ class PromotionListView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(text: model.promotionName,
+                      CustomText(
+                        text: model.promotionName,
                         fontSize: 45.sp,
                         fontWeight: FontWeight.w500,
                       ),
@@ -253,7 +250,7 @@ class PromotionListView extends StatelessWidget {
                       Row(
                         children: [
                           CustomText(
-                              text: 'Loại phế liệu: ',
+                            text: 'Loại phế liệu: ',
                             fontSize: 43.sp,
                           ),
                           CustomText(
@@ -272,7 +269,8 @@ class PromotionListView extends StatelessWidget {
                             fontSize: 43.sp,
                           ),
                           CustomText(
-                            text: CustomFormats.currencyFormat(model.bonusAmount),
+                            text:
+                                CustomFormats.currencyFormat(model.bonusAmount),
                             color: AppColors.orangeFFF5670A,
                             fontSize: 43.sp,
                           ),
@@ -281,7 +279,8 @@ class PromotionListView extends StatelessWidget {
                             fontSize: 43.sp,
                           ),
                           CustomText(
-                            text: CustomFormats.currencyFormat(model.appliedAmount),
+                            text: CustomFormats.currencyFormat(
+                                model.appliedAmount),
                             color: AppColors.orangeFFF5670A,
                             fontSize: 43.sp,
                           ),
@@ -289,7 +288,8 @@ class PromotionListView extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       CustomText(
-                          text: 'Thời gian: ${model.appliedFromTime} đến ${model.appliedToTime}',
+                        text:
+                            'Thời gian: ${model.appliedFromTime} đến ${model.appliedToTime}',
                         fontSize: 43.sp,
                       ),
                       // Text(

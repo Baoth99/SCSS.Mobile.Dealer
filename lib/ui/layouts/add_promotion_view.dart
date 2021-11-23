@@ -1,9 +1,9 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/add_promotion_bloc.dart';
 import 'package:dealer_app/repositories/events/add_promotion_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_model.dart';
 import 'package:dealer_app/repositories/states/add_promotion_state.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -71,20 +71,20 @@ class AddPromotionView extends StatelessWidget {
             } else {
               EasyLoading.dismiss();
               if (state is SuccessState) {
-                CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: state.message,
-                    type: CoolAlertType.success,
-                    onTap: () {
-                      Navigator.popUntil(context,
-                          ModalRoute.withName(CustomRoutes.promotionListView));
-                    });
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.SUCCES,
+                  desc: state.message,
+                  btnOkText: 'Đóng',
+                  okRoutePress: CustomRoutes.promotionListView,
+                );
               }
               if (state is ErrorState) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: state.message,
-                  type: CoolAlertType.error,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.ERROR,
+                  desc: state.message,
+                  btnOkText: 'Đóng',
                 );
               }
             }

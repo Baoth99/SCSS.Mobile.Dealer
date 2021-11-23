@@ -1,9 +1,8 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/register_bloc.dart';
 import 'package:dealer_app/repositories/events/register_event.dart';
 import 'package:dealer_app/repositories/states/register_state.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
-
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:flutter/material.dart';
@@ -29,10 +28,11 @@ class RegisterView extends StatelessWidget {
               } else if (state.process == Process.processed) {
                 EasyLoading.dismiss();
               } else if (state.process == Process.error) {
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: CustomTexts.otpErrorMessage,
-                  type: CoolAlertType.error,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.ERROR,
+                  desc: CustomTexts.otpErrorMessage,
+                  btnOkText: 'Đóng',
                 );
               } else if (state.process == Process.valid) {
                 Navigator.of(context).pushNamed(CustomRoutes.registerOTP,
