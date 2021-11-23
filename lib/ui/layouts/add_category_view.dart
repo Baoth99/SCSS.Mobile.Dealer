@@ -312,7 +312,18 @@ class AddCategoryView extends StatelessWidget {
         CustomWidgets.customElevatedButton(
             blocContext, CustomTexts.addScrapCategory, () {
           if (_formKey.currentState!.validate()) {
-            blocContext.read<AddCategoryBloc>().add(EventSubmitScrapCategory());
+            FunctionalWidgets.showAwesomeDialog(
+              blocContext,
+              dialogType: DialogType.QUESTION,
+              desc: 'Thêm danh mục?',
+              btnCancelText: 'Hủy',
+              btnOkText: 'Đồng ý',
+              btnOkOnpress: () {
+                blocContext
+                    .read<AddCategoryBloc>()
+                    .add(EventSubmitScrapCategory());
+              },
+            );
           }
         }),
         rowFlexibleType.smallToBig,

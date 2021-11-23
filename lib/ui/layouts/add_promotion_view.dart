@@ -159,9 +159,18 @@ class AddPromotionView extends StatelessWidget {
                               CustomTexts.addPromotion,
                               () {
                                 if (_formKey.currentState!.validate())
-                                  context
-                                      .read<AddPromotionBloc>()
-                                      .add(EventSubmitPromotion());
+                                  FunctionalWidgets.showAwesomeDialog(
+                                    context,
+                                    dialogType: DialogType.QUESTION,
+                                    desc: 'Thêm ưu đãi?',
+                                    btnCancelText: 'Hủy',
+                                    btnOkText: 'Đồng ý',
+                                    btnOkOnpress: () {
+                                      context
+                                          .read<AddPromotionBloc>()
+                                          .add(EventSubmitPromotion());
+                                    },
+                                  );
                               },
                             )),
                       ],

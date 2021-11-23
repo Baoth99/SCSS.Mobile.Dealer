@@ -486,9 +486,18 @@ class CreateTransactionView extends StatelessWidget {
             CustomWidgets.customElevatedButton(
                 context, CustomTexts.createTransactionButtonText, () {
               if (_formKey.currentState!.validate()) {
-                context
-                    .read<CreateTransactionBloc>()
-                    .add(EventSubmitNewTransaction());
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.QUESTION,
+                  desc: 'Tạo giao dịch?',
+                  btnCancelText: 'Hủy',
+                  btnOkText: 'Đồng ý',
+                  btnOkOnpress: () {
+                    context
+                        .read<CreateTransactionBloc>()
+                        .add(EventSubmitNewTransaction());
+                  },
+                );
               }
             }),
             rowFlexibleType.smallToBig,
