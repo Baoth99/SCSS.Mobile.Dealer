@@ -1,13 +1,11 @@
-import 'package:cool_alert/cool_alert.dart';
-import 'package:dealer_app/blocs/authentication_bloc.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/create_transaction_bloc.dart';
 import 'package:dealer_app/repositories/events/create_transaction_event.dart';
 import 'package:dealer_app/repositories/models/scrap_category_unit_model.dart';
-import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/create_transaction_state.dart';
 import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/flexible.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/currency_text_formatter.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
@@ -47,20 +45,20 @@ class CreateTransactionView extends StatelessWidget {
               } else {
                 EasyLoading.dismiss();
                 if (state.process == Process.error) {
-                  CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: CustomTexts.generalErrorMessage,
-                    type: CoolAlertType.error,
+                  FunctionalWidgets.showAwesomeDialog(
+                    context,
+                    dialogType: DialogType.ERROR,
+                    desc: CustomTexts.generalErrorMessage,
+                    btnOkText: 'Đóng',
+                    okRoutePress: CustomRoutes.categoryList,
                   );
                 } else if (state.process == Process.valid) {
-                  CustomCoolAlert.showCoolAlert(
-                    context: context,
-                    title: CustomTexts.createTransactionSuccessfullyText,
-                    type: CoolAlertType.success,
-                    onTap: () {
-                      Navigator.popUntil(
-                          context, ModalRoute.withName(CustomRoutes.botNav));
-                    },
+                  FunctionalWidgets.showAwesomeDialog(
+                    context,
+                    dialogType: DialogType.SUCCES,
+                    desc: CustomTexts.createTransactionSuccessfullyText,
+                    btnOkText: 'Đóng',
+                    okRoutePress: CustomRoutes.botNav,
                   );
                 }
               }
@@ -140,9 +138,7 @@ class CreateTransactionView extends StatelessWidget {
                       _nameField(),
                       _detailText(),
                       Container(
-                        margin: EdgeInsets.symmetric(
-                          vertical: 30.h
-                        ),
+                        margin: EdgeInsets.symmetric(vertical: 30.h),
                         child: _items(),
                       ),
                       _getDottedDivider(),
@@ -247,7 +243,7 @@ class CreateTransactionView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomText(
-                text: CustomTexts.detailText,
+              text: CustomTexts.detailText,
               color: AppColors.black,
               fontSize: 42.sp,
             ),
@@ -490,9 +486,18 @@ class CreateTransactionView extends StatelessWidget {
             CustomWidgets.customElevatedButton(
                 context, CustomTexts.createTransactionButtonText, () {
               if (_formKey.currentState!.validate()) {
-                context
-                    .read<CreateTransactionBloc>()
-                    .add(EventSubmitNewTransaction());
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.QUESTION,
+                  desc: 'Tạo giao dịch?',
+                  btnCancelText: 'Hủy',
+                  btnOkText: 'Đồng ý',
+                  btnOkOnpress: () {
+                    context
+                        .read<CreateTransactionBloc>()
+                        .add(EventSubmitNewTransaction());
+                  },
+                );
               }
             }),
             rowFlexibleType.smallToBig,
@@ -528,14 +533,16 @@ class CreateTransactionView extends StatelessWidget {
                         rowFlexibleType.bigToSmall,
                       ),
                       _quantityField(),
-                      BlocBuilder<CreateTransactionBloc, CreateTransactionState>(
+                      BlocBuilder<CreateTransactionBloc,
+                          CreateTransactionState>(
                         builder: (context, state) {
                           return Visibility(
                             visible: (state.itemQuantity -
                                     state.itemQuantity.truncate()) >
                                 0,
                             child: Container(
-                              padding: EdgeInsets.only(bottom: 40.h, left: 20.w),
+                              padding:
+                                  EdgeInsets.only(bottom: 40.h, left: 20.w),
                               child: CustomText(
                                 text: '* Chữ số thập phân sử dụng dấu "," '
                                     'nên dùng cho các loại đơn vị như kilogam, gam, tạ, tấn,... ',
@@ -609,20 +616,26 @@ class CreateTransactionView extends StatelessWidget {
             child: ListTile(
               // dense: true,
               isThreeLine: true,
-              title: Text(CustomTexts.calculatedByUnitPriceText, style: TextStyle(fontWeight: FontWeight.w500),),
-              subtitle: Text(CustomTexts.calculatedByUnitPriceExplainationText, style: TextStyle(fontSize: 37.sp),),
+              title: Text(
+                CustomTexts.calculatedByUnitPriceText,
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              subtitle: Text(
+                CustomTexts.calculatedByUnitPriceExplainationText,
+                style: TextStyle(fontSize: 37.sp),
+              ),
               trailing: SizedBox(
                 height: 80.h,
                 child: Switch(
                   value: state.isItemTotalCalculatedByUnitPrice,
-                  onChanged:
-                      state.itemDealerCategoryId != CustomVar.unnamedScrapCategory.id
-                          ? (value) {
-                              context.read<CreateTransactionBloc>().add(
-                                  EventCalculatedByUnitPriceChanged(
-                                      isCalculatedByUnitPrice: value));
-                            }
-                          : null,
+                  onChanged: state.itemDealerCategoryId !=
+                          CustomVar.unnamedScrapCategory.id
+                      ? (value) {
+                          context.read<CreateTransactionBloc>().add(
+                              EventCalculatedByUnitPriceChanged(
+                                  isCalculatedByUnitPrice: value));
+                        }
+                      : null,
                 ),
               ),
             ),
@@ -686,7 +699,6 @@ class CreateTransactionView extends StatelessWidget {
             mode: Mode.DIALOG,
             maxHeight: 250,
             showSelectedItems: true,
-            label: CustomTexts.unitLabel,
             items: state.scrapCategoryDetails,
             compareFn: (ScrapCategoryUnitModel? item,
                     ScrapCategoryUnitModel? selectedItem) =>
@@ -705,10 +717,31 @@ class CreateTransactionView extends StatelessWidget {
                     EventDealerCategoryUnitChanged(
                         dealerCategoryDetailId: selectedValue.id));
             },
-
+            dropdownSearchDecoration: InputDecoration(
+              labelText: CustomTexts.unitLabel,
+              contentPadding: EdgeInsets.fromLTRB(12, 12, 0, 0),
+              border: OutlineInputBorder(),
+            ),
+            dropdownBuilder: _customDropDownExample,
           ),
         );
       },
+    );
+  }
+
+  Widget _customDropDownExample(
+      BuildContext context, ScrapCategoryUnitModel? item) {
+    if (item == null) {
+      return SizedBox(
+        height: 46,
+      );
+    }
+
+    return Container(
+      child: Text(
+        item.unit,
+        overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 
@@ -784,10 +817,12 @@ class CreateTransactionView extends StatelessWidget {
                   if (value != CustomTexts.emptyString) {
                     context.read<CreateTransactionBloc>().add(
                         EventUnitPriceChanged(
-                            unitPrice: value.replaceAll(RegExp(r'[^0-9]'), '')));
+                            unitPrice:
+                                value.replaceAll(RegExp(r'[^0-9]'), '')));
                   } else {
                     context.read<CreateTransactionBloc>().add(
-                        EventUnitPriceChanged(unitPrice: CustomTexts.zeroString));
+                        EventUnitPriceChanged(
+                            unitPrice: CustomTexts.zeroString));
                   }
                 },
                 validator: (value) {

@@ -1,13 +1,13 @@
-import 'package:cool_alert/cool_alert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dealer_app/blocs/authentication_bloc.dart';
 import 'package:dealer_app/blocs/dealer_info_bloc.dart';
 import 'package:dealer_app/repositories/events/dealer_info_event.dart';
 import 'package:dealer_app/repositories/models/get_branches_model.dart';
 import 'package:dealer_app/repositories/states/authentication_state.dart';
 import 'package:dealer_app/repositories/states/dealer_info_state.dart';
-import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
 import 'package:dealer_app/ui/widgets/arrow_back_button.dart';
-import 'package:dealer_app/utils/cool_alert.dart';
+import 'package:dealer_app/ui/widgets/custom_text_widget.dart';
+import 'package:dealer_app/ui/widgets/function_widgets.dart';
 import 'package:dealer_app/utils/custom_widgets.dart';
 import 'package:dealer_app/utils/param_util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -41,12 +41,13 @@ class DealerInfoView extends StatelessWidget {
         listeners: [
           BlocListener<DealerInfoBloc, DealerInfoState>(
             listener: (context, state) {
+              if (state is LoadingState) EasyLoading.show();
               if (state is ErrorState) {
-                EasyLoading.dismiss();
-                CustomCoolAlert.showCoolAlert(
-                  context: context,
-                  title: state.message,
-                  type: CoolAlertType.error,
+                FunctionalWidgets.showAwesomeDialog(
+                  context,
+                  dialogType: DialogType.ERROR,
+                  desc: state.message,
+                  btnOkText: 'Đóng',
                 );
               }
               if (state is LoadedState) {
@@ -97,8 +98,7 @@ class DealerInfoView extends StatelessWidget {
               AppColors.greenFF61C53D.withOpacity(1),
               AppColors.greenFF39AC8F.withOpacity(1),
             ], // red to yellow
-            tileMode:
-            TileMode.repeated, // repeats the gradient over the canvas
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
           ),
         ),
       ),
@@ -109,8 +109,11 @@ class DealerInfoView extends StatelessWidget {
             if (authState.user!.roleKey == DealerRoleKey.MAIN_BRANCH.number)
               return chooseDealer();
             else
-              return Text(dealerInfoState.dealerName, style: TextStyle(
-                  color: AppColors.white, fontSize: 50.sp), overflow: TextOverflow.ellipsis,);
+              return Text(
+                dealerInfoState.dealerName,
+                style: TextStyle(color: AppColors.white, fontSize: 50.sp),
+                overflow: TextOverflow.ellipsis,
+              );
           });
         },
       ),
@@ -170,9 +173,7 @@ class DealerInfoView extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   CustomWidgets.customText(
-                      text: 'Thông tin vựa',
-                    fontWeight: FontWeight.w500
-                  ),
+                      text: 'Thông tin vựa', fontWeight: FontWeight.w500),
                   _dealerName(),
                   _dealerPhone(),
                   _dealerAddress(),
@@ -180,8 +181,7 @@ class DealerInfoView extends StatelessWidget {
                   _dealerTime(),
                   if (state.dealerAccountBranch != null)
                     CustomWidgets.customText(
-                        text: 'Người quản lý',
-                        fontWeight: FontWeight.w500),
+                        text: 'Người quản lý', fontWeight: FontWeight.w500),
                   if (state.dealerAccountBranch != null) _dealerBranchName(),
                   if (state.dealerAccountBranch != null) _dealerBranchPhone(),
                 ],

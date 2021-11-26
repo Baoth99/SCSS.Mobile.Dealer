@@ -70,50 +70,67 @@ class DealerInfoBloc extends Bloc<DealerInfoEvent, DealerInfoState> {
       }
     }
     if (event is EventChangeBranch) {
-      // If main branch is not selected
-      if (event.branchId != _mainBrannchId) {
-        var branchInfo =
-            await _dealerInfoHandler.getBranchDetail(id: event.branchId);
-
-        // Get image
-        ImageProvider? image;
-        if (branchInfo.dealerBranchImageUrl.isNotEmpty)
-          image = await _dataHandler.getImageBytes(
-              imageUrl: branchInfo.dealerBranchImageUrl);
-
-        yield new LoadedState(
+      try {
+        yield new LoadingState(
           branches: state.branches,
-          selectedId: event.branchId,
-          dealerImage: image,
-          dealerName: branchInfo.dealerBranchName,
-          dealerAddress: branchInfo.dealerBranchAddress,
-          dealerPhone: branchInfo.dealerBranchPhone,
-          openTime: branchInfo.dealerBranchOpenTime,
-          closeTime: branchInfo.dealerBranchCloseTime,
-          dealerAccountBranch: branchInfo.dealerAccountBranch,
+          selectedId: state.selectedId,
+          dealerImage: state.dealerImage,
+          dealerName: state.dealerName,
+          dealerAddress: state.dealerAddress,
+          dealerPhone: state.dealerPhone,
+          openTime: state.openTime,
+          closeTime: state.closeTime,
+          dealerAccountBranch: state.dealerAccountBranch,
         );
-      }
-      // If main branch is selected
-      else {
-        GetDealerInfoModel getDealerInfoModel =
-            await _dealerInfoHandler.getDealerInfo();
+        // If main branch is not selected
+        if (event.branchId != _mainBrannchId) {
+          var branchInfo =
+              await _dealerInfoHandler.getBranchDetail(id: event.branchId);
 
-        // Get image
-        ImageProvider? image;
-        if (getDealerInfoModel.dealerImageUrl.isNotEmpty)
-          image = await _dataHandler.getImageBytes(
-              imageUrl: getDealerInfoModel.dealerImageUrl);
+          // Get image
+          ImageProvider? image;
+          if (branchInfo.dealerBranchImageUrl.isNotEmpty)
+            image = await _dataHandler.getImageBytes(
+                imageUrl: branchInfo.dealerBranchImageUrl);
 
-        yield LoadedState(
-          branches: state.branches,
-          selectedId: getDealerInfoModel.id,
-          dealerImage: image,
-          dealerName: getDealerInfoModel.dealerName,
-          dealerAddress: getDealerInfoModel.dealerAddress,
-          dealerPhone: getDealerInfoModel.dealerPhone,
-          openTime: getDealerInfoModel.openTime,
-          closeTime: getDealerInfoModel.closeTime,
-          dealerAccountBranch: null,
+          yield new LoadedState(
+            branches: state.branches,
+            selectedId: event.branchId,
+            dealerImage: image,
+            dealerName: branchInfo.dealerBranchName,
+            dealerAddress: branchInfo.dealerBranchAddress,
+            dealerPhone: branchInfo.dealerBranchPhone,
+            openTime: branchInfo.dealerBranchOpenTime,
+            closeTime: branchInfo.dealerBranchCloseTime,
+            dealerAccountBranch: branchInfo.dealerAccountBranch,
+          );
+        }
+        // If main branch is selected
+        else {
+          GetDealerInfoModel getDealerInfoModel =
+              await _dealerInfoHandler.getDealerInfo();
+
+          // Get image
+          ImageProvider? image;
+          if (getDealerInfoModel.dealerImageUrl.isNotEmpty)
+            image = await _dataHandler.getImageBytes(
+                imageUrl: getDealerInfoModel.dealerImageUrl);
+
+          yield LoadedState(
+            branches: state.branches,
+            selectedId: getDealerInfoModel.id,
+            dealerImage: image,
+            dealerName: getDealerInfoModel.dealerName,
+            dealerAddress: getDealerInfoModel.dealerAddress,
+            dealerPhone: getDealerInfoModel.dealerPhone,
+            openTime: getDealerInfoModel.openTime,
+            closeTime: getDealerInfoModel.closeTime,
+            dealerAccountBranch: null,
+          );
+        }
+      } catch (e) {
+        yield ErrorState.noData(
+          message: 'Đã có lỗi xảy ra, vui lòng thử lại',
         );
       }
     }

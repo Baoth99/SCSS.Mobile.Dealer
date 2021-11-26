@@ -90,7 +90,26 @@ class LoadingState extends CategoryDetailState {
 class SubmittedState extends CategoryDetailState {
   final String message;
 
-  SubmittedState({required this.message});
+  SubmittedState({
+    required this.message,
+    required isImageSourceActionSheetVisible,
+    required units,
+    required pickedImageUrl,
+    required initScrapName,
+    required initScrapImage,
+    required initScrapImageUrl,
+    required scrapName,
+    required isNameExisted,
+  }) : super(
+          isImageSourceActionSheetVisible: isImageSourceActionSheetVisible,
+          units: units,
+          pickedImageUrl: pickedImageUrl,
+          initScrapName: initScrapName,
+          initScrapImage: initScrapImage,
+          initScrapImageUrl: initScrapImageUrl,
+          scrapName: scrapName,
+          isNameExisted: isNameExisted,
+        );
 }
 
 class ErrorState extends CategoryDetailState {

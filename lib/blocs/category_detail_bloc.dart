@@ -139,7 +139,17 @@ class CategoryDetailBloc
 
           if (result) {
             yield SubmittedState(
-                message: CustomTexts.updateScrapCategorySucessfull);
+              message: CustomTexts.updateScrapCategorySucessfull,
+              units: state.units,
+              isImageSourceActionSheetVisible:
+                  state.isImageSourceActionSheetVisible,
+              pickedImageUrl: state.pickedImageUrl,
+              initScrapName: state.initScrapName,
+              initScrapImage: state.initScrapImage,
+              initScrapImageUrl: state.initScrapImageUrl,
+              scrapName: state.scrapName,
+              isNameExisted: state.isNameExisted,
+            );
           } else {
             yield ErrorState(
               message: CustomTexts.errorHappenedTryAgain,
@@ -161,6 +171,7 @@ class CategoryDetailBloc
                 state.isImageSourceActionSheetVisible,
             pickedImageUrl: state.pickedImageUrl,
             initScrapName: state.initScrapName,
+            initScrapImage: state.initScrapImage,
             initScrapImageUrl: state.initScrapImageUrl,
             scrapName: state.scrapName,
             isNameExisted: true,
@@ -199,7 +210,17 @@ class CategoryDetailBloc
 
         if (result) {
           yield SubmittedState(
-              message: CustomTexts.deleteScrapCategorySucessfull);
+            message: CustomTexts.deleteScrapCategorySucessfull,
+            units: state.units,
+            isImageSourceActionSheetVisible:
+                state.isImageSourceActionSheetVisible,
+            pickedImageUrl: state.pickedImageUrl,
+            initScrapName: state.initScrapName,
+            initScrapImage: state.initScrapImage,
+            initScrapImageUrl: state.initScrapImageUrl,
+            scrapName: state.scrapName,
+            isNameExisted: state.isNameExisted,
+          );
         } else {
           yield ErrorState(
             message: CustomTexts.errorHappenedTryAgain,
