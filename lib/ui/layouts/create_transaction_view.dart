@@ -50,7 +50,6 @@ class CreateTransactionView extends StatelessWidget {
                     dialogType: DialogType.ERROR,
                     desc: CustomTexts.generalErrorMessage,
                     btnOkText: 'Đóng',
-                    okRoutePress: CustomRoutes.categoryList,
                   );
                 } else if (state.process == Process.valid) {
                   FunctionalWidgets.showAwesomeDialog(

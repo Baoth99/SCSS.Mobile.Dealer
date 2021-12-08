@@ -28,7 +28,7 @@ class PromotionListView extends StatelessWidget {
                 if (state is ErrorState) {
                   FunctionalWidgets.showAwesomeDialog(
                     context,
-                    dialogType: DialogType.SUCCES,
+                    dialogType: DialogType.ERROR,
                     desc: state.errorMessage,
                     btnOkText: 'Đóng',
                     okRoutePress: CustomRoutes.botNav,
