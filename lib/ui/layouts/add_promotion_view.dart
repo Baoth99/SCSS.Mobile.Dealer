@@ -209,6 +209,7 @@ class AddPromotionView extends StatelessWidget {
                   .read<AddPromotionBloc>()
                   .add(EventChangePromotionName(value));
             },
+            maxLength: 100,
             validator: (value) {
               if (value == null || value.isEmpty)
                 return CustomTexts.promotionNameBlank;

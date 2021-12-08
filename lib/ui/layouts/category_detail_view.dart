@@ -156,6 +156,7 @@ class CategoryDetailView extends StatelessWidget {
                 .add(EventChangeScrapName(scrapName: value));
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
+          maxLength: 100,
           validator: (value) {
             if (value == null || value.isEmpty)
               return CustomTexts.inputScrapCategoryName;
