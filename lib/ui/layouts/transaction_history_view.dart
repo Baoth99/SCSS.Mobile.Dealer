@@ -392,7 +392,7 @@ class TransactionHistoryView extends StatelessWidget {
       title: Text(model.collectorName),
       subtitle: Text(CustomFormats.currencyFormat(model.total)),
       trailing: Text(
-          '${model.transactionDateTime.hour.toString().padLeft(2, '0')}:${model.transactionDateTime.minute}'),
+          '${model.transactionDateTime.hour.toString().padLeft(2, '0')}:${model.transactionDateTime.minute.toString().padLeft(2, '0')}'),
       onTap: () => Navigator.pushNamed(
         context,
         CustomRoutes.transactionHistoryDetailView,
