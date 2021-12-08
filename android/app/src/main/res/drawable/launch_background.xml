@@ -14,7 +14,7 @@
                 android:type="linear" />
         </shape>
     </item>
-    <item android:top="170dp"
+    <item android:top="80dp"
         android:gravity="center|top"
         android:height="250dp"
         android:width="250dp">
