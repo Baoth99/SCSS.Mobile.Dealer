@@ -67,7 +67,7 @@ class AddCategoryBloc extends Bloc<AddCategoryEvent, AddCategoryState> {
         initScrapName: state.initScrapName,
         initScrapImage: state.initScrapImage,
         initScrapImageUrl: state.initScrapImageUrl,
-        scrapName: state.scrapName,
+        scrapName: state.scrapName.trim(),
         isNameExisted: state.isNameExisted,
       );
       try {
