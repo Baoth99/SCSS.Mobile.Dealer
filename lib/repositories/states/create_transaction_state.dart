@@ -40,6 +40,8 @@ class CreateTransactionState {
       scrapCategoryMap; //map contains unique categories <id, name> for dropdown list
   List<CollectorPhoneModel> collectorPhoneList;
 
+  String? transactionId;
+
   int get itemTotalCalculated {
     if (isItemTotalCalculatedByUnitPrice && itemPrice != 0)
       return (itemPrice * itemQuantity).truncate();
@@ -173,6 +175,7 @@ class CreateTransactionState {
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
     List<CollectorPhoneModel>? collectorPhoneList,
+    String? transactionId,
   })  : collectorId = collectorId,
         collectorPhone = collectorPhone ?? '',
         collectorName = collectorName,
@@ -203,7 +206,8 @@ class CreateTransactionState {
         //Data
         scrapCategories = scrapCategories ?? [],
         scrapCategoryMap = scrapCategoryMap ?? {},
-        collectorPhoneList = collectorPhoneList ?? [];
+        collectorPhoneList = collectorPhoneList ?? [],
+        transactionId = transactionId;
 
   CreateTransactionState copyWith({
     String? collectorId,
@@ -235,6 +239,7 @@ class CreateTransactionState {
     List<ScrapCategoryModel>? scrapCategories,
     Map<String, String>? scrapCategoryMap,
     List<CollectorPhoneModel>? collectorPhoneList,
+    String? transactionId,
   }) {
     return CreateTransactionState(
       collectorId: collectorId ?? this.collectorId,
@@ -271,6 +276,7 @@ class CreateTransactionState {
       scrapCategories: scrapCategories ?? this.scrapCategories,
       scrapCategoryMap: scrapCategoryMap ?? this.scrapCategoryMap,
       collectorPhoneList: collectorPhoneList ?? this.collectorPhoneList,
+      transactionId: transactionId ?? transactionId,
     );
   }
 

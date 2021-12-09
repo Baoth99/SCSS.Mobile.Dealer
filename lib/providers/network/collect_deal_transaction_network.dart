@@ -38,7 +38,7 @@ class CollectDealTransactionNetWork {
     }
   }
 
-  static Future<bool> postCollectDealTransaction({
+  static Future<String?> postCollectDealTransaction({
     required String bearerToken,
     required String body,
   }) async {
@@ -57,10 +57,12 @@ class CollectDealTransactionNetWork {
       body: body,
     );
 
+    Map decodedBody = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
-      if (response.body.contains('400')) return false;
+      if (decodedBody['statusCode'] == '400') return null;
       // If the server did return a 200 OK response,
-      return true;
+      return decodedBody['resData']['id'];
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

@@ -324,11 +324,12 @@ class CreateTransactionBloc
           items: state.items,
         );
 
-        bool result = await collectDealTransactionHandler
+        String? transactionId = await collectDealTransactionHandler
             .createCollectDealTransaction(model: model);
-        if (result) {
+        if (transactionId != null) {
           yield state.copyWith(process: Process.processed);
-          yield state.copyWith(process: Process.valid);
+          yield state.copyWith(
+              process: Process.valid, transactionId: transactionId);
         } else {
           yield state.copyWith(process: Process.processed);
           yield state.copyWith(process: Process.error);

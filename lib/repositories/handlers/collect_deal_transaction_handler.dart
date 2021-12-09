@@ -9,7 +9,7 @@ import 'package:dealer_app/utils/secure_storage.dart';
 
 abstract class ICollectDealTransactionHandler {
   Future<InfoReviewModel?> getInfoReview({required String collectorId});
-  Future<bool> createCollectDealTransaction(
+  Future<String?> createCollectDealTransaction(
       {required CollectDealTransactionRequestModel model});
   Future<List<CollectDealTransactionModel>> getCollectDealHistories({
     DateTime? fromDate,
@@ -45,7 +45,7 @@ class CollectDealTransactionHandler implements ICollectDealTransactionHandler {
     }
   }
 
-  Future<bool> createCollectDealTransaction(
+  Future<String?> createCollectDealTransaction(
       {required CollectDealTransactionRequestModel model}) async {
     try {
       //get access token

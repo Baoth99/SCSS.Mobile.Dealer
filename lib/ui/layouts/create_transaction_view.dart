@@ -57,7 +57,14 @@ class CreateTransactionView extends StatelessWidget {
                     dialogType: DialogType.SUCCES,
                     desc: CustomTexts.createTransactionSuccessfullyText,
                     btnOkText: 'Đóng',
-                    okRoutePress: CustomRoutes.botNav,
+                    btnOkOnpress: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        CustomRoutes.transactionHistoryDetailView,
+                        ModalRoute.withName(CustomRoutes.botNav),
+                        arguments: state.transactionId,
+                      );
+                    },
                   );
                 }
               }
