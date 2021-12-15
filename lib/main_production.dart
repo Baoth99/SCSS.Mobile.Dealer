@@ -41,5 +41,5 @@ void configLoading() {
       ],
     )
     ..userInteractions = false
-    ..dismissOnTap = false;
+    ..dismissOnTap = true;
 }
