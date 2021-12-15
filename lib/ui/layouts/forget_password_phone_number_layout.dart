@@ -35,8 +35,9 @@ class ForgetPasswordPhoneNumberLayout extends StatelessWidget {
               if (state.status.isSubmissionSuccess) {
                 if (state.isExist) {
                   // navigate to otp code
-                  Navigator.of(context).popAndPushNamed(
+                  Navigator.of(context).pushNamedAndRemoveUntil(
                     CustomRoutes.forgetPasswordOTP,
+                    ModalRoute.withName(CustomRoutes.forgetPasswordPhoneNumber),
                     arguments: ForgetPasswordOTPArgument(
                       Symbols.vietnamCallingCode,
                       state.phoneNumber.value,
