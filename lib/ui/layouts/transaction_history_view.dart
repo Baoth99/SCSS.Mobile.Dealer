@@ -351,7 +351,7 @@ class TransactionHistoryView extends StatelessWidget {
                 child: Container(
                   child: GroupedListView<CollectDealTransactionModel, DateTime>(
                     physics: AlwaysScrollableScrollPhysics(),
-                    elements: state.filteredTransactionList,
+                    elements: _sortList(state.filteredTransactionList),
                     order: GroupedListOrder.DESC,
                     groupBy: (CollectDealTransactionModel element) => DateTime(
                         element.transactionDateTime.year,
@@ -403,5 +403,13 @@ class TransactionHistoryView extends StatelessWidget {
 
   Future _loadMoreTransactions(BuildContext context) async {
     context.read<TransactionHistoryBloc>().add(EventLoadMoreTransactions());
+  }
+
+  List<CollectDealTransactionModel> _sortList(
+      List<CollectDealTransactionModel> list) {
+    List<CollectDealTransactionModel> newList = List.from(list);
+    newList.sort((transA, transB) =>
+        transA.transactionDateTime.compareTo(transB.transactionDateTime));
+    return newList;
   }
 }
